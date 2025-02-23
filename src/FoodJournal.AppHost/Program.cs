@@ -1,5 +1,16 @@
-var builder = DistributedApplication.CreateBuilder(args);
+namespace FoodJournal.AppHost;
 
-builder.AddProject<Projects.WebApp>("webapp");
+/// <summary>
+/// Configures and runs the distributed application.
+/// </summary>
+internal static class Program
+{
+    private static async Task Main(string[] args)
+    {
+        var builder = DistributedApplication.CreateBuilder(args);
 
-builder.Build().Run();
+        builder.AddProject<Projects.WebApp>("webapp");
+
+        await builder.Build().RunAsync();
+    }
+}

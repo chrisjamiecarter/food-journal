@@ -1,8 +1,12 @@
+using FoodJournal.ServiceDefaults;
 using WebApp.Components;
 
 namespace WebApp;
 
-public class Program
+/// <summary>
+/// Configures and runs the web application, setting up services, middleware components, and routing.
+/// </summary>
+internal static class Program
 {
     public static void Main(string[] args)
     {
@@ -21,7 +25,6 @@ public class Program
         if (!app.Environment.IsDevelopment())
         {
             app.UseExceptionHandler("/Error");
-            // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
             app.UseHsts();
         }
 

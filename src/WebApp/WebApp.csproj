@@ -4,4 +4,9 @@
     <ProjectReference Include="..\FoodJournal.ServiceDefaults\FoodJournal.ServiceDefaults.csproj" />
   </ItemGroup>
 
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+    <Exec Command="npm install tailwindcss @tailwindcss/cli" />
+    <Exec Command="npm run build:css" />
+  </Target>
+  
 </Project>

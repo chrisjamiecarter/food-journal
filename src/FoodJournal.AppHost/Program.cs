@@ -9,7 +9,15 @@ internal static class Program
     {
         var builder = DistributedApplication.CreateBuilder(args);
 
-        builder.AddProject<Projects.WebApp>("webapp");
+        var postgres = builder.AddPostgres("postgres")
+                              .WithImage("postgres")
+                              .WithImageTag("latest")
+                              .WithLifetime(ContainerLifetime.Persistent);
+        
+        var identityDb = postgres.AddDatabase("identitydb");
+
+        var webApp = builder.AddProject<Projects.WebApp>("webapp")
+                            .WithReference(identityDb);
 
         await builder.Build().RunAsync();
     }

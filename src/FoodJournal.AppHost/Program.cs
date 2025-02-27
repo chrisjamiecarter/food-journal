@@ -16,7 +16,12 @@ internal static class Program
         
         var identityDb = postgres.AddDatabase("identitydb");
 
-        var webApp = builder.AddProject<Projects.WebApp>("webapp")
+        var identityApi = builder.AddProject<Projects.Identity_Api>("identityapi", "https")
+                                 .WithExternalHttpEndpoints()
+                                 .WithReference(identityDb);
+
+        var webApp = builder.AddProject<Projects.WebApp>("webapp", "https")
+                            .WithExternalHttpEndpoints()
                             .WithReference(identityDb);
 
         await builder.Build().RunAsync();

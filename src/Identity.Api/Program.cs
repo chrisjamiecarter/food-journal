@@ -1,4 +1,3 @@
-using System.Security.Claims;
 using FoodJournal.ServiceDefaults;
 using Identity.Api.Data;
 using Identity.Api.Extensions;
@@ -38,8 +37,10 @@ internal static class Program
 
         app.MapIdentityApi<ApplicationUser>();
 
-        app.MapGet("/", (ClaimsPrincipal user) => $"Hello {user.Identity!.Name}")
-           .RequireAuthorization();
+        app.MapGet("/", () => "Identity API is running.");
+
+        //app.MapGet("/", (ClaimsPrincipal user) => $"Hello {user.Identity!.Name}")
+        //   .RequireAuthorization();
 
         app.MapControllers();
 

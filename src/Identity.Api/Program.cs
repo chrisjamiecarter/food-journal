@@ -3,6 +3,7 @@ using Identity.Api.Data;
 using Identity.Api.Extensions;
 using Identity.Api.Models;
 using Microsoft.AspNetCore.Identity;
+using Scalar.AspNetCore;
 
 namespace Identity.Api;
 
@@ -29,6 +30,8 @@ internal static class Program
                         .AddEntityFrameworkStores<ApplicationDbContext>()
                         .AddApiEndpoints();
 
+        builder.Services.AddOpenApi();
+
         var app = builder.Build();
 
         app.UseHttpsRedirection();
@@ -43,6 +46,13 @@ internal static class Program
         //   .RequireAuthorization();
 
         app.MapControllers();
+
+        app.MapOpenApi();
+        app.MapScalarApiReference(options =>
+        {
+            options.Servers = [];
+            options.WithDefaultHttpClient(ScalarTarget.CSharp, ScalarClient.RestSharp);
+        });
 
         app.Run();
     }

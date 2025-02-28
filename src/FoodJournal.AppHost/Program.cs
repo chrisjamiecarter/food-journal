@@ -1,3 +1,6 @@
+using Aspire.Hosting;
+using FoodJournal.AppHost.Extensions;
+
 namespace FoodJournal.AppHost;
 
 /// <summary>
@@ -18,11 +21,14 @@ internal static class Program
 
         var identityApi = builder.AddProject<Projects.Identity_Api>("identityapi", "https")
                                  .WithExternalHttpEndpoints()
-                                 .WithReference(identityDb);
+                                 .WithReference(identityDb)
+                                 .WithScalar()
+                                 .WaitFor(identityDb);
 
         var webApp = builder.AddProject<Projects.WebApp>("webapp", "https")
                             .WithExternalHttpEndpoints()
-                            .WithReference(identityDb);
+                            .WithReference(identityDb)
+                            .WaitFor(identityApi);
 
         await builder.Build().RunAsync();
     }

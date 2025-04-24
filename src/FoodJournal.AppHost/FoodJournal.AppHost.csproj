@@ -15,7 +15,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\FoodJournal.BlazorApp\FoodJournal.BlazorApp.csproj" />
-    <ProjectReference Include="..\FoodJournal.Common\FoodJournal.Common.csproj" IsApireProjectResource="false" />
+    <ProjectReference Include="..\FoodJournal.Common\FoodJournal.Common.csproj" />
     <ProjectReference Include="..\Identity.Api\Identity.Api.csproj" />
     <ProjectReference Include="..\WebApp\WebApp.csproj" />
   </ItemGroup>

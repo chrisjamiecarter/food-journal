@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Primitives;
 using FoodJournal.BlazorApp.Components.Account.Pages;
 using FoodJournal.BlazorApp.Components.Account.Pages.Manage;
-using FoodJournal.BlazorApp.Data;
+using FoodJournal.Application.Entities;
 
 namespace Microsoft.AspNetCore.Routing;
 

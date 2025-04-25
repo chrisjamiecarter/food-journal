@@ -1,0 +1,18 @@
+<Project Sdk="Microsoft.NET.Sdk.Worker">
+
+  <PropertyGroup>
+    <UserSecretsId>dotnet-FoodJournal.DatabaseMigrator-49c57b84-dcda-4c56-9d1c-d634b7d7a65e</UserSecretsId>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Aspire.Microsoft.EntityFrameworkCore.SqlServer" />
+    <PackageReference Include="Bogus" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" />
+    <PackageReference Include="Microsoft.Extensions.Hosting" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\FoodJournal.Application\FoodJournal.Application.csproj" />
+    <ProjectReference Include="..\FoodJournal.ServiceDefaults\FoodJournal.ServiceDefaults.csproj" />
+  </ItemGroup>
+</Project>

@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
-using FoodJournal.BlazorApp.Data;
+using FoodJournal.Application.Entities;
 
 namespace FoodJournal.BlazorApp.Components.Account;
 

@@ -2,15 +2,15 @@
 
 public static class ServiceNames
 {
-    internal static class Database
-    {
-        public const string Name = "postgres";
-        public const string Image = "postgres";
-        public const string ImageTag = "latest";
-        public const string ServerName = "foodjournal-db";
-    }
+    public const string DatabaseMigratorAppName = "foodjournal-db-migrator";
 
-    public const string FoodJournal = "FoodJournal";
+    public const string DatabaseName = "foodjournal-db";
 
-    public const string OutputCache = "outputcahce";
+    public const int DatabasePort = 58585;
+        
+    public const string DatabaseProvider = "sql";
+
+    public const string OutputCacheName = "outputcache";
+
+    public const string WebAppName = "foodjournal-web";
 }

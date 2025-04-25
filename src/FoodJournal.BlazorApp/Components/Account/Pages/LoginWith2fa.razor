@@ -1,8 +1,9 @@
 ﻿@page "/Account/LoginWith2fa"
 
 @using System.ComponentModel.DataAnnotations
+@using FoodJournal.Application.Database
+@using FoodJournal.Application.Entities
 @using Microsoft.AspNetCore.Identity
-@using FoodJournal.BlazorApp.Data
 
 @inject SignInManager<ApplicationUser> SignInManager
 @inject UserManager<ApplicationUser> UserManager

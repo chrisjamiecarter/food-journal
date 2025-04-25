@@ -32,6 +32,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FoodJournal.BlazorApp", "sr
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FoodJournal.Application", "src\FoodJournal.Application\FoodJournal.Application.csproj", "{8CCEF160-D9EA-473E-8E8E-DBAD447F0382}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FoodJournal.DatabaseMigrator", "src\FoodJournal.DatabaseMigrator\FoodJournal.DatabaseMigrator.csproj", "{AEE11CDF-8405-B6A3-5BC5-3342C6D634CC}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -66,6 +68,10 @@ Global
 		{8CCEF160-D9EA-473E-8E8E-DBAD447F0382}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8CCEF160-D9EA-473E-8E8E-DBAD447F0382}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8CCEF160-D9EA-473E-8E8E-DBAD447F0382}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AEE11CDF-8405-B6A3-5BC5-3342C6D634CC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AEE11CDF-8405-B6A3-5BC5-3342C6D634CC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AEE11CDF-8405-B6A3-5BC5-3342C6D634CC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AEE11CDF-8405-B6A3-5BC5-3342C6D634CC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -78,6 +84,7 @@ Global
 		{CE25DD46-4668-4E02-ADDD-1985C1791810} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
 		{5ACBD045-5EE8-34BA-9B9E-9B4FA139C4EC} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
 		{8CCEF160-D9EA-473E-8E8E-DBAD447F0382} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
+		{AEE11CDF-8405-B6A3-5BC5-3342C6D634CC} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {17D2309D-DCF1-4A5E-9D5B-824B4E0C10C4}

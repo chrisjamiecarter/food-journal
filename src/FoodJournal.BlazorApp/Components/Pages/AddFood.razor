@@ -1,0 +1,15 @@
+﻿<h3>Add Food</h3>
+
+<EditForm Model="Input">
+    <InputText @bind-Value="Input.Name" />
+    <button type="submit" class="inline-block rounded-sm border border-indigo-600 bg-indigo-600 px-12 py-3 text-sm font-medium text-white hover:bg-transparent hover:text-indigo-600 focus:ring-3 focus:outline-hidden">Add</button>
+</EditForm>
+
+@code {
+    public CreateFood Input = new();
+
+    public class CreateFood
+    {
+        public string Name { get; set; } = string.Empty;
+    }
+}

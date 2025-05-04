@@ -1,0 +1,25 @@
+﻿@using FoodJournal.Application.Entities
+
+<h3>FoodsList</h3>
+
+<table>
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var food in foods)
+        {
+            <tr>
+                <td>@food.Id</td>
+                <td>@food.Name</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@code {
+    private List<Food> foods = [new Food(Guid.NewGuid(), "Test")];
+}

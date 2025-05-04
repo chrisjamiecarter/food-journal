@@ -7,6 +7,7 @@
       "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
     --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono",
       "Courier New", monospace;
+    --color-indigo-600: oklch(51.1% 0.262 276.966);
     --color-zinc-100: oklch(96.7% 0.001 286.375);
     --color-zinc-400: oklch(70.5% 0.015 286.067);
     --color-zinc-500: oklch(55.2% 0.016 285.938);
@@ -18,11 +19,13 @@
     --container-6xl: 72rem;
     --text-xs: 0.75rem;
     --text-sm: 0.875rem;
+    --text-sm--line-height: calc(1.25 / 0.875);
     --text-base: 1rem;
     --text-lg: 1.125rem;
     --font-weight-normal: 400;
     --font-weight-medium: 500;
     --font-weight-semibold: 600;
+    --radius-sm: 0.25rem;
     --radius-lg: 0.5rem;
     --default-font-family: var(--font-sans);
     --default-mono-font-family: var(--font-mono);
@@ -290,6 +293,13 @@
   .rounded-lg {
     border-radius: var(--radius-lg);
   }
+  .rounded-sm {
+    border-radius: var(--radius-sm);
+  }
+  .border {
+    border-style: var(--tw-border-style);
+    border-width: 1px;
+  }
   .border-t {
     border-top-style: var(--tw-border-style);
     border-top-width: 1px;
@@ -298,11 +308,17 @@
     border-bottom-style: var(--tw-border-style);
     border-bottom-width: 1px;
   }
+  .border-indigo-600 {
+    border-color: var(--color-indigo-600);
+  }
   .border-zinc-950\/5 {
     border-color: color-mix(in srgb, oklch(14.1% 0.005 285.823) 5%, transparent);
     @supports (color: color-mix(in lab, red, red)) {
       border-color: color-mix(in oklab, var(--color-zinc-950) 5%, transparent);
     }
+  }
+  .bg-indigo-600 {
+    background-color: var(--color-indigo-600);
   }
   .bg-white {
     background-color: var(--color-white);
@@ -316,8 +332,14 @@
   .px-2 {
     padding-inline: calc(var(--spacing) * 2);
   }
+  .px-12 {
+    padding-inline: calc(var(--spacing) * 12);
+  }
   .py-2\.5 {
     padding-block: calc(var(--spacing) * 2.5);
+  }
+  .py-3 {
+    padding-block: calc(var(--spacing) * 3);
   }
   .pb-2 {
     padding-bottom: calc(var(--spacing) * 2);
@@ -335,6 +357,10 @@
   .text-lg\/7 {
     font-size: var(--text-lg);
     line-height: calc(var(--spacing) * 7);
+  }
+  .text-sm {
+    font-size: var(--text-sm);
+    line-height: var(--tw-leading, var(--text-sm--line-height));
   }
   .text-sm\/5 {
     font-size: var(--text-sm);
@@ -355,6 +381,9 @@
   .font-semibold {
     --tw-font-weight: var(--font-weight-semibold);
     font-weight: var(--font-weight-semibold);
+  }
+  .text-white {
+    color: var(--color-white);
   }
   .text-zinc-500 {
     color: var(--color-zinc-500);
@@ -382,6 +411,13 @@
       outline-color: color-mix(in oklab, var(--color-black) 20%, transparent);
     }
   }
+  .hover\:bg-transparent {
+    &:hover {
+      @media (hover: hover) {
+        background-color: transparent;
+      }
+    }
+  }
   .hover\:bg-zinc-950\/5 {
     &:hover {
       @media (hover: hover) {
@@ -389,6 +425,29 @@
         @supports (color: color-mix(in lab, red, red)) {
           background-color: color-mix(in oklab, var(--color-zinc-950) 5%, transparent);
         }
+      }
+    }
+  }
+  .hover\:text-indigo-600 {
+    &:hover {
+      @media (hover: hover) {
+        color: var(--color-indigo-600);
+      }
+    }
+  }
+  .focus\:ring-3 {
+    &:focus {
+      --tw-ring-shadow: var(--tw-ring-inset,) 0 0 0 calc(3px + var(--tw-ring-offset-width)) var(--tw-ring-color, currentcolor);
+      box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
+    }
+  }
+  .focus\:outline-hidden {
+    &:focus {
+      --tw-outline-style: none;
+      outline-style: none;
+      @media (forced-colors: active) {
+        outline: 2px solid transparent;
+        outline-offset: 2px;
       }
     }
   }

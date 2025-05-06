@@ -22,9 +22,9 @@ internal class FoodRepository(ApplicationDbContext dbContext) : IFoodRepository
         return await dbContext.SaveChangesAsync(cancellationToken) > 0;
     }
 
-    public async Task<IEnumerable<Food>> GetAllAsync(CancellationToken cancellationToken)
+    public async Task<List<Food>> GetAllAsync(CancellationToken cancellationToken)
     {
-        return await dbContext.Foods.ToListAsync(cancellationToken);
+        return await dbContext.Foods.OrderBy(p => p.Name).ToListAsync(cancellationToken);
     }
 
     public async Task<Food?> GetByIdAsync(Guid id, CancellationToken cancellationToken)

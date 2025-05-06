@@ -1,7 +1,11 @@
-﻿<h3>Add Food</h3>
+﻿@using FoodJournal.Application.Entities
+@using FoodJournal.Application.Repositories
+@inject IFoodRepository FoodRepository
 
-<EditForm Model="Input">
-    <InputText @bind-Value="Input.Name" />
+<h3>Add Food</h3>
+
+<EditForm Model="Input" OnValidSubmit="HandleValidSubmit">
+    <InputText @bind-Value="Input.Name" id="Input.Name" />
     <button type="submit" class="inline-block rounded-sm border border-indigo-600 bg-indigo-600 px-12 py-3 text-sm font-medium text-white hover:bg-transparent hover:text-indigo-600 focus:ring-3 focus:outline-hidden">Add</button>
 </EditForm>
 
@@ -11,5 +15,12 @@
     public class CreateFood
     {
         public string Name { get; set; } = string.Empty;
+    }
+
+    private async Task HandleValidSubmit()
+    {
+        var food = new Food(Guid.CreateVersion7(), Input.Name);
+
+        var result = await FoodRepository.CreateAsync(food, CancellationToken.None);
     }
 }

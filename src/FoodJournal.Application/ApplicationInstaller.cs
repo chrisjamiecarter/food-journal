@@ -1,5 +1,6 @@
 ﻿using FoodJournal.Application.Database;
 using FoodJournal.Application.Entities;
+using FoodJournal.Application.Repositories;
 using FoodJournal.Common;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
@@ -19,6 +20,8 @@ public static class ApplicationInstaller
                         .AddEntityFrameworkStores<ApplicationDbContext>()
                         .AddSignInManager()
                         .AddDefaultTokenProviders();
+
+        builder.Services.AddScoped<IFoodRepository, FoodRepository>();
 
         return builder;
     }

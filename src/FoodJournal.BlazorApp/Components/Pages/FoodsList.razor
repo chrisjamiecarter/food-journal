@@ -1,4 +1,6 @@
 ﻿@using FoodJournal.Application.Entities
+@using FoodJournal.Application.Repositories
+@inject IFoodRepository FoodRepository;
 
 <h3>FoodsList</h3>
 
@@ -21,5 +23,10 @@
 </table>
 
 @code {
-    private List<Food> foods = [new Food(Guid.NewGuid(), "Test")];
+    private IEnumerable<Food> foods = [new Food(Guid.NewGuid(), "Test")];
+
+    protected override async Task OnInitializedAsync()
+    {
+        foods = await FoodRepository.GetAllAsync(CancellationToken.None);
+    }
 }

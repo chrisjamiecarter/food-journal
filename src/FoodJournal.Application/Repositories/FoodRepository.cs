@@ -8,16 +8,12 @@ internal class FoodRepository(ApplicationDbContext dbContext) : IFoodRepository
 {
     public async Task<bool> CreateAsync(Food food, CancellationToken cancellationToken)
     {
-        ArgumentNullException.ThrowIfNull(food, nameof(food));
-
         await dbContext.Foods.AddAsync(food, cancellationToken);
         return await dbContext.SaveChangesAsync(cancellationToken) > 0;
     }
 
     public async Task<bool> DeleteAsync(Food food, CancellationToken cancellationToken)
     {
-        ArgumentNullException.ThrowIfNull(food, nameof(food));
-
         dbContext.Foods.Remove(food);
         return await dbContext.SaveChangesAsync(cancellationToken) > 0;
     }
@@ -34,8 +30,6 @@ internal class FoodRepository(ApplicationDbContext dbContext) : IFoodRepository
 
     public async Task<bool> UpdateAsync(Food food, CancellationToken cancellationToken)
     {
-        ArgumentNullException.ThrowIfNull(food, nameof(food));
-
         dbContext.Foods.Update(food);
         return await dbContext.SaveChangesAsync(cancellationToken) > 0;
     }

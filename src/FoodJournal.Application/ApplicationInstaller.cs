@@ -22,6 +22,7 @@ public static class ApplicationInstaller
                         .AddDefaultTokenProviders();
 
         builder.Services.AddScoped<IFoodRepository, FoodRepository>();
+        builder.Services.AddScoped<IMealRepository, MealRepository>();
 
         return builder;
     }

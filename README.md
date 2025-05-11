@@ -7,6 +7,10 @@ Welcome to the **Food Journal** App!
 
 This is a .NET project designed to demonstrate using forms and complex relational data.
 
+## NOTE
+
+Migrations: Add-Migration [MigrationName] -project FoodJournal.Application -startupproject FoodJournal.BlazorApp
+
 ## Version
 
 This document applies to the FoodJournal v0.0.1 development version.

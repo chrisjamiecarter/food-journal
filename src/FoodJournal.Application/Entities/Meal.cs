@@ -19,5 +19,7 @@ public sealed class Meal : AggregateRoot
 
     public required DateTime Date { get; set; }
     public required MealType Type { get; set; }
+    public required string UserId { get; set; }
+    public ApplicationUser? User { get; set; }
     public Collection<Food> Foods { get; } = [];
 }

@@ -13,5 +13,10 @@ internal class ApplicationUserConfiguration : IEntityTypeConfiguration<Applicati
     public void Configure(EntityTypeBuilder<ApplicationUser> builder)
     {
         builder.ToTable(Tables.ApplicationUser, Schemas.Auth);
+
+        builder.HasMany(e => e.Meals)
+               .WithOne(e => e.User)
+               .HasForeignKey(fk => fk.UserId)
+               .OnDelete(DeleteBehavior.Cascade);
     }
 }

@@ -8,12 +8,12 @@ using Microsoft.EntityFrameworkCore;
 
 namespace FoodJournal.DatabaseMigrator;
 
-public class Worker : BackgroundService
+internal class Worker : BackgroundService
 {
     public const string ActivitySourceName = "Migrations";
     private const int Seed = 19890309;
 
-    private static readonly ActivitySource _activitySource = new(ActivitySourceName);
+    private static readonly ActivitySource ActivitySource = new(ActivitySourceName);
 
     private readonly IServiceProvider _serviceProvider;
     private readonly IHostApplicationLifetime _hostApplicationLifetime;
@@ -26,7 +26,7 @@ public class Worker : BackgroundService
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
-        using var activity = _activitySource.StartActivity("Migrating database", ActivityKind.Client);
+        using var activity = ActivitySource.StartActivity("Migrating database", ActivityKind.Client);
 
         try
         {
@@ -63,29 +63,28 @@ public class Worker : BackgroundService
 
         var foods = Foods.Names.Select(x => new Food(Guid.CreateVersion7(), x)).ToList();
 
-        var mealFaker = new Faker<Meal>()
-            .UseSeed(Seed)
-            .CustomInstantiator(f =>
-            {
-                var meal = new Meal(Guid.CreateVersion7(),
-                                f.Date.Past(1),
-                                f.PickRandom<MealType>());
-                foreach (var item in f.Make(f.Random.Int(1, 5), () => f.PickRandom(foods)))
-                {
-                    meal.Foods.Add(item);
-                }
-                return meal;
-            });
-            //.RuleFor(e => e.Foods, f => f.Make(f.Random.Int(1, 5), () => f.PickRandom(foods)));
+        //var mealFaker = new Faker<Meal>()
+        //    .UseSeed(Seed)
+        //    .CustomInstantiator(f =>
+        //    {
+        //        var meal = new Meal(Guid.CreateVersion7(),
+        //                        f.Date.Past(1),
+        //                        f.PickRandom<MealType>());
+        //        foreach (var item in f.Make(f.Random.Int(1, 5), () => f.PickRandom(foods)))
+        //        {
+        //            meal.Foods.Add(item);
+        //        }
+        //        return meal;
+        //    });
 
-        var meals = mealFaker.Generate(100);
+        //var meals = mealFaker.Generate(100);
 
         var strategy = dbContext.Database.CreateExecutionStrategy();
         await strategy.ExecuteAsync(async () =>
         {
             await using var transaction = await dbContext.Database.BeginTransactionAsync(cancellationToken);
             await dbContext.Foods.AddRangeAsync(foods, cancellationToken);
-            await dbContext.Meals.AddRangeAsync(meals, cancellationToken);
+            //await dbContext.Meals.AddRangeAsync(meals, cancellationToken);
             await dbContext.SaveChangesAsync(cancellationToken);
             await transaction.CommitAsync(cancellationToken);
         });

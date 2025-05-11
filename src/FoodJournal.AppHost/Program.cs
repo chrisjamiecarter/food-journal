@@ -28,17 +28,6 @@ internal static class Program
                                .WithReference(journalDatabase)
                                .WaitFor(migratorApp);
 
-        //var identityApi = builder.AddProject<Projects.Identity_Api>("identityapi", "https")
-        //                         .WithExternalHttpEndpoints()
-        //                         .WithReference(identityDb)
-        //                         .WithScalar()
-        //                         .WaitFor(identityDb);
-
-        //var webApp = builder.AddProject<Projects.WebApp>("webapp", "https")
-        //                    .WithExternalHttpEndpoints()
-        //                    .WithReference(identityDb)
-        //                    .WaitFor(identityApi);
-
         await builder.Build().RunAsync();
     }
 }

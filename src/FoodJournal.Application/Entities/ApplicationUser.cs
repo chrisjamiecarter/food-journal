@@ -1,3 +1,4 @@
+using System.Collections.ObjectModel;
 using Microsoft.AspNetCore.Identity;
 
 namespace FoodJournal.Application.Entities;
@@ -8,5 +9,5 @@ namespace FoodJournal.Application.Entities;
 /// </summary>
 public class ApplicationUser : IdentityUser
 {
+    public Collection<Meal> Meals { get; } = [];
 }
-

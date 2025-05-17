@@ -56,35 +56,18 @@ internal class Worker : BackgroundService
 
     private static async Task SeedDatabaseAsync(ApplicationDbContext dbContext, CancellationToken cancellationToken)
     {
-        if (await dbContext.Foods.AnyAsync(cancellationToken) && await dbContext.Meals.AnyAsync(cancellationToken))
+        if (await dbContext.Foods.AnyAsync(cancellationToken))
         {
             return;
         }
 
         var foods = Foods.Names.Select(x => new Food(Guid.CreateVersion7(), x)).ToList();
 
-        //var mealFaker = new Faker<Meal>()
-        //    .UseSeed(Seed)
-        //    .CustomInstantiator(f =>
-        //    {
-        //        var meal = new Meal(Guid.CreateVersion7(),
-        //                        f.Date.Past(1),
-        //                        f.PickRandom<MealType>());
-        //        foreach (var item in f.Make(f.Random.Int(1, 5), () => f.PickRandom(foods)))
-        //        {
-        //            meal.Foods.Add(item);
-        //        }
-        //        return meal;
-        //    });
-
-        //var meals = mealFaker.Generate(100);
-
         var strategy = dbContext.Database.CreateExecutionStrategy();
         await strategy.ExecuteAsync(async () =>
         {
             await using var transaction = await dbContext.Database.BeginTransactionAsync(cancellationToken);
             await dbContext.Foods.AddRangeAsync(foods, cancellationToken);
-            //await dbContext.Meals.AddRangeAsync(meals, cancellationToken);
             await dbContext.SaveChangesAsync(cancellationToken);
             await transaction.CommitAsync(cancellationToken);
         });

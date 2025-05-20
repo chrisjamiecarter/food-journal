@@ -9,6 +9,7 @@
         <tr>
             <th>ID</th>
             <th>Name</th>
+            <th>Actions</th>
         </tr>
     </thead>
     <tbody>
@@ -17,6 +18,13 @@
             <tr>
                 <td>@food.Id</td>
                 <td>@food.Name</td>
+                <td>
+                    <div>
+                        <NavLink href=@($"foods/edit/{@food.Id}") >
+                            Edit
+                        </NavLink>
+                    </div>
+                </td>
             </tr>
         }
     </tbody>

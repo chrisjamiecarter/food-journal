@@ -308,9 +308,6 @@
   .max-w-6xl {
     max-width: var(--container-6xl);
   }
-  .min-w-0 {
-    min-width: calc(var(--spacing) * 0);
-  }
   .flex-1 {
     flex: 1;
   }

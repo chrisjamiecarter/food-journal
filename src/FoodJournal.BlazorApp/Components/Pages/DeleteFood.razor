@@ -1,0 +1,74 @@
+﻿@page "/foods/delete/{Id:guid}"
+
+@using FoodJournal.Application.Entities
+@using FoodJournal.Application.Repositories
+@using FoodJournal.BlazorApp.Components.Shared
+@inject IFoodRepository FoodRepository;
+@inject NavigationManager NavigationManager
+
+<PageTitle>Delete Food</PageTitle>
+
+<div>
+    <h1>Delete Food</h1>
+
+    @if (Food is null)
+    {
+        <LoadingSpinner />
+    }
+    else
+    {
+        <p>@Food.Id</p>
+        <p>@Food.Name</p>
+        <button onclick="@DeleteFoodAsync">Delete</button>
+    }
+
+</div>
+
+@code {
+    [Parameter] public Guid Id { get; set; }
+
+    private Food? Food { get; set; }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await LoadFoodAsync();
+        }
+    }
+
+    private async Task LoadFoodAsync()
+    {
+        var food = await FoodRepository.GetByIdAsync(Id, CancellationToken.None);
+
+        if (food is null)
+        {
+            // TODO: Toast.
+        }
+        else
+        {
+            Food = food;
+        }
+
+        await InvokeAsync(StateHasChanged);
+    }
+
+    private async Task DeleteFoodAsync()
+    {
+        if (Food is null)
+        {
+            return;
+        }
+
+        var deleted = await FoodRepository.DeleteAsync(Food, CancellationToken.None);
+
+        if (deleted)
+        {
+            NavigationManager.NavigateTo("journal");
+        }
+        else
+        {
+            // TODO: Toast.
+        }
+    }
+}

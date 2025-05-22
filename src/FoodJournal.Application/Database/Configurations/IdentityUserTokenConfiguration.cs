@@ -8,7 +8,7 @@ namespace FoodJournal.Application.Database.Configurations;
 /// <summary>
 /// Configures an <see cref="IdentityUserToken"/> table definition in the database.
 /// </summary>
-internal class IdentityUserTokenConfiguration : IEntityTypeConfiguration<IdentityUserToken<string>>
+internal sealed class IdentityUserTokenConfiguration : IEntityTypeConfiguration<IdentityUserToken<string>>
 {
     public void Configure(EntityTypeBuilder<IdentityUserToken<string>> builder)
     {

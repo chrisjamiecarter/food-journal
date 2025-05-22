@@ -11,8 +11,9 @@ namespace FoodJournal.Application.Entities;
 public sealed class Meal : AggregateRoot
 {
     [SetsRequiredMembers]
-    public Meal(Guid id, DateTime date, MealType type) : base(id)
+    public Meal(Guid id, string userId, DateTime date, MealType type) : base(id)
     {
+        UserId = userId;
         Date = date;
         Type = type;
     }

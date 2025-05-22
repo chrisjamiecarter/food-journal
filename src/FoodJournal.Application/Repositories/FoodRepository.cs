@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace FoodJournal.Application.Repositories;
 
-internal class FoodRepository(ApplicationDbContext dbContext) : IFoodRepository
+internal sealed class FoodRepository(ApplicationDbContext dbContext) : IFoodRepository
 {
     public async Task<bool> CreateAsync(Food food, CancellationToken cancellationToken)
     {

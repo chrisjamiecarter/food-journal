@@ -8,7 +8,7 @@ namespace FoodJournal.Application.Database.Configurations;
 /// <summary>
 /// Configures an <see cref="IdentityRoleClaim"/> table definition in the database.
 /// </summary>
-internal class IdentityRoleClaimConfiguration : IEntityTypeConfiguration<IdentityRoleClaim<string>>
+internal sealed class IdentityRoleClaimConfiguration : IEntityTypeConfiguration<IdentityRoleClaim<string>>
 {
     public void Configure(EntityTypeBuilder<IdentityRoleClaim<string>> builder)
     {

@@ -8,7 +8,7 @@ namespace FoodJournal.Application.Database.Configurations;
 /// <summary>
 /// Configures an <see cref="ApplicationUser"/> table definition in the database.
 /// </summary>
-internal class ApplicationUserConfiguration : IEntityTypeConfiguration<ApplicationUser>
+internal sealed class ApplicationUserConfiguration : IEntityTypeConfiguration<ApplicationUser>
 {
     public void Configure(EntityTypeBuilder<ApplicationUser> builder)
     {

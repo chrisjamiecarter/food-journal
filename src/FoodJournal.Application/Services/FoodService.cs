@@ -3,7 +3,7 @@ using FoodJournal.Application.Repositories;
 
 namespace FoodJournal.Application.Services;
 
-internal class FoodService(IFoodRepository foodRepository) : IFoodService
+internal sealed class FoodService(IFoodRepository foodRepository) : IFoodService
 {
     public async Task<bool> CreateAsync(Food food, CancellationToken cancellationToken)
     {

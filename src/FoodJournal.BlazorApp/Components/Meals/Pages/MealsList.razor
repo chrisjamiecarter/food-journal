@@ -1,0 +1,72 @@
+﻿@page "/meals"
+
+@using FoodJournal.Application.Entities
+@using FoodJournal.Application.Repositories
+@using FoodJournal.BlazorApp.Components.Shared
+@using Microsoft.AspNetCore.Authorization
+@inject IMealRepository MealRepository
+
+@attribute [Authorize]
+
+<PageTitle>Meals</PageTitle>
+
+<h1>Meals</h1>
+
+@if (Meals is null)
+{
+    <LoadingSpinner />
+}
+else
+{
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>User ID</th>
+                <th>Date</th>
+                <th>Type</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var meal in Meals)
+            {
+                <tr>
+                    <td>@meal.Id</td>
+                    <td>@meal.UserId</td>
+                    <td>@meal.Date</td>
+                    <td>@meal.Type</td>
+                    <td>
+                        <div>
+                            <NavLink href=@($"meals/edit/{@meal.Id}")>
+                                Edit
+                            </NavLink>
+                            <NavLink href=@($"meals/delete/{@meal.Id}")>
+                                Delete
+                            </NavLink>
+                        </div>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    private IEnumerable<Meal>? Meals { get; set; }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await LoadMealsAsync();
+        }
+    }
+
+    private async Task LoadMealsAsync()
+    {
+        Meals = await MealRepository.GetAllAsync(CancellationToken.None);
+        
+        await InvokeAsync(StateHasChanged);
+    }
+}

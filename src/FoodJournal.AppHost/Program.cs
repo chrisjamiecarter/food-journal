@@ -15,7 +15,8 @@ internal static class Program
         var builder = DistributedApplication.CreateBuilder(args);
 
         var sqlServer = builder.AddSqlServer(ServiceNames.DatabaseProvider, port: ServiceNames.DatabasePort)
-                               .WithLifetime(ContainerLifetime.Persistent);
+                               .WithLifetime(ContainerLifetime.Persistent)
+                               .WithContainerName("foodjournal-sqlserver");
 
         var journalDatabase = sqlServer.AddDatabase(ServiceNames.DatabaseName);
 

@@ -4,8 +4,6 @@
 @using Microsoft.AspNetCore.Authorization
 @inject IMealRepository MealRepository
 
-@attribute [Authorize]
-
 @if (Meals is null)
 {
     <LoadingSpinner />

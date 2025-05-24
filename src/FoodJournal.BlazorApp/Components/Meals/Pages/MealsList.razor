@@ -1,6 +1,4 @@
-﻿@page "/meals"
-
-@using FoodJournal.Application.Entities
+﻿@using FoodJournal.Application.Entities
 @using FoodJournal.Application.Repositories
 @using FoodJournal.BlazorApp.Components.Shared
 @using Microsoft.AspNetCore.Authorization
@@ -8,48 +6,46 @@
 
 @attribute [Authorize]
 
-<PageTitle>Meals</PageTitle>
-
-<h1>Meals</h1>
-
 @if (Meals is null)
 {
     <LoadingSpinner />
 }
 else
 {
-    <table>
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>User ID</th>
-                <th>Date</th>
-                <th>Type</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var meal in Meals)
-            {
+    <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
+        <table class="w-full text-sm text-left text-gray-400">
+            <thead class="text-xs text-gray-400 bg-gray-700">
                 <tr>
-                    <td>@meal.Id</td>
-                    <td>@meal.UserId</td>
-                    <td>@meal.Date</td>
-                    <td>@meal.Type</td>
-                    <td>
-                        <div>
-                            <NavLink href=@($"meals/edit/{@meal.Id}")>
-                                Edit
-                            </NavLink>
-                            <NavLink href=@($"meals/delete/{@meal.Id}")>
-                                Delete
-                            </NavLink>
-                        </div>
-                    </td>
+                    <th scope="col" class="px-6 py-3">ID</th>
+                    <th scope="col" class="px-6 py-3">User ID</th>
+                    <th scope="col" class="px-6 py-3">Date</th>
+                    <th scope="col" class="px-6 py-3">Type</th>
+                    <th scope="col" class="px-6 py-3">Actions</th>
                 </tr>
-            }
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+                @foreach (var meal in Meals)
+                {
+                    <tr class="bg-gray-800 border-b border-gray-700 hover:bg-gray-600">
+                        <td scope="row" class="px-6 py-4 font-medium text-white whitespace-nowrap">@meal.Id</td>
+                        <td class="px-6 py-4">@meal.UserId</td>
+                        <td class="px-6 py-4">@meal.Date</td>
+                        <td class="px-6 py-4">@meal.Type</td>
+                        <td>
+                            <div>
+                                <NavLink href=@($"meals/edit/{@meal.Id}")>
+                                    Edit
+                                </NavLink>
+                                <NavLink href=@($"meals/delete/{@meal.Id}")>
+                                    Delete
+                                </NavLink>
+                            </div>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
 }
 
 @code {
@@ -66,7 +62,18 @@ else
     private async Task LoadMealsAsync()
     {
         Meals = await MealRepository.GetAllAsync(CancellationToken.None);
-        
+
+        if (!Meals.Any())
+        {
+            Meals = 
+            [
+                new Meal(Guid.NewGuid(), Guid.NewGuid().ToString(), DateTime.Now, Application.Enums.MealType.Breakfast),
+                new Meal(Guid.NewGuid(), Guid.NewGuid().ToString(), DateTime.Now, Application.Enums.MealType.Lunch),
+                new Meal(Guid.NewGuid(), Guid.NewGuid().ToString(), DateTime.Now, Application.Enums.MealType.Dinner),
+                new Meal(Guid.NewGuid(), Guid.NewGuid().ToString(), DateTime.Now, Application.Enums.MealType.Snack),
+            ];
+        }
+
         await InvokeAsync(StateHasChanged);
     }
 }

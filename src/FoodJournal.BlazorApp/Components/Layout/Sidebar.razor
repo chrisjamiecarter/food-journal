@@ -1,4 +1,6 @@
-﻿<div class="fixed inset-y-0 left-0 w-64 max-lg:hidden">
+﻿@inject ICurrentUserService CurrentUserService
+
+<div class="fixed inset-y-0 left-0 w-64 max-lg:hidden">
     <nav class="flex flex-col min-h-0 h-full">
 
         @* Brand *@
@@ -52,8 +54,8 @@
                         </span>
                         <span class="flex w-full justify-between">
                             <span>
-                                <span class="block truncate text-sm/5 font-medium text-zinc-950 dark:text-white">Name</span>
-                                <span class="block truncate text-xs/5 font-normal text-zinc-500 dark:text-zinc-400">email@domain.tld</span>
+                                <span class="block truncate text-sm/5 font-medium text-zinc-950 dark:text-white">@name</span>
+                                <span class="block truncate text-xs/5 font-normal text-zinc-500 dark:text-zinc-400">@email</span>
                             </span>
                             <button class="cursor-pointer" type="submit">
                                 <span class="material-symbols-outlined">
@@ -71,5 +73,12 @@
 </div>
 
 @code {
+    string email = string.Empty;
+    string name = string.Empty;
 
+    protected override void OnInitialized()
+    {
+        email = CurrentUserService.Email ?? string.Empty;
+        name = CurrentUserService.Name ?? string.Empty;
+    }
 }

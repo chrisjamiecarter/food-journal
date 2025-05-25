@@ -124,7 +124,7 @@
 
     private async Task HandleValidSubmit()
     {
-        var currentUserId = CurrentUserService.UserId;
+        var currentUserId = CurrentUserService.Id;
         if (string.IsNullOrWhiteSpace(currentUserId))
         {
             // TODO: Handle case where user is not authenticated

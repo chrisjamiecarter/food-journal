@@ -5,5 +5,7 @@
 /// </summary>
 public interface ICurrentUserService
 {
-    string? UserId { get; }
+    string? Id { get; }
+    string? Email { get; }
+    string? Name { get; }
 }

@@ -5,6 +5,8 @@ using FoodJournal.BlazorApp.Components.Account;
 using FoodJournal.Application.Entities;
 using FoodJournal.Application;
 using FoodJournal.ServiceDefaults;
+using FoodJournal.Application.Services;
+using FoodJournal.BlazorApp.Services;
 
 namespace FoodJournal.BlazorApp;
 
@@ -45,6 +47,9 @@ internal static class Program
         //    .AddDefaultTokenProviders();
 
         builder.Services.AddSingleton<IEmailSender<ApplicationUser>, IdentityNoOpEmailSender>();
+
+        builder.Services.AddHttpContextAccessor();
+        builder.Services.AddScoped<ICurrentUserService, CurrentUserService>();
 
         var app = builder.Build();
 

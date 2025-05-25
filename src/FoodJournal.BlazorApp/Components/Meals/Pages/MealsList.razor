@@ -2,7 +2,7 @@
 @using FoodJournal.Application.Repositories
 @using FoodJournal.BlazorApp.Components.Shared
 @using Microsoft.AspNetCore.Authorization
-@inject IMealRepository MealRepository
+@inject IMealService MealService
 
 @if (Meals is null)
 {
@@ -49,6 +49,12 @@ else
 @code {
     private IEnumerable<Meal>? Meals { get; set; }
 
+    public async Task RefreshAsync()
+    {
+        await LoadMealsAsync();
+        await InvokeAsync(StateHasChanged);
+    }
+
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         if (firstRender)
@@ -59,7 +65,7 @@ else
 
     private async Task LoadMealsAsync()
     {
-        Meals = await MealRepository.GetAllAsync(CancellationToken.None);
+        Meals = await MealService.GetAllAsync(CancellationToken.None);
 
         if (!Meals.Any())
         {

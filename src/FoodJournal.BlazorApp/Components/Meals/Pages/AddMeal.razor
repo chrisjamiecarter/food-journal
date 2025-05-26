@@ -1,5 +1,4 @@
-﻿@page "/meals/add"
-
+﻿@using FoodJournal.BlazorApp.Components.Meals.Models
 @inject ICurrentUserService CurrentUserService
 @inject IFoodService FoodService
 @inject IMealService MealService
@@ -96,59 +95,18 @@
 
 
 @code {
-    private CreateMeal Input = new();
-    private IEnumerable<Food>? Foods { get; set; }
+    [Parameter]
+    public IEnumerable<Food>? Foods { get; set; }
+
+    [Parameter]
+    public EventCallback<CreateMealDto> OnAddMeal { get; set; }
+
+    private CreateMealDto Input = new();
     private bool isSubmitting = false;
-
-    public class CreateMeal
-    {
-        public DateTime Date { get; set; } = DateTime.Now;
-        public MealType Type { get; set; } = MealType.Breakfast;
-        public List<Food> Foods { get; set; } = [];
-    }
-
-    protected override async Task OnAfterRenderAsync(bool firstRender)
-    {
-        if (firstRender)
-        {
-            await LoadMealsAsync();
-        }
-    }
-
-    private async Task LoadMealsAsync()
-    {
-        Foods = await FoodService.GetAllAsync(CancellationToken.None);
-
-        await InvokeAsync(StateHasChanged);
-    }
 
     private async Task HandleValidSubmit()
     {
-        var currentUserId = CurrentUserService.Id;
-        if (string.IsNullOrWhiteSpace(currentUserId))
-        {
-            // TODO: Handle case where user is not authenticated
-            return;
-        }
-
-        var meal = new Meal(Guid.CreateVersion7(), currentUserId, Input.Date, Input.Type);
-
-        foreach (var food in Input.Foods)
-        {
-            meal.Foods.Add(food);
-        }
-
-        var created = await MealService.CreateAsync(meal, CancellationToken.None);
-
-        if (created)
-        {
-            // TODO: Toast.
-            NavigationManager.NavigateTo("/meals");
-        }
-        else
-        {
-            // TODO: Toast.
-        }
+        await OnAddMeal.InvokeAsync(Input);
     }
 
     private void ToggleFood(Food food, bool isSelected)

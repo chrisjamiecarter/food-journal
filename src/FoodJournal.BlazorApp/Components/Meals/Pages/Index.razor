@@ -1,4 +1,10 @@
 ﻿@page "/meals"
+@using FoodJournal.BlazorApp.Components.Meals.Models
+
+@inject ICurrentUserService CurrentUserService
+@inject IFoodService FoodService
+@inject IMealService MealService
+@inject NavigationManager NavigationManager
 
 @attribute [Authorize]
 
@@ -8,13 +14,74 @@
     
     <h1>Meals</h1>
 
-    <NavLink href=@($"meals/add")>
+    @* <NavLink href=@($"meals/add")>
         Add
-    </NavLink>
-    <MealsList />
+    </NavLink> *@
+    <AddMeal Foods="Foods" OnAddMeal="HandleAddMeal" />
+    <MealsList Meals="Meals" />
 
 </section>
 
 @code {
+    private IEnumerable<Food>? Foods { get; set; }
+    private IEnumerable<Meal>? Meals { get; set; }
+
+    private async Task RefreshAsync()
+    {
+        await LoadFoodsAsync();
+        await LoadMealsAsync();
+        await InvokeAsync(StateHasChanged);
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await RefreshAsync();
+        }
+    }
+
+    private async Task LoadFoodsAsync()
+    {
+        Foods = await FoodService.GetAllAsync(CancellationToken.None);
+
+        await InvokeAsync(StateHasChanged);
+    }
+
+    private async Task LoadMealsAsync()
+    {
+        Meals = await MealService.GetAllAsync(CancellationToken.None);
+
+        await InvokeAsync(StateHasChanged);
+    }
+
+    private async Task HandleAddMeal(CreateMealDto createMeal)
+    {
+        var currentUserId = CurrentUserService.Id;
+        if (string.IsNullOrWhiteSpace(currentUserId))
+        {
+            // TODO: Handle case where user is not authenticated
+            return;
+        }
+
+        var meal = new Meal(Guid.CreateVersion7(), currentUserId, createMeal.Date, createMeal.Type);
+
+        foreach (var food in createMeal.Foods)
+        {
+            meal.Foods.Add(food);
+        }
+
+        var created = await MealService.CreateAsync(meal, CancellationToken.None);
+
+        if (created)
+        {
+            // TODO: Toast.
+            await RefreshAsync();
+        }
+        else
+        {
+            // TODO: Toast.
+        }
+    }
 
 }

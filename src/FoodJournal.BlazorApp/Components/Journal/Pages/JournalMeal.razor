@@ -1,14 +1,18 @@
 ﻿<div>
-    <h3>
-        @MealType
-    </h3>
+    <div class="flex justify-between mb-3">
+        <h3 class="font-bold">@MealType</h3>
+        <button class="flex items-center cursor-pointer rounded-full bg-gray-800 hover:bg-gray-600">
+                <span class="material-symbols-outlined">add</span>
+        </button>
+    </div>
+
     @if (MealFoods is null)
     {
         <LoadingSpinner />
     }
     else
     {
-        <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
+        <div class="relative overflow-x-auto shadow-md sm:rounded-lg mb-3">
             <table class="w-full text-sm text-left text-gray-400">
                 <thead class="text-xs text-gray-400 bg-gray-700">
                     <tr>
@@ -32,11 +36,6 @@
             </table>
         </div>
     }
-    <div class="border-t border-gray-700">
-        <button>
-            Add @MealType
-        </button>
-    </div>
 </div>
 
 @code {

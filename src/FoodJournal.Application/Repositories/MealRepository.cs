@@ -28,6 +28,17 @@ internal sealed class MealRepository(ApplicationDbContext dbContext) : IMealRepo
         return await dbContext.Meals.FindAsync([id], cancellationToken);
     }
 
+    public async Task<List<Meal>> GetByUserIdAsync(string userId, CancellationToken cancellationToken)
+    {
+        var query = dbContext.Meals.Include(x => x.Foods).AsQueryable();
+
+        query = query.Where(x => x.UserId == userId);
+
+        query = query.OrderBy(p => p.Date);
+
+        return await query.ToListAsync(cancellationToken);
+    }
+
     public async Task<bool> UpdateAsync(Meal meal, CancellationToken cancellationToken)
     {
         dbContext.Meals.Update(meal);

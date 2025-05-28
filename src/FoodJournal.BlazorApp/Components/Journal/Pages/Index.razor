@@ -1,13 +1,15 @@
 ﻿@page "/journal"
 
 @using Microsoft.AspNetCore.Authorization
+@inject ICurrentUserService CurrentUserService
+@inject IMealService MealService
 
 @attribute [Authorize]
 
 <PageTitle>Journal</PageTitle>
 
 <section>
-    <div class="flex justify-center items-center bg-slate-600 h-20 p-5 rounded-xl">
+    <div class="flex justify-center items-center bg-slate-600 h-20 p-5 rounded-xl mb-3">
         @* <div class="font-bold">
             Journal
         </div> *@
@@ -24,10 +26,52 @@
             Add
         </div> *@
     </div>
+
+    <div class="bg-slate-600 p-5 rounded-xl mb-3">
+        <JournalMeal MealType="MealType.Breakfast" MealDate="@JournalDate" MealFoods="@BreakfastJournal" />
+    </div>
+    <div class="bg-slate-600 p-5 rounded-xl mb-3">
+        <JournalMeal MealType="MealType.Lunch" MealDate="@JournalDate" MealFoods="@LunchJournal" />
+    </div>
+    <div class="bg-slate-600 p-5 rounded-xl mb-3">
+        <JournalMeal MealType="MealType.Dinner" MealDate="@JournalDate" MealFoods="@DinnerJournal" />
+    </div>
+    <div class="bg-slate-600 p-5 rounded-xl mb-3">
+        <JournalMeal MealType="MealType.Snack" MealDate="@JournalDate" MealFoods="@SnackJournal" />
+    </div>
 </section>
 
 @code {
     private DateTime JournalDate = DateTime.Now;
+    private IEnumerable<Meal>? Meals { get; set; }
+
+    private IEnumerable<Food>? BreakfastJournal => Meals?.FirstOrDefault(m => m.Type == MealType.Breakfast && m.Date.Date == JournalDate.Date)?.Foods ?? [];
+    private IEnumerable<Food>? LunchJournal => Meals?.FirstOrDefault(m => m.Type == MealType.Lunch && m.Date.Date == JournalDate.Date)?.Foods ?? [];
+    private IEnumerable<Food>? DinnerJournal => Meals?.FirstOrDefault(m => m.Type == MealType.Dinner && m.Date.Date == JournalDate.Date)?.Foods ?? [];
+    private IEnumerable<Food>? SnackJournal => Meals?.FirstOrDefault(m => m.Type == MealType.Snack && m.Date.Date == JournalDate.Date)?.Foods ?? [];
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await LoadMealsAsync();
+        }
+    }
+
+    private async Task LoadMealsAsync()
+    {
+        Meals = null;
+
+        var currentUserId = CurrentUserService.Id;
+        if (string.IsNullOrWhiteSpace(currentUserId))
+        {
+            return;
+        }
+
+        Meals = await MealService.GetByUserIdAsync(currentUserId, CancellationToken.None);
+
+        await InvokeAsync(StateHasChanged);
+    }
 
     private void IncrementJournalDate(int days)
     {

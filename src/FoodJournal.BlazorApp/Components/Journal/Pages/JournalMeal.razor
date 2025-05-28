@@ -1,0 +1,51 @@
+﻿<div>
+    <h3>
+        @MealType
+    </h3>
+    @if (MealFoods is null)
+    {
+        <LoadingSpinner />
+    }
+    else
+    {
+        <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
+            <table class="w-full text-sm text-left text-gray-400">
+                <thead class="text-xs text-gray-400 bg-gray-700">
+                    <tr>
+                        <th scope="col" class="px-6 py-3">ID</th>
+                        <th scope="col" class="px-6 py-3">Name</th>
+                        <th scope="col" class="px-6 py-3">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var food in MealFoods)
+                    {
+                        <tr class="bg-gray-800 border-b border-gray-700 hover:bg-gray-600">
+                            <td scope="row" class="px-6 py-4 font-medium text-white whitespace-nowrap">@food.Id</td>
+                            <td class="px-6 py-4">@food.Name</td>
+                            <td>
+                                Delete
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+    <div class="border-t border-gray-700">
+        <button>
+            Add @MealType
+        </button>
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public MealType MealType { get; set; }
+
+    [Parameter]
+    public DateTime MealDate { get; set; }
+
+    [Parameter]
+    public IEnumerable<Food>? MealFoods { get; set; }
+}

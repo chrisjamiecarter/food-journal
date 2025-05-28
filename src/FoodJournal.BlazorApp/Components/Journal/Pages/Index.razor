@@ -1,0 +1,36 @@
+﻿@page "/journal"
+
+@using Microsoft.AspNetCore.Authorization
+
+@attribute [Authorize]
+
+<PageTitle>Journal</PageTitle>
+
+<section>
+    <div class="flex justify-center items-center bg-slate-600 h-20 p-5 rounded-xl">
+        @* <div class="font-bold">
+            Journal
+        </div> *@
+        <div class="flex gap-3">
+            <button class="flex items-center cursor-pointer hover:bg-gray-600" onclick="@(() => IncrementJournalDate(-1))">
+                <span class="material-symbols-outlined">chevron_left</span>
+            </button>
+            <InputDate @bind-Value="JournalDate" />
+            <button class="flex items-center cursor-pointer hover:bg-gray-600" onclick="@(() => IncrementJournalDate(1))">
+                <span class="material-symbols-outlined">chevron_right</span>
+            </button>
+        </div>
+        @* <div>
+            Add
+        </div> *@
+    </div>
+</section>
+
+@code {
+    private DateTime JournalDate = DateTime.Now;
+
+    private void IncrementJournalDate(int days)
+    {
+        JournalDate = JournalDate.AddDays(days);
+    }
+}

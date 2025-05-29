@@ -28,13 +28,12 @@
         <StatusMessage Message="@Message" />
         <EditForm class="space-y-6" Model="Input" asp-route-returnUrl="@ReturnUrl" method="post" OnValidSubmit="RegisterUser" FormName="register">
             <DataAnnotationsValidator />
-            <ValidationSummary class="text-danger" role="alert" />
 
             <div>
                 <label for="Input.Username" class="block text-sm/6 font-medium text-white">Username</label>
                 <div class="mt-2">
                     <InputText @bind-Value="Input.Username" id="Input.Username" class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6" autocomplete="username" aria-required="true" placeholder="username" />
-                    <ValidationMessage For="() => Input.Username" class="text-danger" />
+                    <ValidationMessage For="() => Input.Username" class="text-red-600 text-sm" />
                 </div>
             </div>
 
@@ -42,7 +41,7 @@
                 <label for="Input.Email" class="block text-sm/6 font-medium text-white">Email address</label>
                 <div class="mt-2">
                     <InputText @bind-Value="Input.Email" id="Input.Email" type="email" class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6" autocomplete="email" aria-required="true" placeholder="name@example.com" />
-                    <ValidationMessage For="() => Input.Email" class="text-danger" />
+                    <ValidationMessage For="() => Input.Email" class="text-red-600 text-sm" />
                 </div>
             </div>
 
@@ -50,7 +49,7 @@
                 <label for="Input.Password" class="block text-sm/6 font-medium text-white">Password</label>
                 <div class="mt-2">
                     <InputText type="password" @bind-Value="Input.Password" id="Input.Password" class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6" autocomplete="current-password" aria-required="true" placeholder="password" />
-                    <ValidationMessage For="() => Input.Password" class="text-danger" />
+                    <ValidationMessage For="() => Input.Password" class="text-red-600 text-sm" />
                 </div>
             </div>
 
@@ -58,7 +57,7 @@
                 <label for="Input.ConfirmPassword" class="block text-sm/6 font-medium text-white">Confirm Password</label>
                 <div class="mt-2">
                     <InputText type="password" @bind-Value="Input.ConfirmPassword" id="Input.ConfirmPassword" class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6" autocomplete="new-password" aria-required="true" placeholder="password" />
-                    <ValidationMessage For="() => Input.ConfirmPassword" class="text-danger" />
+                    <ValidationMessage For="() => Input.ConfirmPassword" class="text-red-600 text-sm" />
                 </div>
             </div>
 

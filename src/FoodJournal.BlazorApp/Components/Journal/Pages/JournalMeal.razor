@@ -1,10 +1,13 @@
-﻿<div>
+﻿@using FoodJournal.BlazorApp.Components.Journal.Models
+<div>
     <div class="flex justify-between mb-3">
-        <h3 class="font-bold">@MealType</h3>
-        <button class="flex items-center cursor-pointer rounded-full bg-gray-800 hover:bg-gray-600">
-                <span class="material-symbols-outlined">add</span>
+        <h3 class="font-bold">@MealType</h3>        
+        <button class="flex items-center cursor-pointer rounded-full bg-gray-800 hover:bg-gray-600" onclick="@ToggleShow">
+            <span class="material-symbols-outlined">add</span>
         </button>
     </div>
+
+    <AddMeal Show="@Show" JournalDate="@MealDate" JournalMealType="@MealType" AvailableFoods="@AvailableFoods" OnAddMeal="HandleAddJournalMeal" />
 
     @if (MealFoods is null)
     {
@@ -40,6 +43,9 @@
 
 @code {
     [Parameter]
+    public IEnumerable<Food>? AvailableFoods { get; set; }
+    
+    [Parameter]
     public MealType MealType { get; set; }
 
     [Parameter]
@@ -47,4 +53,19 @@
 
     [Parameter]
     public IEnumerable<Food>? MealFoods { get; set; }
+
+    [Parameter]
+    public EventCallback<CreateJournalMealDto> OnAddJournalMeal { get; set; }
+
+    private bool Show { get; set; } = false;
+
+    private void ToggleShow()
+    {
+        Show = !Show;
+    }
+
+    private async Task HandleAddJournalMeal(CreateJournalMealDto createMeal)
+    {
+        await OnAddJournalMeal.InvokeAsync(createMeal);
+    }
 }

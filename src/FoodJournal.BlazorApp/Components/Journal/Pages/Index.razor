@@ -1,7 +1,10 @@
 ﻿@page "/journal"
 
+@using FoodJournal.BlazorApp.Components.Journal.Models
 @using Microsoft.AspNetCore.Authorization
+
 @inject ICurrentUserService CurrentUserService
+@inject IFoodService FoodService
 @inject IMealService MealService
 
 @attribute [Authorize]
@@ -20,21 +23,23 @@
     </div>
 
     <div class="bg-slate-600 p-5 rounded-xl mb-3">
-        <JournalMeal MealType="MealType.Breakfast" MealDate="@JournalDate" MealFoods="@BreakfastJournal" />
+        <JournalMeal MealType="MealType.Breakfast" MealDate="@JournalDate" MealFoods="@BreakfastJournal" AvailableFoods="Foods" OnAddJournalMeal="HandleAddMeal" />
     </div>
     <div class="bg-slate-600 p-5 rounded-xl mb-3">
-        <JournalMeal MealType="MealType.Lunch" MealDate="@JournalDate" MealFoods="@LunchJournal" />
+        <JournalMeal MealType="MealType.Lunch" MealDate="@JournalDate" MealFoods="@LunchJournal" AvailableFoods="Foods" OnAddJournalMeal="HandleAddMeal" />
     </div>
     <div class="bg-slate-600 p-5 rounded-xl mb-3">
-        <JournalMeal MealType="MealType.Dinner" MealDate="@JournalDate" MealFoods="@DinnerJournal" />
+        <JournalMeal MealType="MealType.Dinner" MealDate="@JournalDate" MealFoods="@DinnerJournal" AvailableFoods="Foods" OnAddJournalMeal="HandleAddMeal" />
     </div>
     <div class="bg-slate-600 p-5 rounded-xl mb-3">
-        <JournalMeal MealType="MealType.Snack" MealDate="@JournalDate" MealFoods="@SnackJournal" />
+        <JournalMeal MealType="MealType.Snack" MealDate="@JournalDate" MealFoods="@SnackJournal" AvailableFoods="Foods" OnAddJournalMeal="HandleAddMeal" />
     </div>
 </section>
 
 @code {
     private DateTime JournalDate = DateTime.Now;
+    
+    private IEnumerable<Food>? Foods { get; set; }
     private IEnumerable<Meal>? Meals { get; set; }
 
     private IEnumerable<Food>? BreakfastJournal => Meals?.FirstOrDefault(m => m.Type == MealType.Breakfast && m.Date.Date == JournalDate.Date)?.Foods ?? [];
@@ -46,8 +51,20 @@
     {
         if (firstRender)
         {
-            await LoadMealsAsync();
+            await RefreshAsync();
         }
+    }
+
+    private async Task RefreshAsync()
+    {
+        await LoadFoodsAsync();
+        await LoadMealsAsync();
+        await InvokeAsync(StateHasChanged);
+    }
+
+    private async Task LoadFoodsAsync()
+    {
+        Foods = await FoodService.GetAllAsync(CancellationToken.None);
     }
 
     private async Task LoadMealsAsync()
@@ -61,12 +78,40 @@
         }
 
         Meals = await MealService.GetByUserIdAsync(currentUserId, CancellationToken.None);
-
-        await InvokeAsync(StateHasChanged);
     }
 
     private void IncrementJournalDate(int days)
     {
         JournalDate = JournalDate.AddDays(days);
     }
+
+    private async Task HandleAddMeal(CreateJournalMealDto createMeal)
+    {
+        var currentUserId = CurrentUserService.Id;
+        if (string.IsNullOrWhiteSpace(currentUserId))
+        {
+            // TODO: Handle case where user is not authenticated
+            return;
+        }
+
+        var meal = new Meal(Guid.CreateVersion7(), currentUserId, createMeal.Date, createMeal.Type);
+
+        foreach (var food in createMeal.Foods)
+        {
+            meal.Foods.Add(food);
+        }
+
+        var created = await MealService.CreateAsync(meal, CancellationToken.None);
+
+        if (created)
+        {
+            // TODO: Toast.
+            await RefreshAsync();
+        }
+        else
+        {
+            // TODO: Toast.
+        }
+    }
 }
+

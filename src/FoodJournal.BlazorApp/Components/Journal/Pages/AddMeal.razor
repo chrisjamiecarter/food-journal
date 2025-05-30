@@ -1,0 +1,93 @@
+﻿@using FoodJournal.BlazorApp.Components.Journal.Models
+@inject ICurrentUserService CurrentUserService
+@inject IFoodService FoodService
+@inject IMealService MealService
+@inject NavigationManager NavigationManager
+
+<EditForm class="@(Show ? "block" : "hidden")" Model="@Input" OnValidSubmit="HandleValidSubmit">
+    <DataAnnotationsValidator />
+
+    <!-- Foods Multi-Select -->
+    <div class="mb-6">
+        <label class="block text-sm font-medium text-gray-700 mb-2">Foods</label>
+        <div class="border border-gray-300 rounded-md p-3 max-h-48 overflow-y-auto">
+
+            @if (AvailableFoods != null && AvailableFoods.Any())
+            {
+                @foreach (var food in AvailableFoods)
+                {
+                    <label class="flex items-center py-1">
+                        <input type="checkbox" checked="@Input.Foods.Contains(food)" @onchange="@((ChangeEventArgs e) => ToggleFood(food, (bool)e.Value!))" class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded" />
+                        <span class="ml-2 text-sm text-gray-700">
+                            @food.Name
+                        </span>
+                    </label>
+                }
+            }
+            else
+            {
+                <p class="text-sm text-gray-500">No foods available</p>
+            }
+        </div>
+
+        @if (!Input.Foods.Any())
+        {
+            <p class="mt-1 text-sm text-red-600">Please select at least one food item.</p>
+        }
+    </div>
+
+    <!-- Form Actions -->
+    <div class="flex gap-3">
+        <button type="submit"
+                disabled="@(!Input.Foods.Any())"
+                class="flex-1 bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed">
+            Add Meal
+        </button>
+    </div>
+</EditForm>
+
+
+@code {
+    [Parameter]
+    public bool Show { get; set; }
+
+    [Parameter]
+    public DateTime JournalDate { get; set; }
+
+    [Parameter]
+    public MealType JournalMealType { get; set; }
+
+    [Parameter]
+    public IEnumerable<Food>? AvailableFoods { get; set; }
+
+    [Parameter]
+    public EventCallback<CreateJournalMealDto> OnAddMeal { get; set; }
+
+    private CreateJournalMealDto Input = new();
+
+    private async Task HandleValidSubmit()
+    {
+        Input.Date = JournalDate;
+        Input.Type = JournalMealType;
+
+        await OnAddMeal.InvokeAsync(Input);
+    }
+
+    private void ToggleFood(Food food, bool isSelected)
+    {
+        if (isSelected)
+        {
+            if (!Input.Foods.Contains(food))
+            {
+                Input.Foods.Add(food);
+            }
+        }
+        else
+        {
+            if (Input.Foods.Contains(food))
+            {
+                Input.Foods.Remove(food);
+            }
+        }
+    }
+}

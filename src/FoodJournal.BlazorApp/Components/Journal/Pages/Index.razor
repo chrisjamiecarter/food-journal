@@ -38,7 +38,7 @@
 
 @code {
     private DateTime JournalDate = DateTime.Now;
-    
+
     private IEnumerable<Food>? Foods { get; set; }
     private IEnumerable<Meal>? Meals { get; set; }
 
@@ -96,17 +96,27 @@
 
         // Get meal by user ID, date and type to check if it already exists.
         // If it exists, we can update it instead of creating a new one.
-
-        var meal = new Meal(Guid.CreateVersion7(), currentUserId, createMeal.Date, createMeal.Type);
+        var meal = await MealService.GetByUserIdAndDateAndTypeAsync(currentUserId, createMeal.Date, createMeal.Type, CancellationToken.None);
+        if (meal is null)
+        {
+            meal = new Meal(Guid.CreateVersion7(), currentUserId, createMeal.Date, createMeal.Type);
+            var created = await MealService.CreateAsync(meal, CancellationToken.None);
+            if (!created)
+            {
+                // TODO: Toast.
+            }
+        }
 
         foreach (var food in createMeal.Foods)
         {
-            meal.Foods.Add(food);
+            if (!meal.Foods.Contains(food))
+            {
+                meal.Foods.Add(food);
+            }
         }
 
-        var created = await MealService.CreateAsync(meal, CancellationToken.None);
-
-        if (created)
+        var updated = await MealService.UpdateAsync(meal, CancellationToken.None);
+        if (updated)
         {
             // TODO: Toast.
             await RefreshAsync();

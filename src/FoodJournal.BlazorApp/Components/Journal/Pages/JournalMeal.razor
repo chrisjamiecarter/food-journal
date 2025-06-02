@@ -44,7 +44,7 @@
 @code {
     [Parameter]
     public IEnumerable<Food>? AvailableFoods { get; set; }
-    
+
     [Parameter]
     public MealType MealType { get; set; }
 
@@ -67,5 +67,7 @@
     private async Task HandleAddJournalMeal(CreateJournalMealDto createMeal)
     {
         await OnAddJournalMeal.InvokeAsync(createMeal);
+
+        ToggleShow();
     }
 }

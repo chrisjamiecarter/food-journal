@@ -94,6 +94,9 @@
             return;
         }
 
+        // Get meal by user ID, date and type to check if it already exists.
+        // If it exists, we can update it instead of creating a new one.
+
         var meal = new Meal(Guid.CreateVersion7(), currentUserId, createMeal.Date, createMeal.Type);
 
         foreach (var food in createMeal.Foods)

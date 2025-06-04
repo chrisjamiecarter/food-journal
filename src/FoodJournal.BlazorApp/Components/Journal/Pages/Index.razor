@@ -23,16 +23,16 @@
     </div>
 
     <div class="bg-slate-600 p-5 rounded-xl mb-3">
-        <JournalMeal MealType="MealType.Breakfast" MealDate="@JournalDate" MealFoods="@BreakfastJournal" AvailableFoods="Foods" OnAddJournalMeal="HandleAddMeal" />
+        <JournalMeal MealType="MealType.Breakfast" MealDate="@JournalDate" MealFoods="@BreakfastJournal" AvailableFoods="Foods" OnAddJournalMeal="HandleAddMeal" OnDeleteJournalMealFood="HandleDeleteMealFood" />
     </div>
     <div class="bg-slate-600 p-5 rounded-xl mb-3">
-        <JournalMeal MealType="MealType.Lunch" MealDate="@JournalDate" MealFoods="@LunchJournal" AvailableFoods="Foods" OnAddJournalMeal="HandleAddMeal" />
+        <JournalMeal MealType="MealType.Lunch" MealDate="@JournalDate" MealFoods="@LunchJournal" AvailableFoods="Foods" OnAddJournalMeal="HandleAddMeal" OnDeleteJournalMealFood="HandleDeleteMealFood" />
     </div>
     <div class="bg-slate-600 p-5 rounded-xl mb-3">
-        <JournalMeal MealType="MealType.Dinner" MealDate="@JournalDate" MealFoods="@DinnerJournal" AvailableFoods="Foods" OnAddJournalMeal="HandleAddMeal" />
+        <JournalMeal MealType="MealType.Dinner" MealDate="@JournalDate" MealFoods="@DinnerJournal" AvailableFoods="Foods" OnAddJournalMeal="HandleAddMeal" OnDeleteJournalMealFood="HandleDeleteMealFood" />
     </div>
     <div class="bg-slate-600 p-5 rounded-xl mb-3">
-        <JournalMeal MealType="MealType.Snack" MealDate="@JournalDate" MealFoods="@SnackJournal" AvailableFoods="Foods" OnAddJournalMeal="HandleAddMeal" />
+        <JournalMeal MealType="MealType.Snack" MealDate="@JournalDate" MealFoods="@SnackJournal" AvailableFoods="Foods" OnAddJournalMeal="HandleAddMeal" OnDeleteJournalMealFood="HandleDeleteMealFood" />
     </div>
 </section>
 
@@ -90,7 +90,7 @@
         var currentUserId = CurrentUserService.Id;
         if (string.IsNullOrWhiteSpace(currentUserId))
         {
-            // TODO: Handle case where user is not authenticated
+            // TODO: Handle case where user is not authenticated.
             return;
         }
 
@@ -114,6 +114,43 @@
                 meal.Foods.Add(food);
             }
         }
+
+        var updated = await MealService.UpdateAsync(meal, CancellationToken.None);
+        if (updated)
+        {
+            // TODO: Toast.
+            await RefreshAsync();
+        }
+        else
+        {
+            // TODO: Toast.
+        }
+    }
+
+    private async Task HandleDeleteMealFood(DeleteJournalMealFoodDto deleteMealFood)
+    {
+        var currentUserId = CurrentUserService.Id;
+        if (string.IsNullOrWhiteSpace(currentUserId))
+        {
+            // TODO: Handle case where user is not authenticated.
+            return;
+        }
+
+        var meal = await MealService.GetByUserIdAndDateAndTypeAsync(currentUserId, deleteMealFood.Date, deleteMealFood.Type, CancellationToken.None);
+        if (meal is null)
+        {
+            // TODO: Handle case where meal is not found.
+            return;
+        }
+
+        var foodToDelete = meal.Foods.FirstOrDefault(f => f.Id == deleteMealFood.FoodId);
+        if (foodToDelete is null)
+        {
+            // TODO: Handle case where food is not found.
+            return;
+        }
+
+        meal.Foods.Remove(foodToDelete);
 
         var updated = await MealService.UpdateAsync(meal, CancellationToken.None);
         if (updated)

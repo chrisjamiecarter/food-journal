@@ -4,47 +4,65 @@
 @inject IMealService MealService
 @inject NavigationManager NavigationManager
 
-<EditForm class="@(Show ? "block mb-6" : "hidden")" Model="@Input" OnValidSubmit="HandleValidSubmit">
-    <DataAnnotationsValidator />
+<div class="@(Show ? "block mb-6" : "hidden")">
+    <div class="border-b border-gray-200 dark:border-gray-700 mb-2">
+        <ul class="flex flex-wrap -mb-px text-sm font-medium text-center text-gray-500 dark:text-gray-400">
+            <li class="me-2">
+                <button class="inline-flex items-center justify-center p-4 text-blue-600 border-b-2 border-blue-600 rounded-t-lg active dark:text-blue-500 dark:border-blue-500 group" aria-current="page">
+                    <span class="material-symbols-outlined mr-1" style="font-size:18px;">fastfood</span>
+                    Foods
+                </button>
+            </li>
+            <li class="me-2">
+                <button class="inline-flex items-center justify-center p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300 group">
+                    <span class="material-symbols-outlined mr-1" style="font-size:18px;">restaurant</span>
+                    Meals
+                </button>
+            </li>
+        </ul>
+    </div>
 
-    <!-- Foods Multi-Select -->
-    <div class="mb-3">
-        <label class="block text-sm font-medium text-gray-700 mb-2">Foods</label>
-        <div class="border border-gray-300 rounded-md p-3 max-h-48 overflow-y-auto">
+    <EditForm Model="@Input" OnValidSubmit="HandleValidSubmit">
+        <DataAnnotationsValidator />
 
-            @if (AvailableFoods != null && AvailableFoods.Any())
-            {
-                @foreach (var food in AvailableFoods)
+        <!-- Foods Multi-Select -->
+        <div class="mb-3">
+            <div class="border border-gray-300 rounded-md p-3 max-h-48 overflow-y-auto">
+
+                @if (AvailableFoods != null && AvailableFoods.Any())
                 {
-                    <label class="flex items-center py-1">
-                        <input type="checkbox" checked="@Input.Foods.Contains(food)" @onchange="@((ChangeEventArgs e) => ToggleFood(food, (bool)e.Value!))" class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded" />
-                        <span class="ml-2 text-sm text-gray-700">
-                            @food.Name
-                        </span>
-                    </label>
+                    @foreach (var food in AvailableFoods)
+                    {
+                        <label class="flex items-center py-1">
+                            <input type="checkbox" checked="@Input.Foods.Contains(food)" @onchange="@((ChangeEventArgs e) => ToggleFood(food, (bool)e.Value!))" class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded" />
+                            <span class="ml-2 text-sm text-gray-700">
+                                @food.Name
+                            </span>
+                        </label>
+                    }
                 }
-            }
-            else
+                else
+                {
+                    <p class="text-sm text-gray-500">No foods available</p>
+                }
+            </div>
+
+            @if (!Input.Foods.Any())
             {
-                <p class="text-sm text-gray-500">No foods available</p>
+                <p class="mt-1 text-sm text-red-600">Please select at least one food item.</p>
             }
         </div>
 
-        @if (!Input.Foods.Any())
-        {
-            <p class="mt-1 text-sm text-red-600">Please select at least one food item.</p>
-        }
-    </div>
-
-    <!-- Form Actions -->
-    <div class="flex gap-3">
-        <button type="submit"
-                disabled="@(!Input.Foods.Any())"
-                class="flex-1 bg-blue-600 text-white py-2 px-4 rounded-md cursor-pointer hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed">
-            Add Meal
-        </button>
-    </div>
-</EditForm>
+        <!-- Form Actions -->
+        <div class="flex gap-3">
+            <button type="submit"
+                    disabled="@(!Input.Foods.Any())"
+                    class="flex-1 bg-blue-600 text-white py-2 px-4 rounded-md cursor-pointer hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed">
+                Add Meal
+            </button>
+        </div>
+    </EditForm>
+</div>
 
 
 @code {

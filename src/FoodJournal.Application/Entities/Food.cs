@@ -10,11 +10,13 @@ namespace FoodJournal.Application.Entities;
 public sealed class Food : AggregateRoot
 {
     [SetsRequiredMembers]
-    public Food(Guid id, string name) : base(id)
+    public Food(Guid id, string name, string base64Image) : base(id)
     {
         Name = name;
+        Base64Image = base64Image;
     }
 
     public required string Name { get; set; }
+    public required string Base64Image { get; set; }
     public Collection<Meal> Meals { get; } = [];
 }

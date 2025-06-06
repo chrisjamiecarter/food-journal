@@ -1,8 +1,6 @@
 using System.Diagnostics;
-using Bogus;
 using FoodJournal.Application.Database;
 using FoodJournal.Application.Entities;
-using FoodJournal.Application.Enums;
 using FoodJournal.DatabaseMigrator.Constants;
 using Microsoft.EntityFrameworkCore;
 
@@ -11,7 +9,7 @@ namespace FoodJournal.DatabaseMigrator;
 internal class Worker : BackgroundService
 {
     public const string ActivitySourceName = "Migrations";
-    private const int Seed = 19890309;
+    //private const int Seed = 19890309;
 
     private static readonly ActivitySource ActivitySource = new(ActivitySourceName);
 
@@ -61,7 +59,7 @@ internal class Worker : BackgroundService
             return;
         }
 
-        var foods = Foods.Names.Select(x => new Food(Guid.CreateVersion7(), x)).ToList();
+        var foods = SeedData.FoodSeeds.Select(x => new Food(Guid.CreateVersion7(), x.Name, x.Base64Image)).ToList();
 
         var strategy = dbContext.Database.CreateExecutionStrategy();
         await strategy.ExecuteAsync(async () =>

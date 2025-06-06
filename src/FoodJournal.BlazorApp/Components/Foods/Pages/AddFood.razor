@@ -25,7 +25,7 @@
 
     private async Task HandleValidSubmit()
     {
-        var food = new Food(Guid.CreateVersion7(), Input.Name);
+        var food = new Food(Guid.CreateVersion7(), Input.Name, "");
 
         var result = await FoodRepository.CreateAsync(food, CancellationToken.None);
     }

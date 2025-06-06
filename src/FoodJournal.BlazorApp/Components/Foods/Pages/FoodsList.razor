@@ -16,7 +16,6 @@ else
                     <th scope="col" class="px-6 py-3">ID</th>
                     <th scope="col" class="px-6 py-3">Name</th>
                     <th scope="col" class="px-6 py-3">Image</th>
-                    <th scope="col" class="px-6 py-3">Actions</th>
                 </tr>
             </thead>
             <tbody>
@@ -27,13 +26,6 @@ else
                         <td class="px-6 py-4">@food.Name</td>
                         <td class="px-6 py-4">
                             <img src="@food.Base64Image" alt="@food.Name" />
-                        </td>
-                        <td>
-                            <div>
-                                <NavLink href=@($"foods/edit/{@food.Id}")>
-                                    Edit
-                                </NavLink>
-                            </div>
                         </td>
                     </tr>
                 }

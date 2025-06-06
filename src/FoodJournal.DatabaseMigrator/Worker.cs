@@ -54,12 +54,11 @@ internal class Worker : BackgroundService
 
     private static async Task SeedDatabaseAsync(ApplicationDbContext dbContext, CancellationToken cancellationToken)
     {
-        if (await dbContext.Foods.AnyAsync(cancellationToken))
-        {
-            return;
-        }
+        var dbFoods = await dbContext.Foods.AsNoTracking().ToListAsync(cancellationToken);
+        
+        var seedFoods = SeedData.FoodSeeds.Select(x => new Food(Guid.CreateVersion7(), x.Name, x.Base64Image)).ToList();
 
-        var foods = SeedData.FoodSeeds.Select(x => new Food(Guid.CreateVersion7(), x.Name, x.Base64Image)).ToList();
+        var foods = seedFoods.Where(x => !dbFoods.Any(y => y.Name == x.Name)).ToList();
 
         var strategy = dbContext.Database.CreateExecutionStrategy();
         await strategy.ExecuteAsync(async () =>

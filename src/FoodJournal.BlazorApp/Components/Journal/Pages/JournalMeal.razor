@@ -20,7 +20,7 @@
                 <thead class="text-xs text-gray-400 bg-gray-700">
                     <tr>
                         <th scope="col" class="px-6 py-3">ID</th>
-                        <th scope="col" class="px-6 py-3">Name</th>
+                        <th scope="col" class="px-6 py-3">Food</th>
                         <th scope="col" class="px-6 py-3">Actions</th>
                     </tr>
                 </thead>
@@ -29,7 +29,12 @@
                     {
                         <tr class="bg-gray-800 border-b border-gray-700 hover:bg-gray-600">
                             <td scope="row" class="px-6 py-4 font-medium text-white whitespace-nowrap">@food.Id</td>
-                            <td class="px-6 py-4">@food.Name</td>
+                            <td class="px-6 py-4">
+                                <div class="flex gap-3 items-center">
+                                    <img src="@food.Base64Image" alt="@food.Name" class="" />
+                                    @food.Name
+                                </div>
+                                </td>
                             <td>
                                 <button class="cursor-pointer" onclick="@(() => HandleDeleteJournalMealFood(food.Id))">
                                     Delete

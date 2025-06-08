@@ -36,7 +36,7 @@
                                 </div>
                                 </td>
                             <td>
-                                <button class="cursor-pointer" onclick="@(() => HandleDeleteJournalMealFood(food.Id))">
+                                <button class="cursor-pointer" onclick="@(() => ShowConfirmation(food.Id))">
                                     Delete
                                 </button>
                             </td>
@@ -45,6 +45,14 @@
                 </tbody>
             </table>
         </div>
+
+        @if (ShowConfirmationModal)
+        {
+            <ConfirmationModal Title="Delete food journal entry?"
+                               Message="Do you really want to delete this food from your journal?"
+                               OnCancelCallback="HideConfirmation"
+                               OnConfirmCallback="HandleDeleteJournalMealFood" />
+        }
     }
 </div>
 
@@ -68,6 +76,8 @@
     public EventCallback<DeleteJournalMealFoodDto> OnDeleteJournalMealFood { get; set; }
 
     private bool Show { get; set; } = false;
+    private bool ShowConfirmationModal = false;
+    private Guid? DeletionCandidate = null;
 
     private void ToggleShow()
     {
@@ -81,15 +91,35 @@
         ToggleShow();
     }
 
-    private async Task HandleDeleteJournalMealFood(Guid foodId)
+    private async Task HandleDeleteJournalMealFood()
     {
-        var deleteMealMood = new DeleteJournalMealFoodDto
+        if (DeletionCandidate != null)
         {
-            Date = MealDate,
-            Type = MealType,
-            FoodId = foodId,
-        };
+            var deleteMealMood = new DeleteJournalMealFoodDto
+            {
+                Date = MealDate,
+                Type = MealType,
+                FoodId = DeletionCandidate.Value,
+            };
+        
+            await OnDeleteJournalMealFood.InvokeAsync(deleteMealMood);
+        }
 
-        await OnDeleteJournalMealFood.InvokeAsync(deleteMealMood);
+        ShowConfirmationModal = false;
+        await InvokeAsync(StateHasChanged);
+    }
+
+    private async Task ShowConfirmation(Guid foodId)
+    {
+        DeletionCandidate = foodId;
+        ShowConfirmationModal = true;
+        await InvokeAsync(StateHasChanged);
+    }
+
+    private async Task HideConfirmation()
+    {
+        DeletionCandidate = null;
+        ShowConfirmationModal = false;
+        await InvokeAsync(StateHasChanged);
     }
 }

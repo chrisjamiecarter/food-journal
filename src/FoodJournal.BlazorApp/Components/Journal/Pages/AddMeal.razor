@@ -26,7 +26,7 @@
 
         @if (SelectedTab == PageTab.Foods)
         {
-    
+
             <EditForm Model="@Input" OnValidSubmit="HandleValidSubmit">
                 <DataAnnotationsValidator />
 
@@ -36,6 +36,55 @@
 
                         @if (AvailableFoods != null && AvailableFoods.Any())
                         {
+                            <div class="flex flex-wrap gap-3">
+                                @foreach (var food in AvailableFoods)
+                                {
+                                    <div class="@GetCardClasses(food)" @onclick="@(() => ToggleFood(food, !Input.Foods.Contains(food)))">
+                                        <div class="relative">
+                                            <div class="flex items-center justify-center">
+                                                <img src="@food.Base64Image" alt="@food.Name" class="w-12 h-12 object-cover rounded-t-lg" />
+                                                @if (Input.Foods.Contains(food))
+                                                {
+                                                    <div class="absolute -top-1 -right-1 bg-blue-600 text-white rounded-full w-5 h-5 flex items-center justify-center">
+                                                        <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
+                                                            <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                                                        </svg>
+                                                    </div>
+                                                }
+                                            </div>
+                                        </div>
+                                        <div class="mt-1">
+                                            <h3 class="text-xs font-medium text-gray-700 text-center block">
+                                                @food.Name
+                                            </h3>
+                                        </div>
+                                    </div>
+                                }
+                            </div>
+
+                            @*
+                            <div class="space-y-2">
+                                @foreach (var food in AvailableFoods)
+                                {
+                                    <div class="@GetHorizontalCardClasses(food)" @onclick="@(() => ToggleFood(food, !Input.Foods.Contains(food)))">
+                                        <div class="flex items-center p-3">
+                                            <img src="@food.Base64Image" alt="@food.Name" class="w-12 h-12 object-cover rounded-lg mr-3" />
+                                            <span class="text-sm font-medium text-gray-900 flex-grow">@food.Name</span>
+                                            @if (Input.Foods.Contains(food))
+                                            {
+                                                <div class="bg-blue-600 text-white rounded-full w-6 h-6 flex items-center justify-center ml-2">
+                                                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                                                        <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                                                    </svg>
+                                                </div>
+                                            }
+                                        </div>
+                                    </div>
+                                }
+                            </div> 
+                            *@
+
+                            @*
                             @foreach (var food in AvailableFoods)
                             {
                                 <label class="flex items-center py-1">
@@ -44,7 +93,7 @@
                                         @food.Name
                                     </span>
                                 </label>
-                            }
+                            } *@
                         }
                         else
                         {
@@ -68,7 +117,7 @@
                 </div>
             </EditForm>
         }
-        
+
         @if (SelectedTab == PageTab.Meals)
         {
             <span>TODO: Meals</span>
@@ -95,10 +144,20 @@
 
     private PageTab SelectedTab { get; set; } = PageTab.Foods;
 
+    private string GetCardClasses(Food food)
+    {
+        var baseClasses = "cursor-pointer transition-all duration-200 hover:scale-105 p-2 rounded-lg";
+        var selectedClasses = Input.Foods.Contains(food)
+        ? "bg-blue-100 ring-2 ring-blue-500"
+        : "bg-white hover:bg-gray-50";
+
+        return $"{baseClasses} {selectedClasses}";
+    }
+
     private string GetTabClass(PageTab tab)
     {
-        return SelectedTab == tab 
-        ? "inline-flex items-center justify-center p-4 text-blue-600 border-b-2 border-blue-600 rounded-t-lg cursor-pointer active dark:text-blue-500 dark:border-blue-500 group" 
+        return SelectedTab == tab
+        ? "inline-flex items-center justify-center p-4 text-blue-600 border-b-2 border-blue-600 rounded-t-lg cursor-pointer active dark:text-blue-500 dark:border-blue-500 group"
         : "inline-flex items-center justify-center p-4 border-b-2 border-transparent rounded-t-lg cursor-pointer hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300 group";
     }
 

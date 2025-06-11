@@ -18,11 +18,6 @@ internal sealed class QuickMealRepository(ApplicationDbContext dbContext) : IQui
         return await dbContext.SaveChangesAsync(cancellationToken) > 0;
     }
 
-    public async Task<List<QuickMeal>> GetAllAsync(CancellationToken cancellationToken)
-    {
-        return await dbContext.QuickMeals.OrderBy(p => p.Id).ToListAsync(cancellationToken);
-    }
-
     public async Task<QuickMeal?> GetByIdAsync(Guid id, CancellationToken cancellationToken)
     {
         return await dbContext.QuickMeals.FindAsync([id], cancellationToken);

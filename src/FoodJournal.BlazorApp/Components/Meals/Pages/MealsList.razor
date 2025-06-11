@@ -10,8 +10,8 @@ else
                 <tr>
                     <th scope="col" class="px-6 py-3">ID</th>
                     <th scope="col" class="px-6 py-3">User ID</th>
-                    <th scope="col" class="px-6 py-3">Date</th>
-                    <th scope="col" class="px-6 py-3">Type</th>
+                    <th scope="col" class="px-6 py-3">Name</th>
+                    <th scope="col" class="px-6 py-3">Foods</th>
                     <th scope="col" class="px-6 py-3">Actions</th>
                 </tr>
             </thead>
@@ -21,19 +21,32 @@ else
                     <tr class="bg-gray-800 border-b border-gray-700 hover:bg-gray-600">
                         <td scope="row" class="px-6 py-4 font-medium text-white whitespace-nowrap">@meal.Id</td>
                         <td class="px-6 py-4">@meal.UserId</td>
-                        <td class="px-6 py-4">@meal.Date</td>
-                        <td class="px-6 py-4">@meal.Type</td>
-                        <td>
-                            <div>
-                                <NavLink href=@($"meals/edit/{@meal.Id}")>
+                        <td class="px-6 py-4">@meal.Name</td>
+                        <td class="px-6 py-4">@meal.Foods.Count</td>
+                        <td class="px-6 py-4">
+                            <div class="flex gap-2">
+                                <NavLink href=@($"meals/{@meal.Id}/edit")>
                                     Edit
                                 </NavLink>
-                                <NavLink href=@($"meals/delete/{@meal.Id}")>
+                                <NavLink href=@($"meals/{@meal.Id}/delete")>
                                     Delete
                                 </NavLink>
                             </div>
                         </td>
                     </tr>
+                    @* <tr class="bg-gray-900 border-b border-gray-800">
+                        <td colspan="5" class="px-6 py-3">
+                            <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
+                                @foreach (var food in meal.Foods)
+                                {
+                                    <div class="flex items-center gap-3 bg-gray-800 p-2 rounded-lg shadow">
+                                        <img src="@food.Base64Image" alt="@food.Name" class="w-10 h-10 object-cover rounded-full border border-gray-600" />
+                                        <span class="text-white text-sm">@food.Name</span>
+                                    </div>
+                                }
+                            </div>
+                        </td>
+                    </tr> *@
                 }
             </tbody>
         </table>
@@ -42,5 +55,5 @@ else
 
 @code {
     [Parameter]
-    public IEnumerable<Meal>? Meals { get; set; }
+    public IEnumerable<QuickMeal>? Meals { get; set; }
 }

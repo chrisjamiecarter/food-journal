@@ -2,8 +2,7 @@
 @using FoodJournal.BlazorApp.Components.Meals.Models
 
 @inject ICurrentUserService CurrentUserService
-@inject IFoodService FoodService
-@inject IMealService MealService
+@inject IQuickMealService QuickMealService
 @inject NavigationManager NavigationManager
 
 @attribute [Authorize]
@@ -14,21 +13,23 @@
     
     <h1>Meals</h1>
 
-    @* <NavLink href=@($"meals/add")>
+    @*
+    <NavLink href=@($"meals/add")>
         Add
-    </NavLink> *@
+    </NavLink> 
     <AddMeal Foods="Foods" OnAddMeal="HandleAddMeal" />
+    *@
     <MealsList Meals="Meals" />
 
 </section>
 
 @code {
-    private IEnumerable<Food>? Foods { get; set; }
-    private IEnumerable<Meal>? Meals { get; set; }
+    //private IEnumerable<Food>? Foods { get; set; }
+    private IEnumerable<QuickMeal>? Meals { get; set; }
 
     private async Task RefreshAsync()
     {
-        await LoadFoodsAsync();
+        //await LoadFoodsAsync();
         await LoadMealsAsync();
         await InvokeAsync(StateHasChanged);
     }
@@ -41,12 +42,12 @@
         }
     }
 
-    private async Task LoadFoodsAsync()
-    {
-        Foods = await FoodService.GetAllAsync(CancellationToken.None);
+    // private async Task LoadFoodsAsync()
+    // {
+    //     Foods = await FoodService.GetAllAsync(CancellationToken.None);
 
-        await InvokeAsync(StateHasChanged);
-    }
+    //     await InvokeAsync(StateHasChanged);
+    // }
 
     private async Task LoadMealsAsync()
     {
@@ -57,38 +58,37 @@
             return;
         }
 
-        Meals = await MealService.GetByUserIdAsync(currentUserId, CancellationToken.None);
+        Meals = await QuickMealService.GetByUserIdAsync(currentUserId, CancellationToken.None);
 
         await InvokeAsync(StateHasChanged);
     }
 
-    private async Task HandleAddMeal(CreateMealDto createMeal)
-    {
-        var currentUserId = CurrentUserService.Id;
-        if (string.IsNullOrWhiteSpace(currentUserId))
-        {
-            // TODO: Handle case where user is not authenticated
-            return;
-        }
+    // private async Task HandleAddMeal(CreateMealDto createMeal)
+    // {
+    //     var currentUserId = CurrentUserService.Id;
+    //     if (string.IsNullOrWhiteSpace(currentUserId))
+    //     {
+    //         // TODO: Handle case where user is not authenticated
+    //         return;
+    //     }
 
-        var meal = new Meal(Guid.CreateVersion7(), currentUserId, createMeal.Date, createMeal.Type);
+    //     var meal = new Meal(Guid.CreateVersion7(), currentUserId, createMeal.Date, createMeal.Type);
 
-        foreach (var food in createMeal.Foods)
-        {
-            meal.Foods.Add(food);
-        }
+    //     foreach (var food in createMeal.Foods)
+    //     {
+    //         meal.Foods.Add(food);
+    //     }
 
-        var created = await MealService.CreateAsync(meal, CancellationToken.None);
+    //     var created = await MealService.CreateAsync(meal, CancellationToken.None);
 
-        if (created)
-        {
-            // TODO: Toast.
-            await RefreshAsync();
-        }
-        else
-        {
-            // TODO: Toast.
-        }
-    }
-
+    //     if (created)
+    //     {
+    //         // TODO: Toast.
+    //         await RefreshAsync();
+    //     }
+    //     else
+    //     {
+    //         // TODO: Toast.
+    //     }
+    // }
 }

@@ -50,7 +50,14 @@
 
     private async Task LoadMealsAsync()
     {
-        Meals = await MealService.GetAllAsync(CancellationToken.None);
+        var currentUserId = CurrentUserService.Id;
+        if (string.IsNullOrWhiteSpace(currentUserId))
+        {
+            // TODO: Handle case where user is not authenticated
+            return;
+        }
+
+        Meals = await MealService.GetByUserIdAsync(currentUserId, CancellationToken.None);
 
         await InvokeAsync(StateHasChanged);
     }

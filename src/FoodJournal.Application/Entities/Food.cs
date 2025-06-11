@@ -19,4 +19,5 @@ public sealed class Food : AggregateRoot
     public required string Name { get; set; }
     public required string Base64Image { get; set; }
     public Collection<Meal> Meals { get; } = [];
+    public Collection<QuickMeal> QuickMeals { get; } = [];
 }

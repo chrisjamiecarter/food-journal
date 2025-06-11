@@ -18,5 +18,10 @@ internal sealed class ApplicationUserConfiguration : IEntityTypeConfiguration<Ap
                .WithOne(e => e.User)
                .HasForeignKey(fk => fk.UserId)
                .OnDelete(DeleteBehavior.Cascade);
+
+        builder.HasMany(e => e.QuickMeals)
+               .WithOne(e => e.User)
+               .HasForeignKey(fk => fk.UserId)
+               .OnDelete(DeleteBehavior.Cascade);
     }
 }

@@ -13,6 +13,7 @@ internal static class Tables
     public static readonly string EntityFrameworkCoreMigration = "Migration";
     public static readonly string Food = "Food";
     public static readonly string Meal = "Meal";
+    public static readonly string QuickMeal = "QuickMeal";
     public static readonly string Role = "Role";
     public static readonly string RoleClaim = "RoleClaim";
 }

@@ -13,6 +13,7 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
 {
     public DbSet<Food> Foods { get; set; } = default!;
     public DbSet<Meal> Meals { get; set; } = default!;
+    public DbSet<QuickMeal> QuickMeals { get; set; } = default!;
 
     protected override void OnModelCreating(ModelBuilder builder)
     {

@@ -16,6 +16,9 @@ internal sealed class QuickMealConfiguration : IEntityTypeConfiguration<QuickMea
 
         builder.HasKey(pk => pk.Id);
 
+        builder.Property(p => p.Name)
+               .IsRequired();
+
         builder.Property(p => p.UserId)
                .IsRequired();
 

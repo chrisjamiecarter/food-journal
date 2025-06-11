@@ -11,11 +11,13 @@ namespace FoodJournal.Application.Entities;
 public sealed class QuickMeal : AggregateRoot
 {
     [SetsRequiredMembers]
-    public QuickMeal(Guid id, string userId) : base(id)
+    public QuickMeal(Guid id, string userId, string name) : base(id)
     {
         UserId = userId;
+        Name = name;
     }
 
+    public required string Name { get; set; }
     public required string UserId { get; set; }
     public ApplicationUser? User { get; set; }
     public Collection<Food> Foods { get; } = [];

@@ -19,11 +19,6 @@ internal sealed class MealService(IMealRepository mealRepository) : IMealService
         return await mealRepository.DeleteAsync(meal, cancellationToken);
     }
 
-    public async Task<List<Meal>> GetAllAsync(CancellationToken cancellationToken)
-    {
-        return await mealRepository.GetAllAsync(cancellationToken);
-    }
-
     public async Task<Meal?> GetByIdAsync(Guid id, CancellationToken cancellationToken)
     {
         return await mealRepository.GetByIdAsync(id, cancellationToken);

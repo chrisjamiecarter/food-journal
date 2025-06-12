@@ -5,109 +5,111 @@
 @inject IMealService MealService
 @inject NavigationManager NavigationManager
 
-<EditForm Model="@Input" OnValidSubmit="HandleValidSubmit">
-    <DataAnnotationsValidator />
+<div class="fixed inset-0 z-50 grid place-content-center bg-black/50 p-4"
+     role="dialog"
+     aria-modal="true"
+     aria-labelledby="modalTitle">
+    <div class="w-full max-w-md rounded-lg bg-gray-900 p-6 shadow-lg">
+        <div class="flex items-start justify-between">
+            <h2 id="modalTitle" class="text-xl font-bold text-white sm:text-2xl">
+                Add Meal
+            </h2>
 
-    <!-- Date Input -->
-    <div class="mb-6">
-        <label class="block text-sm font-medium text-gray-700 mb-2">Date</label>
-        <InputDate @bind-Value="Input.Date"
-                   class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500" />
-        <ValidationMessage For="@(() => Input.Date)" class="mt-1 text-sm text-red-600" />
-    </div>
-
-    <!-- Meal Type Selection -->
-    <div class="mb-6">
-        <label class="block text-sm font-medium text-gray-700 mb-3">Meal Type</label>
-        <InputRadioGroup @bind-Value="Input.Type">
-            <div class="space-y-2">
-                <label class="flex items-center">
-                    <InputRadio Value="MealType.Breakfast"
-                                class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300" />
-                    <span class="ml-2 text-sm text-gray-700">Breakfast</span>
-                </label>
-                <label class="flex items-center">
-                    <InputRadio Value="MealType.Lunch"
-                                class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300" />
-                    <span class="ml-2 text-sm text-gray-700">Lunch</span>
-                </label>
-                <label class="flex items-center">
-                    <InputRadio Value="MealType.Dinner"
-                                class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300" />
-                    <span class="ml-2 text-sm text-gray-700">Dinner</span>
-                </label>
-                <label class="flex items-center">
-                    <InputRadio Value="MealType.Snack"
-                                class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300" />
-                    <span class="ml-2 text-sm text-gray-700">Snack</span>
-                </label>
-            </div>
-        </InputRadioGroup>
-        <ValidationMessage For="@(() => Input.Type)" class="mt-1 text-sm text-red-600" />
-    </div>
-
-    <!-- Foods Multi-Select -->
-    <div class="mb-6">
-        <label class="block text-sm font-medium text-gray-700 mb-2">Foods</label>
-        <div class="border border-gray-300 rounded-md p-3 max-h-48 overflow-y-auto">
-
-            @if (Foods != null && Foods.Any())
-            {
-                @foreach (var food in Foods)
-                {
-                    <label class="flex items-center py-1">
-                        <input type="checkbox" checked="@Input.Foods.Contains(food)" @onchange="@((ChangeEventArgs e) => ToggleFood(food, (bool)e.Value!))" class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded" />
-                        <span class="ml-2 text-sm text-gray-700">
-                            @food.Name
-                        </span>
-                    </label>
-                }
-            }
-            else
-            {
-                <p class="text-sm text-gray-500">No foods available</p>
-            }
+            <button type="button"
+                    class="-me-4 -mt-4 rounded-full p-2 text-gray-500 transition-colors hover:bg-gray-800 hover:text-gray-300 focus:outline-none"
+                    aria-label="Close"
+                    onclick="@OnCancelCallback">
+                <svg xmlns="http://www.w3.org/2000/svg"
+                     class="size-5"
+                     fill="none"
+                     viewBox="0 0 24 24"
+                     stroke="currentColor">
+                    <path stroke-linecap="round"
+                          stroke-linejoin="round"
+                          stroke-width="2"
+                          d="M6 18L18 6M6 6l12 12" />
+                </svg>
+            </button>
         </div>
 
-        @if (!Input.Foods.Any())
-        {
-            <p class="mt-1 text-sm text-red-600">Please select at least one food item.</p>
-        }
+        <EditForm Model="@Input" OnValidSubmit="HandleValidSubmit">
+            <DataAnnotationsValidator />
+
+            <!-- Meal Name -->
+            <div class="mb-6">
+                <label for="Input.Name" class="mt-4 block">
+                    <span class="text-sm font-medium text-gray-200">
+                        Name
+                    </span>
+
+                    <InputText id="Input.Name"
+                               @bind-Value="Input.Name"
+                               class="mt-0.5 w-full rounded text-white border-gray-600 bg-gray-900 shadow-sm sm:text-sm" />
+                </label>
+            </div>
+
+            <!-- Foods Multi-Select -->
+            <div class="mb-6">
+                <label class="block text-sm font-medium text-gray-700 mb-2">Foods</label>
+                <div class="border border-gray-300 rounded-md p-3 max-h-48 overflow-y-auto">
+
+                    @if (Foods != null && Foods.Any())
+                    {
+                        @foreach (var food in Foods)
+                        {
+                            <label class="flex items-center py-1">
+                                <input type="checkbox" checked="@Input.Foods.Contains(food)" @onchange="@((ChangeEventArgs e) => ToggleFood(food, (bool)e.Value!))" class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded" />
+                                <span class="ml-2 text-sm text-gray-700">
+                                    @food.Name
+                                </span>
+                            </label>
+                        }
+                    }
+                    else
+                    {
+                        <p class="text-sm text-gray-500">No foods available</p>
+                    }
+                </div>
+
+                @if (!Input.Foods.Any())
+                {
+                    <p class="mt-1 text-sm text-red-600">Please select at least one food item.</p>
+                }
+            </div>
+
+            <footer class="mt-6 flex justify-end gap-2">
+                <button type="button"
+                        class="rounded bg-gray-800 px-4 py-2 text-sm font-medium text-gray-200 transition-colors hover:bg-gray-700"
+                        onclick="@OnCancelCallback">
+                    Cancel
+                </button>
+
+                <button type="submit"
+                        disabled="@(!Input.Foods.Any())"
+                        class="rounded bg-blue-600 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-blue-700">
+                    Add
+                </button>
+            </footer>
+        </EditForm>
     </div>
-
-    <!-- Form Actions -->
-    <div class="flex gap-3">
-        <button type="submit"
-                disabled="@(!Input.Foods.Any() || isSubmitting)"
-                class="flex-1 bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed">
-
-            @if (isSubmitting)
-            {
-                <span>Adding...</span>
-            }
-            else
-            {
-                <span>Add Meal</span>
-            }
-
-        </button>
-    </div>
-</EditForm>
-
+</div>
 
 @code {
     [Parameter]
     public IEnumerable<Food>? Foods { get; set; }
 
     [Parameter]
-    public EventCallback<CreateMealDto> OnAddMeal { get; set; }
+    public EventCallback<CreateMealDto> OnAddMealCallback { get; set; }
+
+    [Parameter]
+    public EventCallback OnCancelCallback { get; set; }
 
     private CreateMealDto Input = new();
     private bool isSubmitting = false;
 
     private async Task HandleValidSubmit()
     {
-        await OnAddMeal.InvokeAsync(Input);
+        await OnAddMealCallback.InvokeAsync(Input);
     }
 
     private void ToggleFood(Food food, bool isSelected)

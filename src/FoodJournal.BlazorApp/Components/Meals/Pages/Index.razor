@@ -2,6 +2,7 @@
 @using FoodJournal.BlazorApp.Components.Meals.Models
 
 @inject ICurrentUserService CurrentUserService
+@inject IFoodService FoodService
 @inject IQuickMealService QuickMealService
 @inject NavigationManager NavigationManager
 
@@ -13,23 +14,26 @@
     
     <h1>Meals</h1>
 
-    @*
-    <NavLink href=@($"meals/add")>
+    <button onclick="@ToggleShowAddMeal">
         Add
-    </NavLink> 
-    <AddMeal Foods="Foods" OnAddMeal="HandleAddMeal" />
-    *@
+    </button>
     <MealsList Meals="Meals" />
+    
+    @if (ShowAddMeal)
+    {
+        <AddMeal Foods="Foods" OnAddMealCallback="HandleAddMeal" OnCancelCallback="ToggleShowAddMeal" />
+    }
 
 </section>
 
 @code {
-    //private IEnumerable<Food>? Foods { get; set; }
+    private IEnumerable<Food>? Foods { get; set; }
     private IEnumerable<QuickMeal>? Meals { get; set; }
+    private bool ShowAddMeal { get; set; } = false;
 
     private async Task RefreshAsync()
     {
-        //await LoadFoodsAsync();
+        await LoadFoodsAsync();
         await LoadMealsAsync();
         await InvokeAsync(StateHasChanged);
     }
@@ -42,12 +46,12 @@
         }
     }
 
-    // private async Task LoadFoodsAsync()
-    // {
-    //     Foods = await FoodService.GetAllAsync(CancellationToken.None);
+    private async Task LoadFoodsAsync()
+    {
+        Foods = await FoodService.GetAllAsync(CancellationToken.None);
 
-    //     await InvokeAsync(StateHasChanged);
-    // }
+        await InvokeAsync(StateHasChanged);
+    }
 
     private async Task LoadMealsAsync()
     {
@@ -63,8 +67,9 @@
         await InvokeAsync(StateHasChanged);
     }
 
-    // private async Task HandleAddMeal(CreateMealDto createMeal)
-    // {
+    private async Task HandleAddMeal(CreateMealDto createMeal)
+    {
+        ToggleShowAddMeal();
     //     var currentUserId = CurrentUserService.Id;
     //     if (string.IsNullOrWhiteSpace(currentUserId))
     //     {
@@ -90,5 +95,10 @@
     //     {
     //         // TODO: Toast.
     //     }
-    // }
+    }
+
+    private void ToggleShowAddMeal()
+    {
+        ShowAddMeal = !ShowAddMeal;
+    }
 }

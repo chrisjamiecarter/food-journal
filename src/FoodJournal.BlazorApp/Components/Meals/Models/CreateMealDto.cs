@@ -1,11 +1,10 @@
-﻿using FoodJournal.Application.Entities;
-using FoodJournal.Application.Enums;
+﻿using System.Collections.ObjectModel;
+using FoodJournal.Application.Entities;
 
 namespace FoodJournal.BlazorApp.Components.Meals.Models;
 
 public class CreateMealDto
 {
-    public DateTime Date { get; set; } = DateTime.Now;
-    public MealType Type { get; set; } = MealType.Breakfast;
-    public List<Food> Foods { get; set; } = [];
+    public string Name { get; set; } = string.Empty;
+    public Collection<Food> Foods { get; } = [];
 }

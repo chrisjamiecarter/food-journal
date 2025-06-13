@@ -11,14 +11,19 @@
 <PageTitle>Meals</PageTitle>
 
 <section>
-    
+
     <h1>Meals</h1>
 
-    <button onclick="@ToggleShowAddMeal">
-        Add
-    </button>
+    <div class="flex justify-end mb-6">
+        <button type="button"
+                class="cursor-pointer flex w-3xs justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm/6 font-semibold text-white shadow-xs hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                onclick="@ToggleShowAddMeal">
+            Add
+        </button>
+    </div>
+
     <MealsList Meals="Meals" />
-    
+
     @if (ShowAddMeal)
     {
         <AddMeal Foods="Foods" OnAddMealCallback="HandleAddMeal" OnCancelCallback="ToggleShowAddMeal" />
@@ -70,31 +75,31 @@
     private async Task HandleAddMeal(CreateMealDto createMeal)
     {
         ToggleShowAddMeal();
-    //     var currentUserId = CurrentUserService.Id;
-    //     if (string.IsNullOrWhiteSpace(currentUserId))
-    //     {
-    //         // TODO: Handle case where user is not authenticated
-    //         return;
-    //     }
+        //     var currentUserId = CurrentUserService.Id;
+        //     if (string.IsNullOrWhiteSpace(currentUserId))
+        //     {
+        //         // TODO: Handle case where user is not authenticated
+        //         return;
+        //     }
 
-    //     var meal = new Meal(Guid.CreateVersion7(), currentUserId, createMeal.Date, createMeal.Type);
+        //     var meal = new Meal(Guid.CreateVersion7(), currentUserId, createMeal.Date, createMeal.Type);
 
-    //     foreach (var food in createMeal.Foods)
-    //     {
-    //         meal.Foods.Add(food);
-    //     }
+        //     foreach (var food in createMeal.Foods)
+        //     {
+        //         meal.Foods.Add(food);
+        //     }
 
-    //     var created = await MealService.CreateAsync(meal, CancellationToken.None);
+        //     var created = await MealService.CreateAsync(meal, CancellationToken.None);
 
-    //     if (created)
-    //     {
-    //         // TODO: Toast.
-    //         await RefreshAsync();
-    //     }
-    //     else
-    //     {
-    //         // TODO: Toast.
-    //     }
+        //     if (created)
+        //     {
+        //         // TODO: Toast.
+        //         await RefreshAsync();
+        //     }
+        //     else
+        //     {
+        //         // TODO: Toast.
+        //     }
     }
 
     private void ToggleShowAddMeal()

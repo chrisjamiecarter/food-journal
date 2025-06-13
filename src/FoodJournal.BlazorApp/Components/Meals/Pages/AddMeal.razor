@@ -5,11 +5,11 @@
 @inject IMealService MealService
 @inject NavigationManager NavigationManager
 
-<div class="fixed inset-0 z-50 grid place-content-center bg-black/50 p-4"
+<div class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4"
      role="dialog"
      aria-modal="true"
      aria-labelledby="modalTitle">
-    <div class="w-full max-w-md rounded-lg bg-gray-900 p-6 shadow-lg">
+    <div class="w-full max-w-lg rounded-lg bg-gray-900 p-6 shadow-lg">
         <div class="flex items-start justify-between">
             <h2 id="modalTitle" class="text-xl font-bold text-white sm:text-2xl">
                 Add Meal
@@ -25,38 +25,61 @@
             </button>
         </div>
 
-        <EditForm Model="@Input" OnValidSubmit="HandleValidSubmit">
+        <EditForm class="w-full space-y-6 mt-6" Model="@Input" OnValidSubmit="HandleValidSubmit">
             <DataAnnotationsValidator />
 
             <!-- Meal Name -->
-            <div class="mb-6">
-                <label for="Input.Name" class="mt-4 block">
-                    <span class="text-sm font-medium text-gray-200">
-                        Name
-                    </span>
-
-                    <InputText id="Input.Name"
-                               @bind-Value="Input.Name"
-                               class="mt-0.5 w-full rounded text-white border-gray-600 bg-gray-900 shadow-sm sm:text-sm" />
-                </label>
+            <div>
+                <label for="Input.Name" class="block text-sm/6 font-medium text-white">Name</label>
+                <div class="mt-2">
+                    <InputText @bind-Value="Input.Name" id="Input.Name" class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6" aria-required="true" placeholder="Meal name" />
+                    <ValidationMessage For="() => Input.Name" class="text-red-600 text-sm" />
+                </div>
             </div>
 
             <!-- Foods Multi-Select -->
-            <div class="mb-6">
-                <label class="block text-sm font-medium text-gray-700 mb-2">Foods</label>
-                <div class="border border-gray-300 rounded-md p-3 max-h-48 overflow-y-auto">
+            <div>
+                <label for="Input.Foods" class="block text-sm/6 font-medium text-white">Foods</label>
+                
+                <div class="mt-2">
+                    <label for="FoodSearch" class="mb-2 text-sm font-medium text-white sr-only">Search</label>
+                    <div class="relative">
+                        <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none text-gray-400">
+                            <span class="material-symbols-outlined">search</span>
+                        </div>
+                        <input type="text" id="FoodSearch" class="block w-full p-4 ps-10 text-sm placeholder-gray-400 text-white border border-gray-600 rounded-lg bg-gray-700 focus:ring-blue-500 focus:border-blue-500" placeholder="Search" @oninput="FilterFoods" />
+                    </div>
+                </div>
 
-                    @if (Foods != null && Foods.Any())
+                <div id="Input.Foods" class="border border-gray-300 rounded-md mt-2 p-3 max-h-48 overflow-y-auto">
+
+                    @if (FilteredFoods.Any())
                     {
-                        @foreach (var food in Foods)
-                        {
-                            <label class="flex items-center py-1">
-                                <input type="checkbox" checked="@Input.Foods.Contains(food)" @onchange="@((ChangeEventArgs e) => ToggleFood(food, (bool)e.Value!))" class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded" />
-                                <span class="ml-2 text-sm text-gray-700">
-                                    @food.Name
-                                </span>
-                            </label>
-                        }
+                        <div class="flex flex-wrap gap-3">
+                            @foreach (var food in FilteredFoods)
+                            {
+                                <div class="@GetCardClasses(food)" @onclick="@(() => ToggleFood(food, !Input.Foods.Contains(food)))">
+                                    <div class="relative">
+                                        <div class="flex items-center justify-center">
+                                            <img src="@food.Base64Image" alt="@food.Name" class="w-12 h-12 object-cover rounded-t-lg" />
+                                            @if (Input.Foods.Contains(food))
+                                            {
+                                                <div class="absolute -top-1 -right-1 bg-blue-600 text-white rounded-full w-5 h-5 flex items-center justify-center">
+                                                    <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
+                                                        <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                                                    </svg>
+                                                </div>
+                                            }
+                                        </div>
+                                    </div>
+                                    <div class="mt-1">
+                                        <h3 class="text-xs font-medium text-gray-700 text-center block">
+                                            @food.Name
+                                        </h3>
+                                    </div>
+                                </div>
+                            }
+                        </div>
                     }
                     else
                     {
@@ -99,6 +122,16 @@
 
     private CreateMealDto Input = new();
     private bool isSubmitting = false;
+    private IEnumerable<Food> FilteredFoods { get; set; } = [];
+
+
+    protected override void OnParametersSet()
+    {
+        if (Foods != null)
+        {
+            FilteredFoods = Foods;
+        }
+    }
 
     private async Task HandleValidSubmit()
     {
@@ -120,6 +153,26 @@
             {
                 Input.Foods.Remove(food);
             }
+        }
+    }
+
+
+    private string GetCardClasses(Food food)
+    {
+        var baseClasses = "cursor-pointer transition-all duration-200 hover:scale-105 p-2 rounded-lg";
+        var selectedClasses = Input.Foods.Contains(food)
+        ? "bg-blue-100 ring-2 ring-blue-500"
+        : "bg-white hover:bg-gray-50";
+
+        return $"{baseClasses} {selectedClasses}";
+    }
+
+    private void FilterFoods(ChangeEventArgs e)
+    {
+        var searchString = e.Value?.ToString()?.ToLower() ?? "";
+        if (Foods != null)
+        {
+            FilteredFoods = Foods.Where(x => x.Name.ToLower().IndexOf(searchString) >= 0);
         }
     }
 }

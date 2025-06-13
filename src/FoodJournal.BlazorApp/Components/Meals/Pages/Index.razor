@@ -38,6 +38,10 @@
 
     private async Task RefreshAsync()
     {
+        ShowAddMeal = false;
+        Foods = null;
+        Meals = null;
+
         await LoadFoodsAsync();
         await LoadMealsAsync();
         await InvokeAsync(StateHasChanged);
@@ -63,7 +67,7 @@
         var currentUserId = CurrentUserService.Id;
         if (string.IsNullOrWhiteSpace(currentUserId))
         {
-            // TODO: Handle case where user is not authenticated
+            // TODO: Handle case where user is not authenticated.
             return;
         }
 
@@ -74,32 +78,29 @@
 
     private async Task HandleAddMeal(CreateMealDto createMeal)
     {
-        ToggleShowAddMeal();
-        //     var currentUserId = CurrentUserService.Id;
-        //     if (string.IsNullOrWhiteSpace(currentUserId))
-        //     {
-        //         // TODO: Handle case where user is not authenticated
-        //         return;
-        //     }
+        var currentUserId = CurrentUserService.Id;
+        if (string.IsNullOrWhiteSpace(currentUserId))
+        {
+            // TODO: Handle case where user is not authenticated.
+            return;
+        }
 
-        //     var meal = new Meal(Guid.CreateVersion7(), currentUserId, createMeal.Date, createMeal.Type);
+        var quickMeal = new QuickMeal(Guid.CreateVersion7(), currentUserId, createMeal.Name);
+        foreach (var food in createMeal.Foods)
+        {
+            quickMeal.Foods.Add(food);
+        }
 
-        //     foreach (var food in createMeal.Foods)
-        //     {
-        //         meal.Foods.Add(food);
-        //     }
-
-        //     var created = await MealService.CreateAsync(meal, CancellationToken.None);
-
-        //     if (created)
-        //     {
-        //         // TODO: Toast.
-        //         await RefreshAsync();
-        //     }
-        //     else
-        //     {
-        //         // TODO: Toast.
-        //     }
+        var created = await QuickMealService.CreateAsync(quickMeal, CancellationToken.None);
+        if (created)
+        {
+            // TODO: Toast.
+            await RefreshAsync();
+        }
+        else
+        {
+            // TODO: Toast.
+        }
     }
 
     private void ToggleShowAddMeal()

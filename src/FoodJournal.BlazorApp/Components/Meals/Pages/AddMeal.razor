@@ -16,19 +16,12 @@
             </h2>
 
             <button type="button"
-                    class="-me-4 -mt-4 rounded-full p-2 text-gray-500 transition-colors hover:bg-gray-800 hover:text-gray-300 focus:outline-none"
+                    class="cursor-pointer flex items-center justify-center -me-4 -mt-4 rounded-full p-2 text-gray-500 transition-colors hover:bg-gray-800 hover:text-gray-300 focus:outline-none"
                     aria-label="Close"
                     onclick="@OnCancelCallback">
-                <svg xmlns="http://www.w3.org/2000/svg"
-                     class="size-5"
-                     fill="none"
-                     viewBox="0 0 24 24"
-                     stroke="currentColor">
-                    <path stroke-linecap="round"
-                          stroke-linejoin="round"
-                          stroke-width="2"
-                          d="M6 18L18 6M6 6l12 12" />
-                </svg>
+                <span class="material-symbols-outlined" style="font-size:20px;">
+                    close
+                </span>
             </button>
         </div>
 
@@ -79,14 +72,14 @@
 
             <footer class="mt-6 flex justify-end gap-2">
                 <button type="button"
-                        class="rounded bg-gray-800 px-4 py-2 text-sm font-medium text-gray-200 transition-colors hover:bg-gray-700"
+                        class="cursor-pointer rounded bg-gray-800 px-4 py-2 text-sm font-medium text-gray-200 transition-colors hover:bg-gray-700"
                         onclick="@OnCancelCallback">
                     Cancel
                 </button>
 
                 <button type="submit"
                         disabled="@(!Input.Foods.Any())"
-                        class="rounded bg-blue-600 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-blue-700">
+                        class="cursor-pointer rounded bg-blue-600 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-blue-700">
                     Add
                 </button>
             </footer>

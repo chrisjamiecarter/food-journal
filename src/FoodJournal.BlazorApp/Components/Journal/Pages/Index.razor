@@ -6,6 +6,7 @@
 @inject ICurrentUserService CurrentUserService
 @inject IFoodService FoodService
 @inject IMealService MealService
+@inject IQuickMealService QuickMealService
 
 @attribute [Authorize]
 
@@ -23,16 +24,16 @@
     </div>
 
     <div class="bg-slate-600 p-5 rounded-xl mb-3">
-        <JournalMeal MealType="MealType.Breakfast" MealDate="@JournalDate" MealFoods="@BreakfastJournal" AvailableFoods="Foods" OnAddJournalMeal="HandleAddMeal" OnDeleteJournalMealFood="HandleDeleteMealFood" />
+        <JournalMeal MealType="MealType.Breakfast" MealDate="@JournalDate" MealFoods="@BreakfastJournal" AvailableFoods="Foods" AvailableMeals="QuickMeals" OnAddJournalMeal="HandleAddMeal" OnDeleteJournalMealFood="HandleDeleteMealFood" />
     </div>
     <div class="bg-slate-600 p-5 rounded-xl mb-3">
-        <JournalMeal MealType="MealType.Lunch" MealDate="@JournalDate" MealFoods="@LunchJournal" AvailableFoods="Foods" OnAddJournalMeal="HandleAddMeal" OnDeleteJournalMealFood="HandleDeleteMealFood" />
+        <JournalMeal MealType="MealType.Lunch" MealDate="@JournalDate" MealFoods="@LunchJournal" AvailableFoods="Foods" AvailableMeals="QuickMeals" OnAddJournalMeal="HandleAddMeal" OnDeleteJournalMealFood="HandleDeleteMealFood" />
     </div>
     <div class="bg-slate-600 p-5 rounded-xl mb-3">
-        <JournalMeal MealType="MealType.Dinner" MealDate="@JournalDate" MealFoods="@DinnerJournal" AvailableFoods="Foods" OnAddJournalMeal="HandleAddMeal" OnDeleteJournalMealFood="HandleDeleteMealFood" />
+        <JournalMeal MealType="MealType.Dinner" MealDate="@JournalDate" MealFoods="@DinnerJournal" AvailableFoods="Foods" AvailableMeals="QuickMeals" OnAddJournalMeal="HandleAddMeal" OnDeleteJournalMealFood="HandleDeleteMealFood" />
     </div>
     <div class="bg-slate-600 p-5 rounded-xl mb-3">
-        <JournalMeal MealType="MealType.Snack" MealDate="@JournalDate" MealFoods="@SnackJournal" AvailableFoods="Foods" OnAddJournalMeal="HandleAddMeal" OnDeleteJournalMealFood="HandleDeleteMealFood" />
+        <JournalMeal MealType="MealType.Snack" MealDate="@JournalDate" MealFoods="@SnackJournal" AvailableFoods="Foods" AvailableMeals="QuickMeals" OnAddJournalMeal="HandleAddMeal" OnDeleteJournalMealFood="HandleDeleteMealFood" />
     </div>
 </section>
 
@@ -41,6 +42,7 @@
 
     private IEnumerable<Food>? Foods { get; set; }
     private IEnumerable<Meal>? Meals { get; set; }
+    private IEnumerable<QuickMeal>? QuickMeals { get; set; }
 
     private IEnumerable<Food>? BreakfastJournal => Meals?.FirstOrDefault(m => m.Type == MealType.Breakfast && m.Date.Date == JournalDate.Date)?.Foods ?? [];
     private IEnumerable<Food>? LunchJournal => Meals?.FirstOrDefault(m => m.Type == MealType.Lunch && m.Date.Date == JournalDate.Date)?.Foods ?? [];
@@ -59,6 +61,7 @@
     {
         await LoadFoodsAsync();
         await LoadMealsAsync();
+        await LoadQuickMealsAsync();
         await InvokeAsync(StateHasChanged);
     }
 
@@ -78,6 +81,19 @@
         }
 
         Meals = await MealService.GetByUserIdAsync(currentUserId, CancellationToken.None);
+    }
+
+    private async Task LoadQuickMealsAsync()
+    {
+        QuickMeals = null;
+
+        var currentUserId = CurrentUserService.Id;
+        if (string.IsNullOrWhiteSpace(currentUserId))
+        {
+            return;
+        }
+
+        QuickMeals = await QuickMealService.GetByUserIdAsync(currentUserId, CancellationToken.None);
     }
 
     private void IncrementJournalDate(int days)

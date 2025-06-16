@@ -7,7 +7,7 @@
         </button>
     </div>
 
-    <AddMeal Show="@Show" JournalDate="@MealDate" JournalMealType="@MealType" AvailableFoods="@AvailableFoods" OnAddMeal="HandleAddJournalMeal" />
+    <AddMeal Show="@Show" JournalDate="@MealDate" JournalMealType="@MealType" AvailableFoods="@AvailableFoods" AvailableMeals="@AvailableMeals" OnAddMeal="HandleAddJournalMeal" />
 
     @if (MealFoods is null)
     {
@@ -61,6 +61,9 @@
 @code {
     [Parameter]
     public IEnumerable<Food>? AvailableFoods { get; set; }
+
+    [Parameter]
+    public IEnumerable<QuickMeal>? AvailableMeals { get; set; }
 
     [Parameter]
     public MealType MealType { get; set; }

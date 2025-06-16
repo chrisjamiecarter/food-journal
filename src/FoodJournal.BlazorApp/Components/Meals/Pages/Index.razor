@@ -22,7 +22,7 @@
         </button>
     </div>
 
-    <MealsList Meals="Meals" />
+    <MealsList Meals="Meals" OnDeleteMeal="HandleDeleteMeal" />
 
     @if (ShowAddMeal)
     {
@@ -106,5 +106,33 @@
     private void ToggleShowAddMeal()
     {
         ShowAddMeal = !ShowAddMeal;
+    }
+
+    private async Task HandleDeleteMeal(Guid mealId)
+    {
+        var currentUserId = CurrentUserService.Id;
+        if (string.IsNullOrWhiteSpace(currentUserId))
+        {
+            // TODO: Handle case where user is not authenticated.
+            return;
+        }
+
+        var meal = await QuickMealService.GetByIdAsync(mealId, CancellationToken.None);
+        if (meal is null || meal.UserId != currentUserId)
+        {
+            // TODO: Handle case where meal is not found or not a users meal.
+            return;
+        }
+
+        var deleted = await QuickMealService.DeleteAsync(meal, CancellationToken.None);
+        if (deleted)
+        {
+            // TODO: Toast.
+            await RefreshAsync();
+        }
+        else
+        {
+            // TODO: Toast.
+        }
     }
 }

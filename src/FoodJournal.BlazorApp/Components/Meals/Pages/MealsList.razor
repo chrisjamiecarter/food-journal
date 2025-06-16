@@ -24,13 +24,15 @@ else
                         <td class="px-6 py-4">@meal.Name</td>
                         <td class="px-6 py-4">@meal.Foods.Count</td>
                         <td class="px-6 py-4">
-                            <div class="flex gap-2">
+                            <div class="flex gap-2 justify-end">
                                 <NavLink href=@($"meals/{@meal.Id}/edit")>
-                                    Edit
+                                    <span class="material-symbols-outlined">edit</span>
                                 </NavLink>
-                                <NavLink href=@($"meals/{@meal.Id}/delete")>
-                                    Delete
-                                </NavLink>
+                                <button class="cursor-pointer" onclick="@(() => ShowConfirmation(meal.Id))">
+                                    <span class="material-symbols-outlined">
+                                        delete
+                                    </span>
+                                </button>
                             </div>
                         </td>
                     </tr>
@@ -51,9 +53,49 @@ else
             </tbody>
         </table>
     </div>
+
+    @if (ShowConfirmationModal)
+    {
+        <ConfirmationModal Title="Delete meal?"
+                           Message="Do you really want to delete this meal?"
+                           OnCancelCallback="HideConfirmation"
+                           OnConfirmCallback="HandleDeleteMeal" />
+    }
 }
 
 @code {
     [Parameter]
     public IEnumerable<QuickMeal>? Meals { get; set; }
+
+    [Parameter]
+    public EventCallback<Guid> OnDeleteMeal { get; set; }
+
+    private bool ShowConfirmationModal { get; set; } = false;
+
+    private Guid? DeletionCandidate { get; set; } = null;
+
+    private async Task ShowConfirmation(Guid mealId)
+    {
+        DeletionCandidate = mealId;
+        ShowConfirmationModal = true;
+        await InvokeAsync(StateHasChanged);
+    }
+
+    private async Task HideConfirmation()
+    {
+        DeletionCandidate = null;
+        ShowConfirmationModal = false;
+        await InvokeAsync(StateHasChanged);
+    }
+
+    private async Task HandleDeleteMeal()
+    {
+        if (DeletionCandidate.HasValue)
+        {
+            await OnDeleteMeal.InvokeAsync(DeletionCandidate.Value);
+        }
+
+        ShowConfirmationModal = false;
+        await InvokeAsync(StateHasChanged);
+    }
 }

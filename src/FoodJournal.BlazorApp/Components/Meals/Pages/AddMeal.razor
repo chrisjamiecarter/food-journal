@@ -87,11 +87,6 @@
                     }
                 </div>
                 <ValidationMessage For="() => Input.Foods" class="text-red-600 text-sm" />
-
-@*                 @if (!Input.Foods.Any())
-                {
-                    <p class="mt-1 text-sm text-red-600">Please select at least one food item.</p>
-                } *@
             </div>
 
             <footer class="mt-6 flex justify-end gap-2">
@@ -101,11 +96,21 @@
                     Cancel
                 </button>
 
-                        @* disabled="@(!Input.Foods.Any())" *@
-                <button type="submit"
-                        class="cursor-pointer rounded bg-blue-600 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-blue-700">
-                    Add
-                </button>
+                @if(!isSubmitting)
+                {
+                    <button type="submit"
+                            class="cursor-pointer rounded bg-blue-600 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-blue-700">
+                        Add
+                    </button>
+                }
+                else
+                {
+                    <button type="button"
+                            disabled
+                            class="rounded bg-blue-600 px-4 py-2 text-sm font-medium text-white">
+                        <LoadingIcon />
+                    </button>
+                }
             </footer>
         </EditForm>
     </div>
@@ -125,7 +130,6 @@
     private bool isSubmitting = false;
     private IEnumerable<Food> FilteredFoods { get; set; } = [];
 
-
     protected override void OnParametersSet()
     {
         if (Foods != null)
@@ -136,6 +140,7 @@
 
     private async Task HandleValidSubmit()
     {
+        isSubmitting = true;
         await OnAddMealCallback.InvokeAsync(Input);
     }
 

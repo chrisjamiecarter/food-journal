@@ -86,11 +86,12 @@
                         <p class="text-sm text-gray-500">No foods available</p>
                     }
                 </div>
+                <ValidationMessage For="() => Input.Foods" class="text-red-600 text-sm" />
 
-                @if (!Input.Foods.Any())
+@*                 @if (!Input.Foods.Any())
                 {
                     <p class="mt-1 text-sm text-red-600">Please select at least one food item.</p>
-                }
+                } *@
             </div>
 
             <footer class="mt-6 flex justify-end gap-2">
@@ -100,8 +101,8 @@
                     Cancel
                 </button>
 
+                        @* disabled="@(!Input.Foods.Any())" *@
                 <button type="submit"
-                        disabled="@(!Input.Foods.Any())"
                         class="cursor-pointer rounded bg-blue-600 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-blue-700">
                     Add
                 </button>
@@ -115,12 +116,12 @@
     public IEnumerable<Food>? Foods { get; set; }
 
     [Parameter]
-    public EventCallback<CreateMealDto> OnAddMealCallback { get; set; }
+    public EventCallback<CreateMealInputModel> OnAddMealCallback { get; set; }
 
     [Parameter]
     public EventCallback OnCancelCallback { get; set; }
 
-    private CreateMealDto Input = new();
+    private CreateMealInputModel Input = new();
     private bool isSubmitting = false;
     private IEnumerable<Food> FilteredFoods { get; set; } = [];
 

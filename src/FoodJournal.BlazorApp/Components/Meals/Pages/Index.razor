@@ -76,7 +76,7 @@
         await InvokeAsync(StateHasChanged);
     }
 
-    private async Task HandleAddMeal(CreateMealDto createMeal)
+    private async Task HandleAddMeal(CreateMealInputModel createMeal)
     {
         var currentUserId = CurrentUserService.Id;
         if (string.IsNullOrWhiteSpace(currentUserId))

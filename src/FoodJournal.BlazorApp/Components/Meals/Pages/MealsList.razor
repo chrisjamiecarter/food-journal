@@ -25,6 +25,22 @@ else
                         <td class="px-6 py-4">@meal.Foods.Count</td>
                         <td class="px-6 py-4">
                             <div class="flex gap-2 justify-end">
+                                @if (meal.Id == ExpandedMealId)
+                                {
+                                    <button class="cursor-pointer" onclick="@(() => CollapseMeal())">
+                                        <span class="material-symbols-outlined">
+                                            arrow_drop_up
+                                        </span>
+                                    </button>
+                                }
+                                else
+                                {
+                                    <button class="cursor-pointer" onclick="@(() => ExpandMeal(meal.Id))">
+                                        <span class="material-symbols-outlined">
+                                            arrow_drop_down
+                                        </span>
+                                    </button>
+                                }
                                 <NavLink href=@($"meals/{@meal.Id}/edit")>
                                     <span class="material-symbols-outlined">edit</span>
                                 </NavLink>
@@ -36,19 +52,22 @@ else
                             </div>
                         </td>
                     </tr>
-                    @* <tr class="bg-gray-900 border-b border-gray-800">
-                        <td colspan="5" class="px-6 py-3">
-                            <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
-                                @foreach (var food in meal.Foods)
-                                {
-                                    <div class="flex items-center gap-3 bg-gray-800 p-2 rounded-lg shadow">
-                                        <img src="@food.Base64Image" alt="@food.Name" class="w-10 h-10 object-cover rounded-full border border-gray-600" />
-                                        <span class="text-white text-sm">@food.Name</span>
-                                    </div>
-                                }
-                            </div>
-                        </td>
-                    </tr> *@
+                    @if (meal.Id == ExpandedMealId)
+                    {
+                        <tr class="bg-gray-900 border-b border-gray-800">
+                            <td colspan="5" class="px-6 py-3">
+                                <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
+                                    @foreach (var food in meal.Foods)
+                                    {
+                                        <div class="flex items-center gap-3 bg-gray-800 p-2 rounded-lg shadow">
+                                            <img src="@food.Base64Image" alt="@food.Name" class="w-10 h-10 object-cover rounded-full border border-gray-600" />
+                                            <span class="text-white text-sm">@food.Name</span>
+                                        </div>
+                                    }
+                                </div>
+                            </td>
+                        </tr>
+                    }
                 }
             </tbody>
         </table>
@@ -59,7 +78,7 @@ else
         <ConfirmationModal Title="Delete meal?"
                            Message="Do you really want to delete this meal?"
                            OnCancelCallback="HideConfirmation"
-                           OnConfirmCallback="HandleDeleteMeal" />
+                           OnConfirmCallback="DeleteMeal" />
     }
 }
 
@@ -69,6 +88,15 @@ else
 
     [Parameter]
     public EventCallback<Guid> OnDeleteMeal { get; set; }
+
+    [Parameter]
+    public EventCallback OnCollapseMeal { get; set; }
+
+    [Parameter]
+    public EventCallback<Guid> OnExpandMeal { get; set; }
+
+    [Parameter]
+    public Guid? ExpandedMealId { get; set; }
 
     private bool ShowConfirmationModal { get; set; } = false;
 
@@ -88,7 +116,7 @@ else
         await InvokeAsync(StateHasChanged);
     }
 
-    private async Task HandleDeleteMeal()
+    private async Task DeleteMeal()
     {
         if (DeletionCandidate.HasValue)
         {
@@ -98,4 +126,15 @@ else
         ShowConfirmationModal = false;
         await InvokeAsync(StateHasChanged);
     }
+
+    private async Task CollapseMeal()
+    {
+        await OnCollapseMeal.InvokeAsync();
+    }
+
+    private async Task ExpandMeal(Guid mealId)
+    {
+        await OnExpandMeal.InvokeAsync(mealId);
+    }
+
 }

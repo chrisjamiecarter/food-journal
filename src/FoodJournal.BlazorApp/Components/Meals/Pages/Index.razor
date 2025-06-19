@@ -22,7 +22,7 @@
         </button>
     </div>
 
-    <MealsList Meals="Meals" OnDeleteMeal="HandleDeleteMeal" />
+    <MealsList Meals="Meals" OnDeleteMeal="HandleDeleteMeal" ExpandedMealId="ExpandedMealId" OnCollapseMeal="HandleCollapseMeal" OnExpandMeal="HandleExpandMeal" />
 
     @if (ShowAddMeal)
     {
@@ -35,6 +35,7 @@
     private IEnumerable<Food>? Foods { get; set; }
     private IEnumerable<QuickMeal>? Meals { get; set; }
     private bool ShowAddMeal { get; set; } = false;
+    private Guid? ExpandedMealId { get; set; }
 
     private async Task RefreshAsync()
     {
@@ -134,5 +135,17 @@
         {
             // TODO: Toast.
         }
+    }
+    
+    private async Task HandleCollapseMeal()
+    {
+        ExpandedMealId = null;
+        await RefreshAsync();
+    }
+
+    private async Task HandleExpandMeal(Guid mealId)
+    {
+        ExpandedMealId = mealId;
+        await RefreshAsync();
     }
 }

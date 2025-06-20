@@ -1,0 +1,31 @@
+﻿<Modal Title="@Title"
+       ConfirmText="Delete"
+       CancelText="Cancel"
+       ShowFooter="true"
+       CloseOnBackdropClick="false"
+       ConfirmButtonType="Button.ButtonType.Danger"
+       OnCancel="OnCancel"
+       OnClose="OnClose"
+       OnConfirm="OnConfirm">
+
+    <div class="space-y-4">
+        <div class="flex items-start space-x-3">
+            <div class="flex-shrink-0">
+                <span class="material-symbols-outlined text-red-400">
+                    warning
+                </span>
+            </div>
+            <p class="text-gray-200">
+                @Message
+            </p>
+        </div>
+    </div>
+</Modal>
+
+@code {
+    [Parameter] public string Title { get; set; } = "Are you sure?";
+    [Parameter] public string Message { get; set; } = "Do you really want to perform this action?";
+    [Parameter] public EventCallback OnCancel { get; set; }
+    [Parameter] public EventCallback OnClose { get; set; }
+    [Parameter] public EventCallback OnConfirm { get; set; }
+}

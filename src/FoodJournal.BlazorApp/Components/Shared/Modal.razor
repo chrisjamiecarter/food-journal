@@ -1,4 +1,4 @@
-﻿<div class="@($"fixed inset-0 z-50 overflow-y-auto {(IsVisible ? "block" : "hidden")}")"
+﻿<div class="fixed inset-0 z-50 overflow-y-auto block"
      @onclick="OnBackdropClick">
 
     <!-- Backdrop -->
@@ -11,7 +11,7 @@
 
             <!-- Header -->
             <div class="flex items-center justify-between border-b border-gray-800 px-6 py-4">
-                <div>
+                <div class="flex items-start space-x-3">
                     <h3 class="text-xl font-semibold text-white">
                         @Title
                     </h3>
@@ -44,7 +44,7 @@
                     }
                     @if (ShowConfirmButton)
                     {
-                        <Button OnClickCallback="OnConfirm" Type="Button.ButtonType.Primary">
+                        <Button OnClickCallback="OnConfirm" Type="@ConfirmButtonType">
                             @ConfirmText
                         </Button>
                     }
@@ -55,7 +55,6 @@
 </div>
 
 @code {
-    [Parameter] public bool IsVisible { get; set; }
     [Parameter] public string Title { get; set; } = "Modal Title";
     [Parameter] public string Subtitle { get; set; } = "";
     [Parameter] public bool ShowFooter { get; set; } = true;
@@ -64,14 +63,14 @@
     [Parameter] public string CancelText { get; set; } = "Cancel";
     [Parameter] public string ConfirmText { get; set; } = "Confirm";
     [Parameter] public bool CloseOnBackdropClick { get; set; } = true;
+    [Parameter] public Button.ButtonType ConfirmButtonType { get; set; } = Button.ButtonType.Primary;
     [Parameter] public RenderFragment? ChildContent { get; set; }
-    [Parameter] public EventCallback OnClose { get; set; }
     [Parameter] public EventCallback OnCancel { get; set; }
+    [Parameter] public EventCallback OnClose { get; set; }
     [Parameter] public EventCallback OnConfirm { get; set; }
 
     private async Task CloseModal()
     {
-        IsVisible = false;
         await OnClose.InvokeAsync();
     }
 

@@ -75,10 +75,12 @@ else
 
     @if (ShowConfirmationModal)
     {
-        <ConfirmationModal Title="Delete meal?"
-                           Message="Do you really want to delete this meal?"
-                           OnCancelCallback="HideConfirmation"
-                           OnConfirmCallback="DeleteMeal" />
+        <DeleteConfirmationModal 
+            Title="Delete Meal?"
+            Message="Do you really want to delete this meal?"
+            OnCancel="HideConfirmation"
+            OnClose="HideConfirmation"
+            OnConfirm="DeleteMeal" />
     }
 }
 

@@ -1,0 +1,15 @@
+﻿<button @onclick="OnClick"
+        class="cursor-pointer flex items-center justify-center rounded-lg p-2 text-gray-500 transition-colors hover:bg-gray-800 hover:text-gray-300 focus:outline-none">
+    <span class="material-symbols-outlined" style="font-size:20px;">
+        close
+    </span>
+</button>
+
+@code {
+    [Parameter] public EventCallback OnClickCallback { get; set; }
+
+    private async Task OnClick()
+    {
+        await OnClickCallback.InvokeAsync();
+    }
+}

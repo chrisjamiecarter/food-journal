@@ -1,4 +1,5 @@
-﻿@if (Meals is null)
+﻿@using FoodJournal.BlazorApp.Components.Meals.Models
+@if (Meals is null)
 {
     <LoadingSpinner />
 }
@@ -41,9 +42,11 @@ else
                                         </span>
                                     </button>
                                 }
-                                <NavLink href=@($"meals/{@meal.Id}/edit")>
-                                    <span class="material-symbols-outlined">edit</span>
-                                </NavLink>
+                                <button class="cursor-pointer" onclick="@(() => ShowEditMeal(meal))">
+                                    <span class="material-symbols-outlined">
+                                        edit
+                                    </span>
+                                </button>
                                 <button class="cursor-pointer" onclick="@(() => ShowConfirmation(meal.Id))">
                                     <span class="material-symbols-outlined">
                                         delete
@@ -82,14 +85,29 @@ else
             OnClose="HideConfirmation"
             OnConfirm="DeleteMeal" />
     }
+
+    @if (ShowEditMealModal)
+    {
+        <EditMeal
+            Foods="@Foods"
+            QuickMeal="@EditCandidate"
+            OnUpdateMealCallback="UpdateMeal"
+            OnCancelCallback="HideEditMeal" />
+    }
 }
 
 @code {
+    [Parameter]
+    public IEnumerable<Food>? Foods { get; set; }
+
     [Parameter]
     public IEnumerable<QuickMeal>? Meals { get; set; }
 
     [Parameter]
     public EventCallback<Guid> OnDeleteMeal { get; set; }
+
+    [Parameter]
+    public EventCallback<UpdateMealInputModel> OnUpdateMeal { get; set; }
 
     [Parameter]
     public EventCallback OnCollapseMeal { get; set; }
@@ -104,10 +122,20 @@ else
 
     private Guid? DeletionCandidate { get; set; } = null;
 
+    private bool ShowEditMealModal { get; set; } = false;
+    private QuickMeal? EditCandidate { get; set; } = null;
+
     private async Task ShowConfirmation(Guid mealId)
     {
         DeletionCandidate = mealId;
         ShowConfirmationModal = true;
+        await InvokeAsync(StateHasChanged);
+    }
+
+    private async Task ShowEditMeal(QuickMeal meal)
+    {
+        EditCandidate = meal;
+        ShowEditMealModal = true;
         await InvokeAsync(StateHasChanged);
     }
 
@@ -118,6 +146,13 @@ else
         await InvokeAsync(StateHasChanged);
     }
 
+    private async Task HideEditMeal()
+    {
+        EditCandidate = null;
+        ShowEditMealModal = false;
+        await InvokeAsync(StateHasChanged);
+    }
+
     private async Task DeleteMeal()
     {
         if (DeletionCandidate.HasValue)
@@ -125,7 +160,17 @@ else
             await OnDeleteMeal.InvokeAsync(DeletionCandidate.Value);
         }
 
+        DeletionCandidate = null;
         ShowConfirmationModal = false;
+        await InvokeAsync(StateHasChanged);
+    }
+
+    private async Task UpdateMeal(UpdateMealInputModel updateMeal)
+    {
+        await OnUpdateMeal.InvokeAsync(updateMeal);
+
+        EditCandidate = null;
+        ShowEditMealModal = false;
         await InvokeAsync(StateHasChanged);
     }
 

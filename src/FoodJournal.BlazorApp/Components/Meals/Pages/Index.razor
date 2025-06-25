@@ -22,7 +22,7 @@
         </button>
     </div>
 
-    <MealsList Meals="Meals" OnDeleteMeal="HandleDeleteMeal" ExpandedMealId="ExpandedMealId" OnCollapseMeal="HandleCollapseMeal" OnExpandMeal="HandleExpandMeal" />
+    <MealsList Foods="Foods" Meals="Meals" OnDeleteMeal="HandleDeleteMeal" OnUpdateMeal="HandleEditMeal" ExpandedMealId="ExpandedMealId" OnCollapseMeal="HandleCollapseMeal" OnExpandMeal="HandleExpandMeal" />
 
     @if (ShowAddMeal)
     {
@@ -136,7 +136,42 @@
             // TODO: Toast.
         }
     }
-    
+
+    private async Task HandleEditMeal(UpdateMealInputModel updateMeal)
+    {
+        var currentUserId = CurrentUserService.Id;
+        if (string.IsNullOrWhiteSpace(currentUserId))
+        {
+            // TODO: Handle case where user is not authenticated.
+            return;
+        }
+
+        var quickMeal = await QuickMealService.GetByIdAsync(updateMeal.Id, CancellationToken.None);
+        if (quickMeal is null)
+        {
+            // TODO: Handle case where quick meal not found.
+            return;
+        }
+
+        quickMeal.Name = updateMeal.Name;
+        quickMeal.Foods.Clear();
+        foreach (var food in updateMeal.Foods)
+        {
+            quickMeal.Foods.Add(food);
+        }
+
+        var updated = await QuickMealService.UpdateAsync(quickMeal, CancellationToken.None);
+        if (updated)
+        {
+            // TODO: Toast.
+            await RefreshAsync();
+        }
+        else
+        {
+            // TODO: Toast.
+        }
+    }
+
     private async Task HandleCollapseMeal()
     {
         ExpandedMealId = null;

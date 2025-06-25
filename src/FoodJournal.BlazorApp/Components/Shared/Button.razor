@@ -1,26 +1,46 @@
-﻿<button @onclick="OnClick"
-        class="@ButtonClass">
+﻿<button type="@_buttonType"
+        class="@_buttonClass"
+        @onclick="OnClick">
     @ChildContent
 </button>
 
 @code {
-    public enum ButtonType
+    public enum ButtonStyle
     {
         Primary,
         Secondary,
         Danger,
     }
 
+    public enum ButtonType
+    {
+        Button,
+        Reset,
+        Submit,
+    }
+
     [Parameter] public EventCallback OnClickCallback { get; set; }
-    [Parameter] public ButtonType Type { get; set; }
+    [Parameter] public ButtonStyle Style { get; set; } = ButtonStyle.Primary;
+    [Parameter] public ButtonType Type { get; set; } = ButtonType.Button;
+    [Parameter] public bool Disabled { get; set; } = false;
     [Parameter] public RenderFragment? ChildContent { get; set; }
 
-    private string ButtonClass => Type switch
+    private string _buttonClass => Disabled ? _buttonStyle : $"cursor-pointer {_buttonStyle}";
+
+    private string _buttonStyle => Style switch
     {
-        ButtonType.Primary => "cursor-pointer w-full justify-center rounded-lg bg-blue-600 px-4 py-2.5 text-sm font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-gray-900 transition-colors duration-200 sm:w-auto",
-        ButtonType.Secondary => "cursor-pointer w-full justify-center rounded-lg border border-gray-600 bg-transparent px-4 py-2.5 text-sm font-medium text-gray-300 hover:bg-gray-800 hover:border-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-gray-900 transition-colors duration-200 sm:w-auto",
-        ButtonType.Danger => "cursor-pointer    w-full justify-center rounded-lg bg-red-600 px-4 py-2.5 text-sm font-medium text-white hover:bg-red-700focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 focus:ring-offset-gray-900 transition-colors duration-200 sm:w-auto ",
-        _ => "cursor-pointer w-full justify-center rounded-lg bg-blue-600 px-4 py-2.5 text-sm font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-gray-900 transition-colors duration-200 sm:w-auto"
+        ButtonStyle.Primary => "w-full justify-center rounded-lg bg-blue-600 px-4 py-2.5 text-sm font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-gray-900 transition-colors duration-200 sm:w-auto",
+        ButtonStyle.Secondary => "w-full justify-center rounded-lg border border-gray-600 bg-transparent px-4 py-2.5 text-sm font-medium text-gray-300 hover:bg-gray-800 hover:border-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-gray-900 transition-colors duration-200 sm:w-auto",
+        ButtonStyle.Danger => "w-full justify-center rounded-lg bg-red-600 px-4 py-2.5 text-sm font-medium text-white hover:bg-red-700focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 focus:ring-offset-gray-900 transition-colors duration-200 sm:w-auto",
+        _ => "w-full justify-center rounded-lg bg-blue-600 px-4 py-2.5 text-sm font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-gray-900 transition-colors duration-200 sm:w-auto"
+    };
+
+    private string _buttonType => Type switch
+    {
+        ButtonType.Button => "button",
+        ButtonType.Reset => "reset",
+        ButtonType.Submit => "submit",
+        _ => "button"
     };
 
     private async Task OnClick()

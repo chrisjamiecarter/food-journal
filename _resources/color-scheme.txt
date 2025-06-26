@@ -1,0 +1,5 @@
+text: stone-50 #fafaf9
+background: zinc-950
+primary: lime-400
+secondary: emerald-400
+accent: cyan-400

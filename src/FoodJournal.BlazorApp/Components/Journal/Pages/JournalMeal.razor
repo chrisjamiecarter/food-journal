@@ -1,9 +1,10 @@
 ﻿@using FoodJournal.BlazorApp.Components.Journal.Models
-<div>
+
+<article>
     <div class="flex justify-between mb-3">
         <h3 class="font-bold">@MealType</h3>        
-        <button class="flex items-center cursor-pointer rounded-full p-1 hover:bg-white/15" onclick="@ToggleShow">
-            <span class="material-symbols-outlined text-cyan-400">add</span>
+        <button class="flex items-center cursor-pointer rounded-full p-1 text-cyan-400 hover:bg-white/15" onclick="@ToggleShow">
+            <span class="material-symbols-outlined">add</span>
         </button>
     </div>
 
@@ -15,28 +16,20 @@
     }
     else
     {
-        <div class="relative overflow-x-auto shadow-md sm:rounded-lg mb-3">
-            <table class="w-full text-sm text-left text-gray-400">
-                <thead class="text-xs text-gray-400 bg-gray-700">
-                    <tr>
-                        <th scope="col" class="px-6 py-3">ID</th>
-                        <th scope="col" class="px-6 py-3">Food</th>
-                        <th scope="col" class="px-6 py-3">Actions</th>
-                    </tr>
-                </thead>
+        <div class="relative overflow-x-auto my-3">
+            <table class="w-full text-sm text-left text-stone-50 border-separate border-spacing-y-2">
                 <tbody>
                     @foreach (var food in MealFoods)
                     {
-                        <tr class="bg-gray-800 border-b border-gray-700 hover:bg-gray-600">
-                            <td scope="row" class="px-6 py-4 font-medium text-white whitespace-nowrap">@food.Id</td>
-                            <td class="px-6 py-4">
+                        <tr class="hover:bg-white/3">
+                            <td scope="row" class="rounded-l-lg">
                                 <div class="flex gap-3 items-center">
-                                    <img src="@food.Base64Image" alt="@food.Name" class="" />
-                                    @food.Name
+                                    <img src="@food.Base64Image" alt="@food.Name" />
+                                    <span class="font-medium text-white whitespace-nowrap">@food.Name</span>
                                 </div>
-                                </td>
-                            <td>
-                                <button class="cursor-pointer" onclick="@(() => ShowConfirmation(food.Id))">
+                            </td>
+                            <td class="rounded-r-lg">
+                                <button class="flex items-center justify-self-end cursor-pointer rounded-full p-1 text-cyan-400 hover:bg-white/15 self-end" onclick="@(() => ShowConfirmation(food.Id))">
                                     <span class="material-symbols-outlined">
                                         delete
                                     </span>
@@ -50,13 +43,14 @@
 
         @if (ShowConfirmationModal)
         {
-            <ConfirmationModal Title="Delete food journal entry?"
-                               Message="Do you really want to delete this food from your journal?"
-                               OnCancelCallback="HideConfirmation"
-                               OnConfirmCallback="HandleDeleteJournalMealFood" />
+            <DeleteConfirmationModal Title="Delete food journal entry?"
+                                     Message="Do you really want to delete this food from your journal?"
+                                     OnCancel="HideConfirmation"
+                                     OnClose="HideConfirmation"
+                                     OnConfirm="HandleDeleteJournalMealFood" />
         }
     }
-</div>
+</article>
 
 @code {
     [Parameter]

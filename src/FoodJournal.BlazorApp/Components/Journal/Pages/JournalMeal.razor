@@ -2,13 +2,13 @@
 
 <article class="p-3 lg:rounded-lg lg:bg-stone-950 lg:p-6 lg:ring-1 lg:shadow-xs lg:ring-white/10">
     <div class="flex justify-between">
-        <h3 class="font-bold">@MealType</h3>        
-        <button class="flex items-center cursor-pointer rounded-full p-1 text-cyan-400 hover:bg-white/15" onclick="@ToggleShow">
+        <h3 class="font-bold">@MealType</h3>     
+        <button class="flex items-center cursor-pointer rounded-full p-1 text-cyan-400 hover:bg-white/15" onclick="@ShowAddModal">
             <span class="material-symbols-outlined">add</span>
         </button>
     </div>
 
-    <AddMeal Show="@Show" JournalDate="@MealDate" JournalMealType="@MealType" AvailableFoods="@AvailableFoods" AvailableMeals="@AvailableMeals" OnAddMeal="HandleAddJournalMeal" />
+    @* <AddMeal Show="@Show" JournalDate="@MealDate" JournalMealType="@MealType" AvailableFoods="@AvailableFoods" AvailableMeals="@AvailableMeals" OnAddMeal="HandleAddJournalMeal" /> *@
 
     @if (MealFoods is null)
     {
@@ -29,7 +29,7 @@
                                 </div>
                             </td>
                             <td class="rounded-r-lg">
-                                <button class="flex items-center justify-self-end cursor-pointer rounded-full p-1 text-cyan-400 hover:bg-white/15 self-end" onclick="@(() => ShowConfirmation(food.Id))">
+                                <button class="flex items-center justify-self-end cursor-pointer rounded-full p-1 text-cyan-400 hover:bg-white/15 self-end" onclick="@(() => ShowDeleteModal(food.Id))">
                                     <span class="material-symbols-outlined">
                                         delete
                                     </span>
@@ -41,12 +41,21 @@
             </table>
         </div>
 
-        @if (ShowConfirmationModal)
+        @if (IsAddModalVisible)
+        {
+            <Modal Title="Add Meal"
+                   OnClose="@HideAddModal"
+                   ShowFooter="@false">
+                <AddMeal JournalDate="@MealDate" JournalMealType="@MealType" AvailableFoods="@AvailableFoods" AvailableMeals="@AvailableMeals" OnAddMeal="HandleAddJournalMeal" />
+            </Modal>
+        }
+
+        @if (IsDeleteModalVisible)
         {
             <DeleteConfirmationModal Title="Delete food journal entry?"
                                      Message="Do you really want to delete this food from your journal?"
-                                     OnCancel="HideConfirmation"
-                                     OnClose="HideConfirmation"
+                                     OnCancel="HideDeleteModal"
+                                     OnClose="HideDeleteModal"
                                      OnConfirm="HandleDeleteJournalMealFood" />
         }
     }
@@ -75,19 +84,14 @@
     public EventCallback<DeleteJournalMealFoodDto> OnDeleteJournalMealFood { get; set; }
 
     private bool Show { get; set; } = false;
-    private bool ShowConfirmationModal = false;
+    private bool IsAddModalVisible = false;
+    private bool IsDeleteModalVisible = false;
     private Guid? DeletionCandidate = null;
-
-    private void ToggleShow()
-    {
-        Show = !Show;
-    }
 
     private async Task HandleAddJournalMeal(CreateJournalMealDto createMeal)
     {
         await OnAddJournalMeal.InvokeAsync(createMeal);
-
-        ToggleShow();
+        await HideAddModal();
     }
 
     private async Task HandleDeleteJournalMealFood()
@@ -104,21 +108,32 @@
             await OnDeleteJournalMealFood.InvokeAsync(deleteMealMood);
         }
 
-        ShowConfirmationModal = false;
-        await InvokeAsync(StateHasChanged);
+        await HideDeleteModal();
     }
 
-    private async Task ShowConfirmation(Guid foodId)
+    private async Task HideAddModal()
     {
-        DeletionCandidate = foodId;
-        ShowConfirmationModal = true;
+        IsAddModalVisible = false;
         await InvokeAsync(StateHasChanged);
     }
 
-    private async Task HideConfirmation()
+    private async Task HideDeleteModal()
     {
         DeletionCandidate = null;
-        ShowConfirmationModal = false;
+        IsDeleteModalVisible = false;
+        await InvokeAsync(StateHasChanged);
+    }
+
+    private async Task ShowAddModal()
+    {
+        IsAddModalVisible = true;
+        await InvokeAsync(StateHasChanged);
+    }
+
+    private async Task ShowDeleteModal(Guid foodId)
+    {
+        DeletionCandidate = foodId;
+        IsDeleteModalVisible = true;
         await InvokeAsync(StateHasChanged);
     }
 }

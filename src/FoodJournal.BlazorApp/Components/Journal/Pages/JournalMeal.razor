@@ -1,7 +1,7 @@
 ﻿@using FoodJournal.BlazorApp.Components.Journal.Models
 
-<article>
-    <div class="flex justify-between mb-3">
+<article class="p-3 lg:rounded-lg lg:bg-stone-950 lg:p-6 lg:ring-1 lg:shadow-xs lg:ring-white/10">
+    <div class="flex justify-between">
         <h3 class="font-bold">@MealType</h3>        
         <button class="flex items-center cursor-pointer rounded-full p-1 text-cyan-400 hover:bg-white/15" onclick="@ToggleShow">
             <span class="material-symbols-outlined">add</span>
@@ -16,7 +16,7 @@
     }
     else
     {
-        <div class="relative overflow-x-auto my-3">
+        <div class="relative overflow-x-auto">
             <table class="w-full text-sm text-left text-stone-50 border-separate border-spacing-y-2">
                 <tbody>
                     @foreach (var food in MealFoods)

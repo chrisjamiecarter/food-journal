@@ -12,9 +12,9 @@
 
 <PageTitle>Journal</PageTitle>
 
-<section class="p-6 lg:rounded-lg lg:bg-stone-950 lg:p-10 lg:ring-1 lg:shadow-xs lg:ring-white/10">
-
-    <div class="flex justify-center items-center gap-3 h-20">
+<section class="flex flex-col gap-6">
+        
+    <div class="flex justify-center items-center gap-3 h-20 p-6 lg:rounded-lg lg:bg-stone-950 lg:p-10 lg:ring-1 lg:shadow-xs lg:ring-white/10">
         <button class="flex items-center text-cyan-400 rounded-full p-1 cursor-pointer hover:bg-white/15" onclick="@(() => IncrementJournalDate(-1))">
             <span class="material-symbols-outlined">chevron_left</span>
         </button>
@@ -30,20 +30,10 @@
         </button>
     </div>
 
-    <div class="divide-y divide-cyan-400">
-        <div class="py-5">
-            <JournalMeal MealType="MealType.Breakfast" MealDate="@JournalDate" MealFoods="@BreakfastJournal" AvailableFoods="Foods" AvailableMeals="QuickMeals" OnAddJournalMeal="HandleAddMeal" OnDeleteJournalMealFood="HandleDeleteMealFood" />
-        </div>
-        <div class="py-5">
-            <JournalMeal MealType="MealType.Lunch" MealDate="@JournalDate" MealFoods="@LunchJournal" AvailableFoods="Foods" AvailableMeals="QuickMeals" OnAddJournalMeal="HandleAddMeal" OnDeleteJournalMealFood="HandleDeleteMealFood" />
-        </div>
-        <div class="py-5">
-            <JournalMeal MealType="MealType.Dinner" MealDate="@JournalDate" MealFoods="@DinnerJournal" AvailableFoods="Foods" AvailableMeals="QuickMeals" OnAddJournalMeal="HandleAddMeal" OnDeleteJournalMealFood="HandleDeleteMealFood" />
-        </div>
-        <div class="py-5">
-            <JournalMeal MealType="MealType.Snack" MealDate="@JournalDate" MealFoods="@SnackJournal" AvailableFoods="Foods" AvailableMeals="QuickMeals" OnAddJournalMeal="HandleAddMeal" OnDeleteJournalMealFood="HandleDeleteMealFood" />
-        </div>
-    </div>
+    <JournalMeal MealType="MealType.Breakfast" MealDate="@JournalDate" MealFoods="@BreakfastJournal" AvailableFoods="Foods" AvailableMeals="QuickMeals" OnAddJournalMeal="HandleAddMeal" OnDeleteJournalMealFood="HandleDeleteMealFood" />
+    <JournalMeal MealType="MealType.Lunch" MealDate="@JournalDate" MealFoods="@LunchJournal" AvailableFoods="Foods" AvailableMeals="QuickMeals" OnAddJournalMeal="HandleAddMeal" OnDeleteJournalMealFood="HandleDeleteMealFood" />
+    <JournalMeal MealType="MealType.Dinner" MealDate="@JournalDate" MealFoods="@DinnerJournal" AvailableFoods="Foods" AvailableMeals="QuickMeals" OnAddJournalMeal="HandleAddMeal" OnDeleteJournalMealFood="HandleDeleteMealFood" />
+    <JournalMeal MealType="MealType.Snack" MealDate="@JournalDate" MealFoods="@SnackJournal" AvailableFoods="Foods" AvailableMeals="QuickMeals" OnAddJournalMeal="HandleAddMeal" OnDeleteJournalMealFood="HandleDeleteMealFood" />
 
 </section>
 

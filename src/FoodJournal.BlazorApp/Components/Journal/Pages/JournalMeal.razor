@@ -1,14 +1,12 @@
 ﻿@using FoodJournal.BlazorApp.Components.Journal.Models
 
-<article class="p-3 lg:rounded-lg lg:bg-stone-950 lg:p-6 lg:ring-1 lg:shadow-xs lg:ring-white/10">
+<article class="p-3 rounded-lg bg-stone-950 p-6 ring-1 shadow-xs ring-white/10">
     <div class="flex justify-between">
         <h3 class="font-bold">@MealType</h3>     
         <button class="flex items-center cursor-pointer rounded-full p-1 text-cyan-400 hover:bg-white/15" onclick="@ShowAddModal">
             <span class="material-symbols-outlined">add</span>
         </button>
     </div>
-
-    @* <AddMeal Show="@Show" JournalDate="@MealDate" JournalMealType="@MealType" AvailableFoods="@AvailableFoods" AvailableMeals="@AvailableMeals" OnAddMeal="HandleAddJournalMeal" /> *@
 
     @if (MealFoods is null)
     {
@@ -43,7 +41,7 @@
 
         @if (IsAddModalVisible)
         {
-            <Modal Title="Add Meal"
+            <Modal Title="@($"Add {MealType} Foods")"
                    OnClose="@HideAddModal"
                    ShowFooter="@false">
                 <AddMeal JournalDate="@MealDate" JournalMealType="@MealType" AvailableFoods="@AvailableFoods" AvailableMeals="@AvailableMeals" OnAddMeal="HandleAddJournalMeal" />

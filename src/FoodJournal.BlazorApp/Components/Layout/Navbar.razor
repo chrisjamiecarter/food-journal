@@ -1,0 +1,104 @@
+﻿@inject ICurrentUserService CurrentUserService
+
+<header class="relative z-50 bg-stone-950 lg:hidden">
+
+    <div class="flex items-center justify-between border-b border-white/5 p-4">
+
+        @* Brand with Hamburger *@
+        <div class="flex items-center gap-3 rounded-lg px-2 py-2.5 text-left text-lg/7 font-semibold text-stone-50">
+            <button class="cursor-pointer flex items-center pr-3" @onclick="ToggleMobileMenu">
+                <span class="material-symbols-outlined">
+                    menu
+                </span>
+            </button>
+            <img class="inline-block shrink-0 size-8 rounded-full outline -outline-offset-1 outline-white" src="images/food-journal-logo-32x32.png" alt="" aria-label="food journal logo" />
+            <span class="truncate">Bite Log</span>
+        </div>
+
+        @* Account *@
+        <div class="flex items-center gap-3 rounded-lg px-2 py-2.5 text-left text-base/6 font-medium text-stone-50 sm:py-2 sm:text-sm/5 hover:bg-stone-50/5 active:bg-stone-50/5">
+            <form action="Account/Logout" method="post" class="w-full">
+                <AntiforgeryToken />
+                <input type="hidden" name="returnUrl" value="" />
+                <span class="flex w-full items-center gap-3">
+                    <span data-slot="avatar" class="size-10 inline-grid shrink-0 align-middle outline -outline-offset-1 outline-white/20 rounded-[20%]">
+                        <img class="size-full" src="/images/portrait-placeholder.png" alt="">
+                    </span>
+                    <span class="flex w-full justify-between items-center min-w-0">
+                        <button class="cursor-pointer shrink-0 ml-2" type="submit">
+                            <span class="material-symbols-outlined">
+                                logout
+                            </span>
+                            <span class="hidden" aria-hidden="true">Logout</span>
+                        </button>
+                    </span>
+                </span>
+            </form>
+        </div>
+
+    </div>
+
+    <!-- Nav Links (Mobile + Desktop) -->
+    @if (IsMobileMenuVisible)
+    {
+        <div class="@MenuClasses">
+            <nav class="flex flex-col gap-2 p-3">
+                <NavLink
+                        href="/"
+                         class="flex w-full items-center gap-3 rounded-lg px-2 py-2.5 text-left text-base/6 font-medium text-stone-50 hover:bg-stone-50/5 transition"
+                        ActiveClass="bg-stone-50/5"
+                        Match="NavLinkMatch.All"
+                        @onclick="ToggleMobileMenu">
+                    <span class="material-symbols-outlined">home</span>
+                    <span class="truncate">Home</span>
+                </NavLink>
+                <NavLink
+                        href="/journal"
+                         class="flex w-full items-center gap-3 rounded-lg px-2 py-2.5 text-left text-base/6 font-medium text-stone-50 hover:bg-stone-50/5 transition"
+                        ActiveClass="bg-stone-50/5"
+                        @onclick="ToggleMobileMenu">
+                    <span class="material-symbols-outlined">calendar_month</span>
+                    <span class="truncate">Journal</span>
+                </NavLink>
+                <NavLink 
+                        href="/foods"
+                         class="flex w-full items-center gap-3 rounded-lg px-2 py-2.5 text-left text-base/6 font-medium text-stone-50 hover:bg-stone-50/5 transition"
+                        ActiveClass="bg-stone-50/5"
+                        @onclick="ToggleMobileMenu">
+                    <span class="material-symbols-outlined">restaurant</span>
+                    <span class="truncate">Foods</span>
+                </NavLink>
+                <NavLink
+                        href="/meals"
+                         class="flex w-full items-center gap-3 rounded-lg px-2 py-2.5 text-left text-base/6 font-medium text-stone-50 hover:bg-stone-50/5 transition"
+                        ActiveClass="bg-stone-50/5"
+                        @onclick="ToggleMobileMenu">
+                    <span class="material-symbols-outlined">menu_book</span>
+                    <span class="truncate">Meals</span>
+                </NavLink>
+            </nav>
+        </div>
+    }
+</header>
+
+@code {
+    private string email = string.Empty;
+    private string name = string.Empty;
+
+    private bool IsMobileMenuVisible { get; set; } = false;
+
+    private string MenuClasses =>
+        $"absolute inset-x-0 top-full bg-stone-950 text-stone-50 shadow-lg transition-all duration-300 ease-in-out transform " +
+        (IsMobileMenuVisible ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-4 pointer-events-none");
+
+    protected override void OnInitialized()
+    {
+        email = CurrentUserService.Email ?? string.Empty;
+        name = CurrentUserService.Name ?? string.Empty;
+    }
+
+    private void ToggleMobileMenu()
+    {
+        IsMobileMenuVisible = !IsMobileMenuVisible;
+    }
+}

@@ -19,58 +19,62 @@
 <PageTitle>Register</PageTitle>
 
 <div class="flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
-    <div class="sm:mx-auto sm:w-full sm:max-w-sm">
-        <img class="mx-auto h-10 w-auto" src="/images/food-journal-logo-512x512.png" alt="Bite Log">
-        <h2 class="mt-10 text-center text-2xl/9 font-bold tracking-tight text-white">Register a new account</h2>
-    </div>
+    <div class="bg-zinc-950 rounded-lg p-10 ring-1 shadow-xs ring-white/10 sm:mx-auto sm:w-full sm:max-w-md">
 
-    <div class="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-        <StatusMessage Message="@Message" />
-        <EditForm class="space-y-6" Model="Input" asp-route-returnUrl="@ReturnUrl" method="post" OnValidSubmit="RegisterUser" FormName="register">
-            <DataAnnotationsValidator />
+        <div>
+            <img class="mx-auto h-20 w-auto" src="/images/food-journal-logo-512x512.png" alt="Bite Log">
+            <h2 class="mt-10 text-center text-2xl/9 font-bold tracking-tight text-stone-50">Register a new account</h2>
+        </div>
 
-            <div>
-                <label for="Input.Username" class="block text-sm/6 font-medium text-white">Username</label>
-                <div class="mt-2">
-                    <InputText @bind-Value="Input.Username" id="Input.Username" class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6" autocomplete="username" aria-required="true" placeholder="username" />
-                    <ValidationMessage For="() => Input.Username" class="text-red-600 text-sm" />
+        <div class="mt-10">
+            <StatusMessage Message="@Message" />
+            <EditForm class="space-y-6" Model="Input" asp-route-returnUrl="@ReturnUrl" method="post" OnValidSubmit="RegisterUser" FormName="register">
+                <DataAnnotationsValidator />
+
+                <div>
+                    <label for="Input.Username" class="block text-sm/6 font-medium text-stone-50">Username</label>
+                    <div class="mt-2">
+                        <InputText @bind-Value="Input.Username" id="Input.Username" class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-cyan-400 sm:text-sm/6" autocomplete="username" aria-required="true" placeholder="username" />
+                        <ValidationMessage For="() => Input.Username" class="pt-1.5 text-red-600 text-sm" />
+                    </div>
                 </div>
-            </div>
 
-            <div>
-                <label for="Input.Email" class="block text-sm/6 font-medium text-white">Email address</label>
-                <div class="mt-2">
-                    <InputText @bind-Value="Input.Email" id="Input.Email" type="email" class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6" autocomplete="email" aria-required="true" placeholder="name@example.com" />
-                    <ValidationMessage For="() => Input.Email" class="text-red-600 text-sm" />
+                <div>
+                    <label for="Input.Email" class="block text-sm/6 font-medium text-stone-50">Email address</label>
+                    <div class="mt-2">
+                        <InputText @bind-Value="Input.Email" id="Input.Email" type="email" class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-cyan-400 sm:text-sm/6" autocomplete="email" aria-required="true" placeholder="name@example.com" />
+                        <ValidationMessage For="() => Input.Email" class="pt-1.5 text-red-600 text-sm" />
+                    </div>
                 </div>
-            </div>
 
-            <div>
-                <label for="Input.Password" class="block text-sm/6 font-medium text-white">Password</label>
-                <div class="mt-2">
-                    <InputText type="password" @bind-Value="Input.Password" id="Input.Password" class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6" autocomplete="current-password" aria-required="true" placeholder="password" />
-                    <ValidationMessage For="() => Input.Password" class="text-red-600 text-sm" />
+                <div>
+                    <label for="Input.Password" class="block text-sm/6 font-medium text-stone-50">Password</label>
+                    <div class="mt-2">
+                        <InputText type="password" @bind-Value="Input.Password" id="Input.Password" class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-cyan-400 sm:text-sm/6" autocomplete="current-password" aria-required="true" placeholder="password" />
+                        <ValidationMessage For="() => Input.Password" class="pt-1.5 text-red-600 text-sm" />
+                    </div>
                 </div>
-            </div>
 
-            <div>
-                <label for="Input.ConfirmPassword" class="block text-sm/6 font-medium text-white">Confirm Password</label>
-                <div class="mt-2">
-                    <InputText type="password" @bind-Value="Input.ConfirmPassword" id="Input.ConfirmPassword" class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6" autocomplete="new-password" aria-required="true" placeholder="password" />
-                    <ValidationMessage For="() => Input.ConfirmPassword" class="text-red-600 text-sm" />
+                <div>
+                    <label for="Input.ConfirmPassword" class="block text-sm/6 font-medium text-stone-50">Confirm password</label>
+                    <div class="mt-2">
+                        <InputText type="password" @bind-Value="Input.ConfirmPassword" id="Input.ConfirmPassword" class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-cyan-400 sm:text-sm/6" autocomplete="new-password" aria-required="true" placeholder="password" />
+                        <ValidationMessage For="() => Input.ConfirmPassword" class="pt-1.5 text-red-600 text-sm" />
+                    </div>
                 </div>
-            </div>
 
-            <div>
-                <button type="submit" class="cursor-pointer flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm/6 font-semibold text-white shadow-xs hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Register</button>
-            </div>
+                <div>
+                    <button type="submit" class="cursor-pointer flex w-full justify-center rounded-md bg-emerald-400 px-3 py-1.5 text-sm/6 font-semibold text-zinc-950 shadow-xs hover:bg-emerald-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-400">Register</button>
+                </div>
 
-        </EditForm>
+            </EditForm>
 
-        <p class="mt-10 text-center text-sm/6 text-gray-500">
-            Already have an account?
-            <a href="@(NavigationManager.GetUriWithQueryParameters("Account/Login", new Dictionary<string, object?> { ["ReturnUrl"] = ReturnUrl }))" class="font-semibold text-indigo-600 hover:text-indigo-500">Login to your account</a>
-        </p>
+            <p class="mt-10 text-center text-sm/6 text-stone-500">
+                Already have an account?
+                <a href="@(NavigationManager.GetUriWithQueryParameters("Account/Login", new Dictionary<string, object?> { ["ReturnUrl"] = ReturnUrl }))" class="text-xs font-semibold text-cyan-400 hover:text-cyan-500">Login to your account</a>
+            </p>
+        </div>
+
     </div>
 </div>
 

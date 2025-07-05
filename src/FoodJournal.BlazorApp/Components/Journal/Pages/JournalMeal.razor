@@ -44,7 +44,7 @@
             <Modal Title="@($"Add {MealType} Foods")"
                    OnClose="@HideAddModal"
                    ShowFooter="@false">
-                <AddMeal JournalDate="@MealDate" JournalMealType="@MealType" AvailableFoods="@AvailableFoods" AvailableMeals="@AvailableMeals" OnAddMeal="HandleAddJournalMeal" />
+                <AddMeal JournalDate="@MealDate" JournalMealType="@MealType" AvailableFoods="@AvailableFoods" AvailableMeals="@AvailableMeals" OnAddMeal="@HandleAddJournalMeal" OnCancel="@HideAddModal" />
             </Modal>
         }
 

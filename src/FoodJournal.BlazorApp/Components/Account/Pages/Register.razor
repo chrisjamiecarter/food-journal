@@ -32,33 +32,45 @@
                 <DataAnnotationsValidator />
 
                 <div>
-                    <label for="Input.Username" class="block text-sm/6 font-medium text-stone-50">Username</label>
-                    <div class="mt-2">
-                        <InputText @bind-Value="Input.Username" id="Input.Username" class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-cyan-400 sm:text-sm/6" autocomplete="username" aria-required="true" placeholder="username" />
+                    <label for="Input.Username" class="block mb-2 text-sm/6 font-medium text-stone-50">Username</label>
+                    <div class="relative">
+                        <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none text-gray-400">
+                            <span class="material-symbols-outlined" style="font-size:20px;">person</span>
+                        </div>
+                        <InputText @bind-Value="Input.Username" id="Input.Username" class="block w-full rounded-md bg-white px-3 py-1.5 ps-10 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-cyan-400 sm:text-sm/6" autocomplete="username" aria-required="true" placeholder="username" />
                         <ValidationMessage For="() => Input.Username" class="pt-1.5 text-red-600 text-sm" />
                     </div>
                 </div>
 
                 <div>
-                    <label for="Input.Email" class="block text-sm/6 font-medium text-stone-50">Email address</label>
-                    <div class="mt-2">
-                        <InputText @bind-Value="Input.Email" id="Input.Email" type="email" class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-cyan-400 sm:text-sm/6" autocomplete="email" aria-required="true" placeholder="name@example.com" />
+                    <label for="Input.Email" class="block mb-2 text-sm/6 font-medium text-stone-50">Email address</label>
+                    <div class="relative">
+                        <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none text-gray-400">
+                            <span class="material-symbols-outlined" style="font-size:20px;">alternate_email</span>
+                        </div>
+                        <InputText @bind-Value="Input.Email" id="Input.Email" type="email" class="block w-full rounded-md bg-white px-3 py-1.5 ps-10 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-cyan-400 sm:text-sm/6" autocomplete="email" aria-required="true" placeholder="name@example.com" />
                         <ValidationMessage For="() => Input.Email" class="pt-1.5 text-red-600 text-sm" />
                     </div>
                 </div>
 
                 <div>
-                    <label for="Input.Password" class="block text-sm/6 font-medium text-stone-50">Password</label>
-                    <div class="mt-2">
-                        <InputText type="password" @bind-Value="Input.Password" id="Input.Password" class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-cyan-400 sm:text-sm/6" autocomplete="current-password" aria-required="true" placeholder="password" />
+                    <label for="Input.Password" class="block mb-2 text-sm/6 font-medium text-stone-50">Password</label>
+                    <div class="relative">
+                        <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none text-gray-400">
+                            <span class="material-symbols-outlined" style="font-size:20px;">key</span>
+                        </div>
+                        <InputText type="password" @bind-Value="Input.Password" id="Input.Password" class="block w-full rounded-md bg-white px-3 py-1.5 ps-10 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-cyan-400 sm:text-sm/6" autocomplete="current-password" aria-required="true" placeholder="password" />
                         <ValidationMessage For="() => Input.Password" class="pt-1.5 text-red-600 text-sm" />
                     </div>
                 </div>
 
                 <div>
-                    <label for="Input.ConfirmPassword" class="block text-sm/6 font-medium text-stone-50">Confirm password</label>
-                    <div class="mt-2">
-                        <InputText type="password" @bind-Value="Input.ConfirmPassword" id="Input.ConfirmPassword" class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-cyan-400 sm:text-sm/6" autocomplete="new-password" aria-required="true" placeholder="password" />
+                    <label for="Input.ConfirmPassword" class="block mb-2 text-sm/6 font-medium text-stone-50">Confirm password</label>
+                    <div class="relative">
+                        <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none text-gray-400">
+                            <span class="material-symbols-outlined" style="font-size:20px;">key</span>
+                        </div>
+                        <InputText type="password" @bind-Value="Input.ConfirmPassword" id="Input.ConfirmPassword" class="block w-full rounded-md bg-white px-3 py-1.5 ps-10 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-cyan-400 sm:text-sm/6" autocomplete="new-password" aria-required="true" placeholder="password" />
                         <ValidationMessage For="() => Input.ConfirmPassword" class="pt-1.5 text-red-600 text-sm" />
                     </div>
                 </div>

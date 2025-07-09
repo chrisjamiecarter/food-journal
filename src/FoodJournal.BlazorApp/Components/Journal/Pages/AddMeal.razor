@@ -23,16 +23,6 @@
 
 @if (SelectedTab == PageTab.Foods)
 {
-@*     <div class="mb-3">
-        <label for="FoodSearch" class="mb-2 text-sm font-medium text-white sr-only">Search</label>
-        <div class="relative">
-            <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none text-gray-400">
-                <span class="material-symbols-outlined">search</span>
-            </div>
-            <input type="text" id="FoodSearch" class="block w-full p-4 ps-10 text-sm placeholder-gray-400 text-white border border-gray-600 rounded-lg bg-gray-700 focus:ring-blue-500 focus:border-blue-500" placeholder="Search" @oninput="FilterFoods" />
-        </div>
-    </div> *@
-
     <div class="mb-3">
         <label for="FoodSearch" class="sr-only">Search</label>
         <div class="relative">
@@ -48,7 +38,7 @@
 
         <!-- Foods Multi-Select -->
         <div class="mb-3">
-            <div class="border border-gray-300 rounded-md p-3 max-h-60 overflow-y-auto">
+            <div class="p-3 max-h-60 overflow-y-auto">
 
                 @if (FilteredFoods.Any())
                 {
@@ -62,7 +52,7 @@
                                         <img src="@food.Base64Image" alt="@food.Name" class="w-12 h-12 object-cover rounded-t-lg" />
                                         @if (isSelected)
                                         {
-                                            <div class="absolute -top-1 -right-1 bg-cyan-400 text-stone 50 rounded-full w-5 h-5 flex items-center justify-center">
+                                            <div class="absolute -top-1 -right-1 bg-cyan-400 text-stone-50 rounded-full w-5 h-5 flex items-center justify-center">
                                                 <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
                                                     <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
                                                 </svg>
@@ -104,16 +94,6 @@
 
 @if (SelectedTab == PageTab.Meals)
 {
-@*     <div class="mb-3">
-        <label for="MealSearch" class="sr-only">Search</label>
-        <div class="relative">
-            <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none text-gray-400">
-                <span class="material-symbols-outlined">search</span>
-            </div>
-            <input type="text" id="MealSearch" class="block w-full p-4 ps-10 text-sm placeholder-gray-400 text-white border border-gray-600 rounded-lg bg-gray-700 focus:ring-blue-500 focus:border-blue-500" placeholder="Search" @oninput="FilterMeals" />
-        </div>
-    </div> *@
-
     <div class="mb-3">
         <label for="MealSearch" class="sr-only">Search</label>
         <div class="relative">
@@ -129,7 +109,7 @@
 
         <!-- Meals Single Select -->
         <div class="mb-3">
-            <div class="border border-gray-300 rounded-md p-3 max-h-48 overflow-y-auto">
+            <div class="p-3 max-h-60 overflow-y-auto">
                 @if (FilteredMeals.Any())
                 {
                     <div class="flex flex-wrap gap-3">
@@ -138,10 +118,8 @@
                             var isSelected = MealInput.SelectedMeal?.Id == meal.Id;
                             <div class="@GetCardClasses(isSelected)" @onclick="@(() => SelectMeal(meal))">
                                 <div class="relative">
-                                    <div class="flex items-center justify-center">
-                                        <div class="w-12 h-12 bg-gray-200 rounded-t-lg flex items-center justify-center text-xs text-gray-700">
-                                            🍽️
-                                        </div>
+                                    <div class="flex items-center justify-center ">
+                                        <img src="data:image/png;base64,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" alt="@meal.Name" class="w-12 h-12 object-cover rounded-t-lg" />
                                         @if (isSelected)
                                         {
                                             <div class="absolute -top-1 -right-1 bg-blue-600 text-white rounded-full w-5 h-5 flex items-center justify-center">
@@ -153,7 +131,7 @@
                                     </div>
                                 </div>
                                 <div class="mt-1">
-                                    <h3 class="text-xs font-medium text-gray-700 text-center block">
+                                    <h3 class="text-xs font-medium text-stone-900 text-center block">
                                         @meal.Name
                                     </h3>
                                 </div>
@@ -163,7 +141,7 @@
                 }
                 else
                 {
-                    <p class="text-sm text-gray-500">No meals available</p>
+                    <p class="text-sm text-stone-50">No meals available</p>
                 }
             </div>
 
@@ -173,13 +151,13 @@
             }
         </div>
 
-        <!-- Form Actions -->
-        <div class="flex gap-3">
-            <button type="submit"
-                    disabled="@(MealInput.SelectedMeal is null)"
-                    class="flex-1 bg-blue-600 text-white py-2 px-4 rounded-md cursor-pointer hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed">
+        <div class="flex flex-col-reverse gap-3 sm:flex-row sm:justify-end">
+            <Button OnClickCallback="OnCancel" Style="Button.ButtonStyle.Secondary">
+                Cancel
+            </Button>
+            <Button Disabled="@(MealInput.SelectedMeal is null)" Type="Button.ButtonType.Submit" Style="Button.ButtonStyle.Primary">
                 Add Meal
-            </button>
+            </Button>
         </div>
     </EditForm>
 }

@@ -10,15 +10,13 @@
 
 <PageTitle>Meals</PageTitle>
 
-<section>
+<section class="flex flex-col gap-6">
 
-    <h1>Meals</h1>
+    <div class="flex justify-between items-center gap-3 h-20 p-6 rounded-lg bg-stone-950 p-10 ring-1 shadow-xs ring-white/10">
+        <h3 class="font-bold">Meals</h3>
 
-    <div class="flex justify-end mb-6">
-        <button type="button"
-                class="cursor-pointer flex w-3xs justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm/6 font-semibold text-white shadow-xs hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-                onclick="@ToggleShowAddMeal">
-            Add
+        <button class="flex items-center cursor-pointer rounded-full p-1 text-cyan-400 hover:bg-white/15" onclick="@ToggleShowAddMeal">
+            <span class="material-symbols-outlined">add</span>
         </button>
     </div>
 

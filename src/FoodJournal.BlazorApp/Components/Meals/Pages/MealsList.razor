@@ -1,11 +1,127 @@
 ﻿@using FoodJournal.BlazorApp.Components.Meals.Models
-@if (Meals is null)
-{
-    <LoadingSpinner />
-}
-else
-{
-    <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
+
+<article class="p-3 rounded-lg bg-stone-950 p-6 ring-1 shadow-xs ring-white/10">
+    <div class="flex justify-between">
+        <h3 class="font-bold">Meals</h3>
+        <button class="flex items-center cursor-pointer rounded-full p-1 text-cyan-400 hover:bg-white/15" onclick="@ShowAddModal">
+            <span class="material-symbols-outlined">add</span>
+        </button>
+    </div>
+
+    @if (Meals is null)
+    {
+        <LoadingSpinner />
+    }
+    else
+    {
+        <div class="relative overflow-x-auto">
+            <table class="w-full text-sm text-left text-stone-50 border-separate border-spacing-y-2">
+                <tbody>
+                    @foreach (var meal in Meals)
+                    {
+                        <tr class="hover:bg-white/3">
+                            <td scope="row" class="rounded-l-lg">
+                                <div class="flex gap-3 items-center">
+                                    <img src="data:image/png;base64,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" alt="@meal.Name" class="w-12 h-12 object-cover rounded-t-lg" />
+                                    <span class="font-medium text-white whitespace-nowrap">@meal.Name</span>
+                                </div>
+                            </td>
+                            <td class="rounded-r-lg">
+                                <div class="flex gap-2 justify-end">
+                                    @if (meal.Id == ExpandedMealId)
+                                    {
+                                        <button class="flex items-center cursor-pointer rounded-full p-1 text-cyan-400 hover:bg-white/15" onclick="@(() => CollapseMeal())">
+                                            <span class="material-symbols-outlined">
+                                                visibility_off
+                                            </span>
+                                        </button>
+                                    }
+                                    else
+                                    {
+                                        <button class="flex items-center cursor-pointer rounded-full p-1 text-cyan-400 hover:bg-white/15" onclick="@(() => ExpandMeal(meal.Id))">
+                                            <span class="material-symbols-outlined">
+                                                visibility
+                                            </span>
+                                        </button>
+                                    }
+                                    <button class="flex items-center cursor-pointer rounded-full p-1 text-cyan-400 hover:bg-white/15" onclick="@(() => ShowEditModal(meal))">
+                                        <span class="material-symbols-outlined">
+                                            edit
+                                        </span>
+                                    </button>
+                                    <button class="flex items-center cursor-pointer rounded-full p-1 text-cyan-400 hover:bg-white/15" onclick="@(() => ShowDeleteModal(meal.Id))">
+                                        <span class="material-symbols-outlined">
+                                            delete
+                                        </span>
+                                    </button>
+                                </div>
+   @*                              <button class="flex items-center justify-self-end cursor-pointer rounded-full p-1 text-cyan-400 hover:bg-white/15 self-end" onclick="@(() => ShowDeleteModal(meal.Id))">
+                                    <span class="material-symbols-outlined">
+                                        delete
+                                    </span>
+                                </button> *@
+                            </td>
+                        </tr>
+                        @if (meal.Id == ExpandedMealId)
+                        {
+                            <tr class="bg-gray-900 border-b border-gray-800">
+                                <td colspan="5" class="px-6 py-3">
+                                    <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
+                                        @foreach (var food in meal.Foods)
+                                        {
+                                            <div class="flex items-center gap-3 bg-gray-800 p-2 rounded-lg shadow">
+                                                <img src="@food.Base64Image" alt="@food.Name" class="w-10 h-10 object-cover rounded-full border border-gray-600" />
+                                                <span class="text-white text-sm">@food.Name</span>
+                                            </div>
+                                        }
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    }
+                </tbody>
+            </table>
+        </div>
+
+        @if (IsAddModalVisible)
+        {
+            <Modal>
+                Add Test
+            </Modal>
+            @* <Modal Title="@($"Add {MealType} Foods")"
+                   OnClose="@HideAddModal"
+                   ShowFooter="@false">
+                <AddMeal JournalDate="@MealDate" JournalMealType="@MealType" AvailableFoods="@AvailableFoods" AvailableMeals="@AvailableMeals" OnAddMeal="@HandleAddJournalMeal" OnCancel="@HideAddModal" />
+            </Modal> *@
+        }
+
+        @if (IsEditModalVisible)
+        {
+            <Modal>
+                Edit Test
+            </Modal>
+            @* <Modal Title="@($"Add {MealType} Foods")"
+                   OnClose="@HideAddModal"
+                   ShowFooter="@false">
+                <AddMeal JournalDate="@MealDate" JournalMealType="@MealType" AvailableFoods="@AvailableFoods" AvailableMeals="@AvailableMeals" OnAddMeal="@HandleAddJournalMeal" OnCancel="@HideAddModal" />
+            </Modal> *@
+        }
+
+        @if (IsDeleteModalVisible)
+        {
+            <Modal>
+                Delete Test
+            </Modal>
+            @* <DeleteConfirmationModal Title="Delete food journal entry?"
+                                     Message="Do you really want to delete this food from your journal?"
+                                     OnCancel="HideDeleteModal"
+                                     OnClose="HideDeleteModal"
+                                     OnConfirm="HandleDeleteJournalMealFood" /> *@
+        }
+    }
+</article>
+
+@*     <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
         <table class="w-full text-sm text-left text-gray-400">
             <thead class="text-xs text-gray-400 bg-gray-700">
                 <tr>
@@ -95,6 +211,7 @@ else
             OnCancelCallback="HideEditMeal" />
     }
 }
+ *@
 
 @code {
     [Parameter]
@@ -118,38 +235,53 @@ else
     [Parameter]
     public Guid? ExpandedMealId { get; set; }
 
-    private bool ShowConfirmationModal { get; set; } = false;
+    private bool IsAddModalVisible { get; set; } = false;
+
+    private bool IsDeleteModalVisible { get; set; } = false;
+
+    private bool IsEditModalVisible { get; set; } = false;
 
     private Guid? DeletionCandidate { get; set; } = null;
 
-    private bool ShowEditMealModal { get; set; } = false;
     private QuickMeal? EditCandidate { get; set; } = null;
 
-    private async Task ShowConfirmation(Guid mealId)
+    private async Task HideAddModal()
     {
-        DeletionCandidate = mealId;
-        ShowConfirmationModal = true;
+        IsAddModalVisible = false;
         await InvokeAsync(StateHasChanged);
     }
 
-    private async Task ShowEditMeal(QuickMeal meal)
-    {
-        EditCandidate = meal;
-        ShowEditMealModal = true;
-        await InvokeAsync(StateHasChanged);
-    }
-
-    private async Task HideConfirmation()
+    private async Task HideDeleteModal()
     {
         DeletionCandidate = null;
-        ShowConfirmationModal = false;
+        IsDeleteModalVisible = false;
         await InvokeAsync(StateHasChanged);
     }
 
-    private async Task HideEditMeal()
+    private async Task HideEditModal()
     {
         EditCandidate = null;
-        ShowEditMealModal = false;
+        IsEditModalVisible = false;
+        await InvokeAsync(StateHasChanged);
+    }
+
+    private async Task ShowAddModal()
+    {
+        IsAddModalVisible = true;
+        await InvokeAsync(StateHasChanged);
+    }
+
+    private async Task ShowDeleteModal(Guid foodId)
+    {
+        DeletionCandidate = foodId;
+        IsDeleteModalVisible = true;
+        await InvokeAsync(StateHasChanged);
+    }
+
+    private async Task ShowEditModal(QuickMeal meal)
+    {
+        EditCandidate = meal;
+        IsEditModalVisible = true;
         await InvokeAsync(StateHasChanged);
     }
 
@@ -160,18 +292,14 @@ else
             await OnDeleteMeal.InvokeAsync(DeletionCandidate.Value);
         }
 
-        DeletionCandidate = null;
-        ShowConfirmationModal = false;
-        await InvokeAsync(StateHasChanged);
+        await HideDeleteModal();
     }
 
     private async Task UpdateMeal(UpdateMealInputModel updateMeal)
     {
         await OnUpdateMeal.InvokeAsync(updateMeal);
 
-        EditCandidate = null;
-        ShowEditMealModal = false;
-        await InvokeAsync(StateHasChanged);
+        await HideEditModal();
     }
 
     private async Task CollapseMeal()
@@ -183,5 +311,4 @@ else
     {
         await OnExpandMeal.InvokeAsync(mealId);
     }
-
 }

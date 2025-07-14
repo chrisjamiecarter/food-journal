@@ -6,7 +6,7 @@ public static class ServiceNames
 
     public const string DatabaseName = "foodjournal-db";
 
-    public const int DatabasePort = 51433;
+    public const int DatabasePort = 1433;
         
     public const string DatabaseProvider = "sql";
 

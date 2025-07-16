@@ -96,9 +96,19 @@
         <Button OnClickCallback="OnCancel" Style="Button.ButtonStyle.Secondary">
             Cancel
         </Button>
-        <Button Disabled="@(isSubmitting)" Type="Button.ButtonType.Submit" Style="Button.ButtonStyle.Primary">
-            Add Meal
-        </Button>
+
+        @if (!isSubmitting)
+        {
+            <Button Style="Button.ButtonStyle.Primary" Type="Button.ButtonType.Submit">
+                Save Changes
+            </Button>
+        }
+        else
+        {
+            <Button Disabled="@true" Style="Button.ButtonStyle.Primary" Type="Button.ButtonType.Button">
+                <LoadingIcon />
+            </Button>
+        }
     </div>
 </EditForm>
 

@@ -85,19 +85,18 @@
 
         @if (IsAddModalVisible)
         {
-            <Modal>
-                Add Test
+            <Modal Title="Add Custom Meal"
+                OnClose="@HideAddModal"
+                ShowFooter="@false">
+                <AddMeal Foods="@Foods" OnCreateMeal="@HandleCreateMeal" OnCancel="@HideAddModal" />
             </Modal>
-            @* <Modal Title="@($"Add {MealType} Foods")"
-                   OnClose="@HideAddModal"
-                   ShowFooter="@false">
-                <AddMeal JournalDate="@MealDate" JournalMealType="@MealType" AvailableFoods="@AvailableFoods" AvailableMeals="@AvailableMeals" OnAddMeal="@HandleAddJournalMeal" OnCancel="@HideAddModal" />
-            </Modal> *@
         }
 
         @if (IsEditModalVisible)
         {
-            <Modal>
+            <Modal Title="Add Custom Meal"
+                   OnClose="@HideAddModal"
+                   ShowFooter="@false">
                 Edit Test
             </Modal>
             @* <Modal Title="@($"Add {MealType} Foods")"
@@ -109,14 +108,11 @@
 
         @if (IsDeleteModalVisible)
         {
-            <Modal>
-                Delete Test
-            </Modal>
-            @* <DeleteConfirmationModal Title="Delete food journal entry?"
-                                     Message="Do you really want to delete this food from your journal?"
-                                     OnCancel="HideDeleteModal"
-                                     OnClose="HideDeleteModal"
-                                     OnConfirm="HandleDeleteJournalMealFood" /> *@
+            <DeleteConfirmationModal Title="Delete Meal?"
+                                     Message="Do you really want to delete this meal?"
+                                     OnCancel="@HideDeleteModal"
+                                     OnClose="@HideDeleteModal"
+                                     OnConfirm="@HandleDeleteMeal" />
         }
     }
 </article>
@@ -221,6 +217,9 @@
     public IEnumerable<QuickMeal>? Meals { get; set; }
 
     [Parameter]
+    public EventCallback<CreateMealInputModel> OnCreateMeal { get; set; }
+
+    [Parameter]
     public EventCallback<Guid> OnDeleteMeal { get; set; }
 
     [Parameter]
@@ -285,7 +284,14 @@
         await InvokeAsync(StateHasChanged);
     }
 
-    private async Task DeleteMeal()
+    private async Task HandleCreateMeal(CreateMealInputModel createMeal)
+    {
+        await OnCreateMeal.InvokeAsync(createMeal);
+
+        await HideAddModal();
+    }
+
+    private async Task HandleDeleteMeal()
     {
         if (DeletionCandidate.HasValue)
         {
@@ -295,7 +301,7 @@
         await HideDeleteModal();
     }
 
-    private async Task UpdateMeal(UpdateMealInputModel updateMeal)
+    private async Task HandleUpdateMeal(UpdateMealInputModel updateMeal)
     {
         await OnUpdateMeal.InvokeAsync(updateMeal);
 

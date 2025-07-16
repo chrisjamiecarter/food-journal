@@ -12,7 +12,7 @@
 
 <section class="flex flex-col gap-6">
 
-    <MealsList Foods="@Foods" Meals="@Meals" OnDeleteMeal="@HandleDeleteMeal" OnUpdateMeal="@HandleEditMeal" ExpandedMealId="@ExpandedMealId" OnCollapseMeal="@HandleCollapseMeal" OnExpandMeal="@HandleExpandMeal" />
+    <MealsList Foods="@Foods" Meals="@Meals" OnCreateMeal="@HandleCreateMeal" OnDeleteMeal="@HandleDeleteMeal" OnUpdateMeal="@HandleEditMeal" ExpandedMealId="@ExpandedMealId" OnCollapseMeal="@HandleCollapseMeal" OnExpandMeal="@HandleExpandMeal" />
 
 @*     <div class="flex justify-between items-center gap-3 h-20 p-6 rounded-lg bg-stone-950 p-10 ring-1 shadow-xs ring-white/10">
         <h3 class="font-bold">Meals</h3>
@@ -77,7 +77,7 @@
         await InvokeAsync(StateHasChanged);
     }
 
-    private async Task HandleAddMeal(CreateMealInputModel createMeal)
+    private async Task HandleCreateMeal(CreateMealInputModel createMeal)
     {
         var currentUserId = CurrentUserService.Id;
         if (string.IsNullOrWhiteSpace(currentUserId))

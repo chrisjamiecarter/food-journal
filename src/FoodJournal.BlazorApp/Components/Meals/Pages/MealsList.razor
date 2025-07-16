@@ -86,24 +86,27 @@
         @if (IsAddModalVisible)
         {
             <Modal Title="Add Custom Meal"
-                OnClose="@HideAddModal"
-                ShowFooter="@false">
-                <AddMeal Foods="@Foods" OnCreateMeal="@HandleCreateMeal" OnCancel="@HideAddModal" />
+                   OnClose="@HideAddModal"
+                   ShowFooter="@false"
+                   CloseOnBackdropClick="@false">
+                <AddMeal Foods="@Foods"
+                         OnCreateMeal="@HandleCreateMeal"
+                         OnCancel="@HideAddModal" />
             </Modal>
         }
 
         @if (IsEditModalVisible)
         {
-            <Modal Title="Add Custom Meal"
+            <Modal Title="Edit Meal"
+                   Subtitle="@($"Updating meal: {EditCandidate?.Name}")"
+                   ShowFooter="@false"
                    OnClose="@HideEditModal"
-                   ShowFooter="@false">
-                Edit Test
+                   CloseOnBackdropClick="@false">
+                <EditMeal Foods="@Foods" 
+                          QuickMeal="@EditCandidate"
+                          OnUpdateMeal="@HandleUpdateMeal"
+                          OnCancel="HideEditModal" />
             </Modal>
-            @* <Modal Title="@($"Add {MealType} Foods")"
-                   OnClose="@HideAddModal"
-                   ShowFooter="@false">
-                <AddMeal JournalDate="@MealDate" JournalMealType="@MealType" AvailableFoods="@AvailableFoods" AvailableMeals="@AvailableMeals" OnAddMeal="@HandleAddJournalMeal" OnCancel="@HideAddModal" />
-            </Modal> *@
         }
 
         @if (IsDeleteModalVisible)

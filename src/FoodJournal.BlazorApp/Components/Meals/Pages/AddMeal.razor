@@ -5,46 +5,51 @@
 @inject IMealService MealService
 @inject NavigationManager NavigationManager
 
-<EditForm class="w-full space-y-6 mt-6" Model="@Input" OnValidSubmit="HandleValidSubmit">
+<EditForm id="mealForm" class="space-y-6" Model="@Input" OnValidSubmit="HandleValidSubmit">
+    @* <EditForm class="w-full space-y-6 mt-6" Model="@Input" OnValidSubmit="HandleValidSubmit"> *@
     <DataAnnotationsValidator />
 
     <!-- Meal Name -->
     <div>
-        <label for="Input.Name" class="block text-sm/6 font-medium text-white">Name</label>
-        <div class="mt-2">
-            <InputText @bind-Value="Input.Name" id="Input.Name" class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6" aria-required="true" placeholder="Meal name" />
-            <ValidationMessage For="() => Input.Name" class="pt-1.5 text-red-600 text-sm" />
+        <label for="Input.Name" class="block mb-2 text-sm/6 font-medium text-stone-50">Name</label>
+        <div class="relative">
+            <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none text-gray-400">
+                <span class="material-symbols-outlined" style="font-size:20px;">abc</span>
+            </div>
+            <InputText @bind-Value="Input.Name" id="Input.Name" class="block w-full rounded-md bg-white px-3 py-1.5 ps-10 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-cyan-400 sm:text-sm/6" aria-required="true" placeholder="Meal name" />
         </div>
+        <ValidationMessage For="() => Input.Name" class="pt-1.5 text-red-600 text-sm" />
     </div>
 
     <!-- Foods Multi-Select -->
     <div>
-        <label for="Input.Foods" class="block text-sm/6 font-medium text-white">Foods</label>
+        <label for="Input.Foods" class="block mb-2 text-sm/6 font-medium text-stone-50">Foods</label>
 
-        <div class="mt-2">
-            <label for="FoodSearch" class="mb-2 text-sm font-medium text-white sr-only">Search</label>
+        <div>
+            <label for="FoodSearch" class="sr-only">Search</label>
             <div class="relative">
                 <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none text-gray-400">
-                    <span class="material-symbols-outlined">search</span>
+                    <span class="material-symbols-outlined" style="font-size:20px;">search</span>
                 </div>
-                <input type="text" id="FoodSearch" class="block w-full p-4 ps-10 text-sm placeholder-gray-400 text-white border border-gray-600 rounded-lg bg-gray-700 focus:ring-blue-500 focus:border-blue-500" placeholder="Search" @oninput="FilterFoods" />
+                <input type="text" id="FoodSearch" class="block w-full rounded-md bg-white px-3 py-1.5 ps-10 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-cyan-400 sm:text-sm/6" placeholder="Search" @oninput="FilterFoods" />
             </div>
         </div>
 
-        <div id="Input.Foods" class="border border-gray-300 rounded-md mt-2 p-3 max-h-48 overflow-y-auto">
+        <div id="Input.Foods" class="p-3 max-h-60 overflow-y-auto">
 
             @if (FilteredFoods.Any())
             {
-                <div class="flex flex-wrap gap-3">
+                <div class="flex flex-wrap gap-2">
                     @foreach (var food in FilteredFoods)
                     {
-                        <div class="@GetCardClasses(food)" @onclick="@(() => ToggleFood(food, !Input.Foods.Contains(food)))">
+                        var isSelected = Input.Foods.Contains(food);
+                        <div class="@GetCardClasses(isSelected)" @onclick="@(() => ToggleFood(food, !isSelected))">
                             <div class="relative">
                                 <div class="flex items-center justify-center">
                                     <img src="@food.Base64Image" alt="@food.Name" class="w-12 h-12 object-cover rounded-t-lg" />
-                                    @if (Input.Foods.Contains(food))
+                                    @if (isSelected)
                                     {
-                                        <div class="absolute -top-1 -right-1 bg-blue-600 text-white rounded-full w-5 h-5 flex items-center justify-center">
+                                        <div class="absolute -top-1 -right-1 bg-cyan-400 text-stone-50 rounded-full w-5 h-5 flex items-center justify-center">
                                             <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
                                                 <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
                                             </svg>
@@ -63,7 +68,7 @@
             }
             else
             {
-                <p class="text-sm text-gray-500">No foods available</p>
+                <p class="text-sm text-stone-50">No foods available</p>
             }
         </div>
         <ValidationMessage For="() => Input.Foods" class="pt-1.5 text-red-600 text-sm" />
@@ -158,12 +163,12 @@
         }
     }
 
-    private string GetCardClasses(Food food)
+    private string GetCardClasses(bool isSelected)
     {
         var baseClasses = "cursor-pointer transition-all duration-200 hover:scale-105 p-2 rounded-lg";
-        var selectedClasses = Input.Foods.Contains(food)
-        ? "bg-blue-100 ring-2 ring-blue-500"
-        : "bg-white hover:bg-gray-50";
+        var selectedClasses = isSelected
+            ? "bg-cyan-100 ring-2 ring-cyan-400"
+            : "bg-white";
 
         return $"{baseClasses} {selectedClasses}";
     }

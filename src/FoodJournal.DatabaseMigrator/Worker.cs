@@ -1,6 +1,7 @@
 using System.Diagnostics;
 using FoodJournal.Application.Database;
 using FoodJournal.Application.Entities;
+using FoodJournal.DatabaseMigrator.Models;
 using FoodJournal.DatabaseMigrator.Options;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
@@ -59,7 +60,7 @@ internal class Worker : BackgroundService
     {
         var dbFoods = await dbContext.Foods.AsNoTracking().ToListAsync(cancellationToken);
         
-        var seedFoods = _options.Foods.Select(x => new Food(Guid.CreateVersion7(), x.Name, x.Base64Image)).ToList();
+        var seedFoods = _options.Foods.Select(x => x.ToDomain()).ToList();
 
         var foods = seedFoods.Where(x => !dbFoods.Any(y => y.Name == x.Name)).ToList();
 

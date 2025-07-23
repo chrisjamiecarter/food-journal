@@ -1,8 +1,9 @@
 using System.Diagnostics;
 using FoodJournal.Application.Database;
 using FoodJournal.Application.Entities;
-using FoodJournal.DatabaseMigrator.Constants;
+using FoodJournal.DatabaseMigrator.Options;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 
 namespace FoodJournal.DatabaseMigrator;
 
@@ -15,11 +16,13 @@ internal class Worker : BackgroundService
 
     private readonly IServiceProvider _serviceProvider;
     private readonly IHostApplicationLifetime _hostApplicationLifetime;
+    private readonly SeedDataOptions _options;
 
-    public Worker(IServiceProvider serviceProvider, IHostApplicationLifetime hostApplicationLifetime)
+    public Worker(IServiceProvider serviceProvider, IHostApplicationLifetime hostApplicationLifetime, IOptions<SeedDataOptions> options)
     {
         _serviceProvider = serviceProvider;
         _hostApplicationLifetime = hostApplicationLifetime;
+        _options = options.Value;
     }
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
@@ -43,7 +46,7 @@ internal class Worker : BackgroundService
         _hostApplicationLifetime.StopApplication();
     }
 
-    private static async Task RunMigrationAsync(ApplicationDbContext dbContext, CancellationToken cancellationToken)
+    private async Task RunMigrationAsync(ApplicationDbContext dbContext, CancellationToken cancellationToken)
     {
         var strategy = dbContext.Database.CreateExecutionStrategy();
         await strategy.ExecuteAsync(async () =>
@@ -52,11 +55,11 @@ internal class Worker : BackgroundService
         });
     }
 
-    private static async Task SeedDatabaseAsync(ApplicationDbContext dbContext, CancellationToken cancellationToken)
+    private async Task SeedDatabaseAsync(ApplicationDbContext dbContext, CancellationToken cancellationToken)
     {
         var dbFoods = await dbContext.Foods.AsNoTracking().ToListAsync(cancellationToken);
         
-        var seedFoods = SeedData.FoodSeeds.Select(x => new Food(Guid.CreateVersion7(), x.Name, x.Base64Image)).ToList();
+        var seedFoods = _options.Foods.Select(x => new Food(Guid.CreateVersion7(), x.Name, x.Base64Image)).ToList();
 
         var foods = seedFoods.Where(x => !dbFoods.Any(y => y.Name == x.Name)).ToList();
 

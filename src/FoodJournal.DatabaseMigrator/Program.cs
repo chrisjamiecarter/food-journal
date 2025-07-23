@@ -1,5 +1,6 @@
 using FoodJournal.Application.Database;
 using FoodJournal.Common;
+using FoodJournal.DatabaseMigrator.Options;
 using FoodJournal.ServiceDefaults;
 
 namespace FoodJournal.DatabaseMigrator;
@@ -11,6 +12,8 @@ internal static class Program
         var builder = Host.CreateApplicationBuilder(args);
 
         builder.AddServiceDefaults();
+
+        builder.Services.Configure<SeedDataOptions>(builder.Configuration.GetSection("SeedData"));
 
         builder.Services.AddHostedService<Worker>();
 

@@ -1,0 +1,156 @@
+﻿@* ExamplePage.razor *@
+@page "/modal-example"
+
+<div class="min-h-screen bg-gray-950 p-8">
+    <div class="mx-auto max-w-4xl">
+        <h1 class="text-3xl font-bold text-white mb-8">Dark Modal Examples</h1>
+        
+        <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            <!-- Basic Modal -->
+            <button @onclick="() => showBasicModal = true"
+                    class="rounded-lg bg-blue-600 px-4 py-3 text-white font-medium hover:bg-blue-700 transition-colors">
+                Open Basic Modal
+            </button>
+            
+            <!-- Content Modal -->
+            <button @onclick="() => showContentModal = true"
+                    class="rounded-lg bg-green-600 px-4 py-3 text-white font-medium hover:bg-green-700 transition-colors">
+                Open Content Modal
+            </button>
+            
+            <!-- Confirmation Modal -->
+            <button @onclick="() => showConfirmModal = true"
+                    class="rounded-lg bg-red-600 px-4 py-3 text-white font-medium hover:bg-red-700 transition-colors">
+                Open Confirmation
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- Basic Modal -->
+<Modal IsVisible="showBasicModal" 
+           Title="Welcome"
+           Subtitle="This is a basic modal example"
+           OnClose="() => showBasicModal = false"
+           OnCancel="() => showBasicModal = false"
+           OnConfirm="HandleBasicConfirm">
+    <p class="text-lg">
+        This is a simple modal with default settings. It demonstrates the basic functionality 
+        and styling of the dark modal component.
+    </p>
+</Modal>
+
+<!-- Content Rich Modal -->
+<Modal IsVisible="showContentModal"
+       Title="Project Settings"
+           Subtitle="Configure your project preferences"
+           ConfirmText="Save Changes"
+           OnClose="() => showContentModal = false"
+           OnCancel="() => showContentModal = false"
+           OnConfirm="HandleContentSave">
+    
+    <div class="space-y-6">
+        <div>
+            <label class="block text-sm font-medium text-gray-200 mb-2">Project Name</label>
+            <input type="text" @bind="projectName" 
+                   class="w-full rounded-lg border border-gray-600 bg-gray-800 px-3 py-2 text-white placeholder-gray-400 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+                   placeholder="Enter project name">
+        </div>
+        
+        <div>
+            <label class="block text-sm font-medium text-gray-200 mb-2">Description</label>
+            <textarea @bind="projectDescription" rows="4"
+                      class="w-full rounded-lg border border-gray-600 bg-gray-800 px-3 py-2 text-white placeholder-gray-400 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+                      placeholder="Describe your project..."></textarea>
+        </div>
+        
+        <div class="flex items-center space-x-3">
+            <input type="checkbox" @bind="isPublic" id="public-checkbox"
+                   class="h-4 w-4 rounded border-gray-600 bg-gray-800 text-blue-600 focus:ring-blue-500 focus:ring-offset-gray-900">
+            <label for="public-checkbox" class="text-sm text-gray-200">Make project public</label>
+        </div>
+        
+        <div class="rounded-lg bg-blue-900/30 border border-blue-800 p-4">
+            <div class="flex items-start space-x-3">
+                <svg class="h-5 w-5 text-blue-400 mt-0.5" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M11.25 11.25l.041-.02a.75.75 0 011.063.852l-.708 2.836a.75.75 0 001.063.853l.041-.021M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9-3.75h.008v.008H12V8.25z" />
+                </svg>
+                <div>
+                    <h4 class="text-sm font-medium text-blue-400">Information</h4>
+                    <p class="text-sm text-blue-300 mt-1">
+                        Public projects are visible to all users and can be discovered through search.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</Modal>
+
+<!-- Confirmation Modal -->
+<Modal IsVisible="showConfirmModal"
+       Title="Delete Project"
+       Subtitle="This action cannot be undone"
+       ConfirmText="Delete"
+       CancelText="Keep Project"
+       ShowFooter="true"
+       CloseOnBackdropClick="false"
+       OnClose="() => showConfirmModal = false"
+       OnCancel="() => showConfirmModal = false"
+       OnConfirm="HandleDelete">
+    
+    <div class="space-y-4">
+        <div class="flex items-start space-x-3">
+            <div class="flex-shrink-0">
+                <svg class="h-6 w-6 text-red-400" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z" />
+                </svg>
+            </div>
+            <div>
+                <p class="text-gray-200">
+                    Are you sure you want to delete <strong class="text-white">"My Awesome Project"</strong>? 
+                    This will permanently delete the project and all associated data.
+                </p>
+                <p class="text-gray-400 text-sm mt-2">
+                    This action cannot be undone and all project files, settings, and history will be lost.
+                </p>
+            </div>
+        </div>
+        
+        <div class="rounded-lg bg-red-900/20 border border-red-800 p-3">
+            <p class="text-red-300 text-sm">
+                <strong>Warning:</strong> Deleting this project will also remove it from any shared workspaces.
+            </p>
+        </div>
+    </div>
+</Modal>
+
+@code {
+    private bool showBasicModal = false;
+    private bool showContentModal = false;
+    private bool showConfirmModal = false;
+    
+    private string projectName = "My Awesome Project";
+    private string projectDescription = "";
+    private bool isPublic = false;
+
+    private async Task HandleBasicConfirm()
+    {
+        // Handle basic modal confirmation
+        showBasicModal = false;
+        // Add your logic here
+    }
+
+    private async Task HandleContentSave()
+    {
+        // Handle content modal save
+        showContentModal = false;
+        // Save project settings logic here
+    }
+
+    private async Task HandleDelete()
+    {
+        // Handle delete confirmation
+        showConfirmModal = false;
+        // Delete project logic here
+    }
+}

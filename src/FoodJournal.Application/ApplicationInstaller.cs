@@ -25,10 +25,12 @@ public static class ApplicationInstaller
         builder.Services.AddScoped<IFoodRepository, FoodRepository>();
         builder.Services.AddScoped<IMealRepository, MealRepository>();
         builder.Services.AddScoped<IQuickMealRepository, QuickMealRepository>();
+        builder.Services.AddScoped<ISearchRepository, SearchRepository>();
 
         builder.Services.AddScoped<IFoodService, FoodService>();
         builder.Services.AddScoped<IMealService, MealService>();
         builder.Services.AddScoped<IQuickMealService, QuickMealService>();
+        builder.Services.AddScoped<ISearchService, SearchService>();
 
         return builder;
     }

@@ -1,0 +1,182 @@
+﻿@page "/search"
+
+@using FoodJournal.Application.DTOs
+@using FoodJournal.Application.Enums
+@inject ISearchService SearchService
+@inject ICurrentUserService CurrentUserService
+
+<PageTitle>Search Meals</PageTitle>
+
+<section class="flex flex-col gap-6 p-6">
+
+    <!-- Search Filters -->
+    <div class="p-6 rounded-lg bg-stone-950 ring-1 shadow-xs ring-white/10">
+        <h2 class="text-xl font-bold text-stone-50 mb-4">Search Meals</h2>
+
+        <!-- Date Range -->
+        <div class="flex gap-4 mb-4">
+            <div class="flex-1">
+                <label class="block text-stone-50 mb-2">Start Date</label>
+                <InputDate @bind-Value="StartDate" class="w-full px-3 py-2 rounded-lg bg-stone-900 text-stone-50 border border-stone-700 focus:border-cyan-400 focus:outline-none" />
+            </div>
+            <div class="flex-1">
+                <label class="block text-stone-50 mb-2">End Date</label>
+                <InputDate @bind-Value="EndDate" class="w-full px-3 py-2 rounded-lg bg-stone-900 text-stone-50 border border-stone-700 focus:border-cyan-400 focus:outline-none" />
+            </div>
+        </div>
+
+        <!-- Food Search -->
+        <div class="mb-4">
+            <label class="block text-stone-50 mb-2">Food</label>
+            <InputSelect @bind-Value="SelectedFoodId" class="w-full px-3 py-2 rounded-lg bg-stone-900 text-stone-50 border border-stone-700 focus:border-cyan-400 focus:outline-none">
+                <option value="">All Foods</option>
+                @foreach (var food in AvailableFoods)
+                {
+                    <option value="@food.FoodId">@food.FoodName</option>
+                }
+            </InputSelect>
+        </div>
+
+        <!-- Meal Type -->
+        <div class="mb-4">
+            <label class="block text-stone-50 mb-2">Meal Type</label>
+            <div class="flex gap-2 flex-wrap">
+                <button type="button"
+                        class="px-4 py-2 rounded-lg transition-colors @(SelectedMealType is null ? "bg-cyan-400 text-stone-900" : "bg-stone-800 text-stone-50 hover:bg-stone-700")"
+                        @onclick="() => SelectedMealType = null">
+                    All
+                </button>
+                @foreach (MealType type in Enum.GetValues<MealType>().Where(t => t != MealType.Unknown))
+                {
+                    <button type="button"
+                            class="px-4 py-2 rounded-lg transition-colors @(SelectedMealType == type ? "bg-cyan-400 text-stone-900" : "bg-stone-800 text-stone-50 hover:bg-stone-700")"
+                            @onclick="() => SelectedMealType = type">
+                        @type
+                    </button>
+                }
+            </div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="flex gap-2">
+            <button type="button"
+                    class="px-6 py-2 rounded-lg bg-cyan-400 text-stone-900 font-semibold hover:bg-cyan-500 transition-colors"
+                    @onclick="SearchAsync">
+                Search
+            </button>
+            <button type="button"
+                    class="px-6 py-2 rounded-lg bg-stone-700 text-stone-50 hover:bg-stone-600 transition-colors"
+                    @onclick="ClearFilters">
+                Clear
+            </button>
+        </div>
+    </div>
+
+    <!-- Results -->
+    @if (SearchResults is not null)
+    {
+        <div class="text-stone-50 mb-2">
+            Showing @SearchResults.Meals.Count of @SearchResults.TotalCount results
+        </div>
+
+        @if (SearchResults.Meals.Count == 0)
+        {
+            <div class="p-6 rounded-lg bg-stone-950 ring-1 shadow-xs ring-white/10 text-center">
+                <span class="material-symbols-outlined text-4xl text-stone-500 mb-2">search_off</span>
+                <p class="text-stone-400">No meals found matching your criteria</p>
+            </div>
+        }
+        else
+        {
+            @foreach (var meal in SearchResults.Meals)
+            {
+                <div class="p-4 rounded-lg bg-stone-950 ring-1 shadow-xs ring-white/10">
+                    <div class="flex justify-between items-start mb-2">
+                        <div>
+                            <span class="text-stone-200">@meal.MealDate.ToString("MMM dd, yyyy")</span>
+                            <span class="ml-2 px-2 py-1 rounded bg-cyan-400/20 text-cyan-400 text-sm">@meal.MealType</span>
+                        </div>
+                        <div class="text-stone-400">@meal.TotalCalories cal</div>
+                    </div>
+                    <div class="text-stone-50">
+                        Foods: @string.Join(", ", meal.FoodNames)
+                    </div>
+                </div>
+            }
+
+            <!-- Pagination -->
+            @if (SearchResults.TotalPages > 1)
+            {
+                <div class="flex justify-center gap-2 mt-4">
+                    <button type="button"
+                            class="px-4 py-2 rounded-lg bg-stone-800 text-stone-50 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-stone-700"
+                            disabled="@(CurrentPage == 1)"
+                            @onclick="() => ChangePage(CurrentPage - 1)">
+                        Prev
+                    </button>
+                    <span class="px-4 py-2 text-stone-50">Page @CurrentPage of @SearchResults.TotalPages</span>
+                    <button type="button"
+                            class="px-4 py-2 rounded-lg bg-stone-800 text-stone-50 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-stone-700"
+                            disabled="@(CurrentPage >= SearchResults.TotalPages)"
+                            @onclick="() => ChangePage(CurrentPage + 1)">
+                        Next
+                    </button>
+                </div>
+            }
+        }
+    }
+</section>
+
+@code {
+    private DateTime? StartDate { get; set; }
+    private DateTime? EndDate { get; set; }
+    private Guid? SelectedFoodId { get; set; }
+    private MealType? SelectedMealType { get; set; }
+    private int CurrentPage = 1;
+    private const int PageSize = 10;
+
+    private SearchMealsResponse? SearchResults { get; set; }
+    private List<AvailableFoodResponse> AvailableFoods { get; set; } = [];
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadFoodsAsync();
+    }
+
+    private async Task LoadFoodsAsync()
+    {
+        AvailableFoods = await SearchService.GetAvailableFoodsAsync(CancellationToken.None);
+    }
+
+    private async Task SearchAsync()
+    {
+        var userId = CurrentUserService.Id;
+        if (string.IsNullOrWhiteSpace(userId)) return;
+
+        var request = new SearchMealsRequest(
+            StartDate,
+            EndDate,
+            SelectedFoodId,
+            SelectedMealType,
+            CurrentPage,
+            PageSize);
+
+        SearchResults = await SearchService.SearchMealsAsync(userId, request, CancellationToken.None);
+    }
+
+    private async Task ChangePage(int newPage)
+    {
+        CurrentPage = newPage;
+        await SearchAsync();
+    }
+
+    private async Task ClearFilters()
+    {
+        StartDate = null;
+        EndDate = null;
+        SelectedFoodId = null;
+        SelectedMealType = null;
+        CurrentPage = 1;
+        SearchResults = null;
+    }
+}

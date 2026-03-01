@@ -14,8 +14,7 @@ public interface ISearchService
         CancellationToken cancellationToken);
 }
 
-public class SearchService(
-    ISearchRepository searchRepository) : ISearchService
+internal sealed class SearchService(ISearchRepository searchRepository) : ISearchService
 {
     private readonly ISearchRepository _searchRepository = searchRepository;
 

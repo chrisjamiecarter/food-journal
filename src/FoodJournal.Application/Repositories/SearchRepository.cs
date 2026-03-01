@@ -15,7 +15,7 @@ public interface ISearchRepository
         CancellationToken cancellationToken);
 }
 
-public sealed class SearchRepository(ApplicationDbContext dbContext) : ISearchRepository
+internal sealed class SearchRepository(ApplicationDbContext dbContext) : ISearchRepository
 {
     private readonly ApplicationDbContext _dbContext = dbContext;
 

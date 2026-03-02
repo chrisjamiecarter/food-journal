@@ -43,17 +43,7 @@
     {
         <div class="@MenuClasses">
             <nav class="flex flex-col gap-2 p-3">
-                <NavLink
-                        href="/"
-                         class="flex w-full items-center gap-3 rounded-lg px-2 py-2.5 text-left text-base/6 font-medium text-stone-50 hover:bg-stone-50/5 transition"
-                        ActiveClass="bg-stone-50/5"
-                        Match="NavLinkMatch.All"
-                        @onclick="ToggleMobileMenu">
-                    <span class="material-symbols-outlined">home</span>
-                    <span class="truncate">Home</span>
-                </NavLink>
-                <NavLink
-                        href="/journal"
+                <NavLink href="/journal"
                          class="flex w-full items-center gap-3 rounded-lg px-2 py-2.5 text-left text-base/6 font-medium text-stone-50 hover:bg-stone-50/5 transition"
                         ActiveClass="bg-stone-50/5"
                         @onclick="ToggleMobileMenu">
@@ -67,6 +57,20 @@
                         @onclick="ToggleMobileMenu">
                     <span class="material-symbols-outlined">menu_book</span>
                     <span class="truncate">Meals</span>
+                </NavLink>
+                <NavLink href="/reports"
+                         class="flex w-full items-center gap-3 rounded-lg px-2 py-2.5 text-left text-base/6 font-medium text-stone-50 hover:bg-stone-50/5 transition"
+                         ActiveClass="bg-stone-50/5"
+                         @onclick="ToggleMobileMenu">
+                    <span class="material-symbols-outlined">bar_chart</span>
+                    <span class="truncate">Reports</span>
+                </NavLink>
+                <NavLink href="/search"
+                         class="flex w-full items-center gap-3 rounded-lg px-2 py-2.5 text-left text-base/6 font-medium text-stone-50 hover:bg-stone-50/5 transition"
+                         ActiveClass="bg-stone-50/5"
+                         @onclick="ToggleMobileMenu">
+                    <span class="material-symbols-outlined">search</span>
+                    <span class="truncate">Search</span>
                 </NavLink>
             </nav>
         </div>

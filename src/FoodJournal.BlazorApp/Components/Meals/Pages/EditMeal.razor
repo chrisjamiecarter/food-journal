@@ -141,16 +141,6 @@
         }
     }
 
-    private string GetCardClasses(bool isSelected)
-    {
-        var baseClasses = "cursor-pointer transition-all duration-200 hover:scale-105 p-2 rounded-lg";
-        var selectedClasses = isSelected
-            ? "bg-cyan-100 ring-2 ring-cyan-400"
-            : "bg-white";
-
-        return $"{baseClasses} {selectedClasses}";
-    }
-
     private void FilterFoods(ChangeEventArgs e)
     {
         var searchString = e.Value?.ToString()?.ToLower() ?? "";

@@ -14,21 +14,6 @@
 
     <MealsList Foods="@Foods" Meals="@Meals" OnCreateMeal="@HandleCreateMeal" OnDeleteMeal="@HandleDeleteMeal" OnUpdateMeal="@HandleEditMeal" ExpandedMealId="@ExpandedMealId" OnCollapseMeal="@HandleCollapseMeal" OnExpandMeal="@HandleExpandMeal" />
 
-@*     <div class="flex justify-between items-center gap-3 h-20 p-6 rounded-lg bg-stone-950 p-10 ring-1 shadow-xs ring-white/10">
-        <h3 class="font-bold">Meals</h3>
-
-        <button class="flex items-center cursor-pointer rounded-full p-1 text-cyan-400 hover:bg-white/15" onclick="@ToggleShowAddMeal">
-            <span class="material-symbols-outlined">add</span>
-        </button>
-    </div>
-
-    <MealsList Foods="Foods" Meals="Meals" OnDeleteMeal="HandleDeleteMeal" OnUpdateMeal="HandleEditMeal" ExpandedMealId="ExpandedMealId" OnCollapseMeal="HandleCollapseMeal" OnExpandMeal="HandleExpandMeal" />
-
-    @if (ShowAddMeal)
-    {
-        <AddMeal Foods="Foods" OnAddMealCallback="HandleAddMeal" OnCancelCallback="ToggleShowAddMeal" />
-    } *@
-
 </section>
 
 @code {

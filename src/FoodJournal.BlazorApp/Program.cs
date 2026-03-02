@@ -21,7 +21,8 @@ internal static class Program
         builder.AddApplication();
 
         // Add services to the container.
-        builder.Services.AddRazorComponents()
+        builder.Services
+            .AddRazorComponents()
             .AddInteractiveServerComponents();
 
         builder.Services.AddCascadingAuthenticationState();
@@ -29,27 +30,21 @@ internal static class Program
         builder.Services.AddScoped<IdentityRedirectManager>();
         builder.Services.AddScoped<AuthenticationStateProvider, IdentityRevalidatingAuthenticationStateProvider>();
 
-        builder.Services.AddAuthentication(options =>
+        builder.Services
+            .AddAuthentication(options =>
             {
                 options.DefaultScheme = IdentityConstants.ApplicationScheme;
                 options.DefaultSignInScheme = IdentityConstants.ExternalScheme;
             })
             .AddIdentityCookies();
 
-        //var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
-        //builder.Services.AddDbContext<ApplicationDbContext>(options =>
-        //    options.UseSqlServer(connectionString));
         builder.Services.AddDatabaseDeveloperPageExceptionFilter();
-
-        //builder.Services.AddIdentityCore<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true)
-        //    .AddEntityFrameworkStores<ApplicationDbContext>()
-        //    .AddSignInManager()
-        //    .AddDefaultTokenProviders();
 
         builder.Services.AddSingleton<IEmailSender<ApplicationUser>, IdentityNoOpEmailSender>();
 
         builder.Services.AddHttpContextAccessor();
         builder.Services.AddScoped<ICurrentUserService, CurrentUserService>();
+        builder.Services.AddScoped<IToastService, ToastService>();
 
         var app = builder.Build();
 
@@ -71,7 +66,7 @@ internal static class Program
 
         app.MapStaticAssets();
         app.MapRazorComponents<App>()
-            .AddInteractiveServerRenderMode();
+           .AddInteractiveServerRenderMode();
 
         // Add additional endpoints required by the Identity /Account Razor components.
         app.MapAdditionalIdentityEndpoints();

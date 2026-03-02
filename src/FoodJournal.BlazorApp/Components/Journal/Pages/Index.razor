@@ -34,41 +34,41 @@
     @* Summary Cards *@
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
 
-        @* Calories Today *@
+        @* Calories *@
         <div class="p-4 rounded-lg bg-stone-950 ring-1 shadow-xs ring-white/10">
             <div class="flex items-center gap-2 mb-2">
                 <span class="material-symbols-outlined text-cyan-400">local_fire_department</span>
-                <span class="text-stone-400 text-sm">Today's Calories</span>
+                <span class="text-stone-400 text-sm">Calories</span>
             </div>
             <div class="text-2xl font-bold text-stone-50">@(DayJournal?.Sum(food => food.Calories).ToString("N0"))</div>
             <div class="text-stone-500 text-sm">kcal</div>
         </div>
 
-        @* Carbs Today *@
+        @* Carbs *@
         <div class="p-4 rounded-lg bg-stone-950 ring-1 shadow-xs ring-white/10">
             <div class="flex items-center gap-2 mb-2">
                 <span class="material-symbols-outlined text-emerald-400">bakery_dining</span>
-                <span class="text-stone-400 text-sm">Today's Carbs</span>
+                <span class="text-stone-400 text-sm">Carbs</span>
             </div>
             <div class="text-2xl font-bold text-stone-50">@(DayJournal?.Sum(food => food.Carbs).ToString("N0"))</div>
             <div class="text-stone-500 text-sm">grams</div>
         </div>
 
-        @* Protein Today *@
+        @* Protein *@
         <div class="p-4 rounded-lg bg-stone-950 ring-1 shadow-xs ring-white/10">
             <div class="flex items-center gap-2 mb-2">
                 <span class="material-symbols-outlined text-blue-400">fitness_center</span>
-                <span class="text-stone-400 text-sm">Today's Protein</span>
+                <span class="text-stone-400 text-sm">Protein</span>
             </div>
             <div class="text-2xl font-bold text-stone-50">@(DayJournal?.Sum(food => food.Protein).ToString("N0"))</div>
             <div class="text-stone-500 text-sm">grams</div>
         </div>
 
-        @* Fat Today *@
+        @* Fat *@
         <div class="p-4 rounded-lg bg-stone-950 ring-1 shadow-xs ring-white/10">
             <div class="flex items-center gap-2 mb-2">
                 <span class="material-symbols-outlined text-purple-400">water_drop</span>
-                <span class="text-stone-400 text-sm">Today's Fat</span>
+                <span class="text-stone-400 text-sm">Fat</span>
             </div>
             <div class="text-2xl font-bold text-stone-50">@(DayJournal?.Sum(food => food.Fat).ToString("N0"))</div>
             <div class="text-stone-500 text-sm">grams</div>
@@ -154,7 +154,6 @@
         var currentUserId = CurrentUserService.Id;
         if (string.IsNullOrWhiteSpace(currentUserId))
         {
-            // TODO: Handle case where user is not authenticated.
             return;
         }
 
@@ -167,7 +166,8 @@
             var created = await MealService.CreateAsync(meal, CancellationToken.None);
             if (!created)
             {
-                // TODO: Toast.
+                ToastService.ShowError("Failed to update journal. Please try again.");
+                return;
             }
         }
 
@@ -182,12 +182,13 @@
         var updated = await MealService.UpdateAsync(meal, CancellationToken.None);
         if (updated)
         {
-            // TODO: Toast.
+            ToastService.ShowSuccess("Journal updated successfully!");
             await RefreshAsync();
         }
         else
         {
-            // TODO: Toast.
+            ToastService.ShowError("Failed to update journal. Please try again.");
+            return;
         }
     }
 
@@ -196,7 +197,6 @@
         var currentUserId = CurrentUserService.Id;
         if (string.IsNullOrWhiteSpace(currentUserId))
         {
-            // TODO: Handle case where user is not authenticated.
             return;
         }
 
@@ -219,13 +219,13 @@
         var updated = await MealService.UpdateAsync(meal, CancellationToken.None);
         if (updated)
         {
-            // TODO: Toast.
+            ToastService.ShowSuccess("Journal updated successfully!");
             await RefreshAsync();
         }
         else
         {
-            // TODO: Toast.
+            ToastService.ShowError("Failed to update journal. Please try again.");
+            return;
         }
     }
 }
-

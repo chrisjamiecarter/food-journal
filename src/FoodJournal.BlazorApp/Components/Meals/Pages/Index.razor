@@ -4,7 +4,6 @@
 @inject ICurrentUserService CurrentUserService
 @inject IFoodService FoodService
 @inject IQuickMealService QuickMealService
-@inject NavigationManager NavigationManager
 
 @attribute [Authorize]
 
@@ -80,12 +79,13 @@
         var created = await QuickMealService.CreateAsync(quickMeal, CancellationToken.None);
         if (created)
         {
-            // TODO: Toast.
+            ToastService.ShowSuccess("Meal created successfully!");
             await RefreshAsync();
         }
         else
         {
-            // TODO: Toast.
+            ToastService.ShowError("Failed to create meal. Please try again.");
+            return;
         }
     }
 
@@ -113,12 +113,13 @@
         var deleted = await QuickMealService.DeleteAsync(meal, CancellationToken.None);
         if (deleted)
         {
-            // TODO: Toast.
+            ToastService.ShowSuccess("Meal deleted successfully!");
             await RefreshAsync();
         }
         else
         {
-            // TODO: Toast.
+            ToastService.ShowError("Failed to delete meal. Please try again.");
+            return;
         }
     }
 
@@ -148,12 +149,13 @@
         var updated = await QuickMealService.UpdateAsync(quickMeal, CancellationToken.None);
         if (updated)
         {
-            // TODO: Toast.
+            ToastService.ShowSuccess("Meal updated successfully!");
             await RefreshAsync();
         }
         else
         {
-            // TODO: Toast.
+            ToastService.ShowError("Failed to update meal. Please try again.");
+            return;
         }
     }
 

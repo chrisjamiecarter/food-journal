@@ -1,0 +1,85 @@
+﻿@implements IDisposable
+
+<div class="fixed top-4 right-4 z-50 flex flex-col gap-2 max-w-sm">
+    @foreach (var toast in Toasts)
+    {
+        <div class="@GetToastClasses(toast.Type) animate-slide-in rounded-lg p-4 shadow-lg ring-1 ring-white/10">
+            <div class="flex items-start gap-3">
+                <span class="material-symbols-outlined @GetIconClasses(toast.Type)">
+                    @GetIcon(toast.Type)
+                </span>
+                <div class="flex-1">
+                    <p class="text-sm text-stone-50">@toast.Message</p>
+                </div>
+                <button @onclick="() => RemoveToast(toast.Id)"
+                        class="text-stone-400 hover:text-stone-50">
+                    <span class="material-symbols-outlined" style="font-size: 18px;">close</span>
+                </button>
+            </div>
+        </div>
+    }
+</div>
+
+@code {
+    private List<ToastMessage> Toasts { get; } = [];
+    private const int AutoDismissSeconds = 5;
+
+    protected override void OnInitialized()
+    {
+        if (ToastService is null) return;
+        ToastService.OnShow += HandleShowToast;
+    }
+
+    private void HandleShowToast(object? sender, ToastMessageEventArgs e)
+    {
+        Toasts.Add(e.Message);
+        InvokeAsync(StateHasChanged);
+
+        // Auto-remove after delay
+        _ = Task.Delay(TimeSpan.FromSeconds(AutoDismissSeconds))
+            .ContinueWith(_ => InvokeAsync(() => RemoveToast(e.Message.Id)));
+    }
+
+    private void RemoveToast(Guid id)
+    {
+        var toast = Toasts.FirstOrDefault(t => t.Id == id);
+        if (toast != null)
+        {
+            Toasts.Remove(toast);
+            InvokeAsync(StateHasChanged);
+        }
+    }
+
+    private static string GetToastClasses(ToastType type) => type switch
+    {
+        ToastType.Success => "bg-emerald-400/20",
+        ToastType.Error => "bg-red-400/20",
+        ToastType.Warning => "bg-amber-400/20",
+        ToastType.Info => "bg-cyan-400/20",
+        _ => "bg-stone-700"
+    };
+
+    private static string GetIconClasses(ToastType type) => type switch
+    {
+        ToastType.Success => "text-emerald-400",
+        ToastType.Error => "text-red-400",
+        ToastType.Warning => "text-amber-400",
+        ToastType.Info => "text-cyan-400",
+        _ => "text-stone-50"
+    };
+
+    private static string GetIcon(ToastType type) => type switch
+    {
+        ToastType.Success => "check_circle",
+        ToastType.Error => "error",
+        ToastType.Warning => "warning",
+        ToastType.Info => "info",
+        _ => "info"
+    };
+
+    public void Dispose()
+    {
+        if (ToastService is null) return;
+        ToastService.OnShow -= HandleShowToast;
+    }
+}

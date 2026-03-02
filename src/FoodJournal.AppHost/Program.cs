@@ -14,10 +14,9 @@ internal static class Program
     {
         var builder = DistributedApplication.CreateBuilder(args);
 
-        var sqlServer = builder.AddSqlServer(ServiceNames.DatabaseProvider)
-                               .WithHostPort(ServiceNames.DatabasePort)
-                               .WithLifetime(ContainerLifetime.Persistent)
+        var sqlServer = builder.AddSqlServer(ServiceNames.DatabaseProvider, port: ServiceNames.DatabasePort)
                                .WithContainerName("foodjournal-sqlserver")
+                               .WithLifetime(ContainerLifetime.Persistent)
                                .WithDataVolume();
 
         var journalDatabase = sqlServer.AddDatabase(ServiceNames.DatabaseName);
@@ -26,8 +25,7 @@ internal static class Program
                                  .WithReference(journalDatabase)
                                  .WaitFor(journalDatabase);
 
-        var blazorApp = builder.AddProject<FoodJournal_BlazorApp>(ServiceNames.WebAppName, "https")
-                               .WithExternalHttpEndpoints()
+        var blazorApp = builder.AddProject<FoodJournal_BlazorApp>(ServiceNames.WebAppName)
                                .WithReference(journalDatabase)
                                .WaitFor(migratorApp);
 

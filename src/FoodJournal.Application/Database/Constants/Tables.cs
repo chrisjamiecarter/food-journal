@@ -12,6 +12,8 @@ internal static class Tables
     public static readonly string ApplicationUserToken = "UserToken";
     public static readonly string EntityFrameworkCoreMigration = "Migration";
     public static readonly string Food = "Food";
+    public static readonly string FoodMeal = "FoodMeal";
+    public static readonly string FoodQuickMeal = "FoodQuickMeal";
     public static readonly string Meal = "Meal";
     public static readonly string QuickMeal = "QuickMeal";
     public static readonly string Role = "Role";

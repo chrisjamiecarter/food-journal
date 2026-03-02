@@ -18,8 +18,5 @@ internal sealed class FoodConfiguration : IEntityTypeConfiguration<Food>
 
         builder.Property(p => p.Name)
                .IsRequired();
-
-        builder.HasMany(e => e.Meals)
-               .WithMany(e => e.Foods);
     }
 }

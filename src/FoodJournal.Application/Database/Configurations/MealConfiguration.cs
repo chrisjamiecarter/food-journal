@@ -24,6 +24,18 @@ internal sealed class MealConfiguration : IEntityTypeConfiguration<Meal>
                .HasConversion<int>();
 
         builder.HasMany(e => e.Foods)
-               .WithMany(e => e.Meals);
+               .WithMany(e => e.Meals)
+               .UsingEntity<Dictionary<string, object>>(
+                    right => right
+                        .HasOne<Food>()
+                        .WithMany()
+                        .HasForeignKey(ForeignKeys.FoodsId)
+                        .OnDelete(DeleteBehavior.Cascade),
+                    left => left
+                        .HasOne<Meal>()
+                        .WithMany()
+                        .HasForeignKey(ForeignKeys.MealsId)
+                        .OnDelete(DeleteBehavior.Cascade))
+               .ToTable(Tables.FoodMeal, Schemas.Core);
     }
 }

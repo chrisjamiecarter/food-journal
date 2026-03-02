@@ -23,6 +23,18 @@ internal sealed class QuickMealConfiguration : IEntityTypeConfiguration<QuickMea
                .IsRequired();
 
         builder.HasMany(e => e.Foods)
-               .WithMany(e => e.QuickMeals);
+               .WithMany(e => e.QuickMeals)
+               .UsingEntity<Dictionary<string, object>>(
+                    right => right
+                        .HasOne<Food>()
+                        .WithMany()
+                        .HasForeignKey(ForeignKeys.FoodsId)
+                        .OnDelete(DeleteBehavior.Cascade),
+                    left => left
+                        .HasOne<QuickMeal>()
+                        .WithMany()
+                        .HasForeignKey(ForeignKeys.QuickMealsId)
+                        .OnDelete(DeleteBehavior.Cascade))
+               .ToTable(Tables.FoodQuickMeal, Schemas.Core);
     }
 }

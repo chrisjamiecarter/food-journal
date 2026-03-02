@@ -8,7 +8,18 @@ namespace FoodJournal.Application.Repositories;
 
 public interface IReportRepository
 {
-    Task<IReadOnlyCollection<FoodFrequencyResponse>> GetAllFoodsWithFrequencyAsync(
+    Task<List<AvailableFoodResponse>> GetAvailableFoodsAsync(
+        string userId,
+        CancellationToken cancellationToken);
+
+    Task<FoodFrequencyResponse?> GetFoodFrequencyAsync(
+        string userId,
+        Guid foodId,
+        DateTime startDate,
+        DateTime endDate,
+        CancellationToken cancellationToken);
+
+    Task<IReadOnlyCollection<FoodFrequencyResponse>> GetFoodsFrequencyAsync(
         string userId,
         DateTime startDate,
         DateTime endDate,
@@ -28,7 +39,52 @@ internal sealed class ReportRepository(ApplicationDbContext dbContext) : IReport
 {
     private readonly ApplicationDbContext _dbContext = dbContext;
 
-    public async Task<IReadOnlyCollection<FoodFrequencyResponse>> GetAllFoodsWithFrequencyAsync(string userId, DateTime startDate, DateTime endDate, CancellationToken cancellationToken)
+    public async Task<List<AvailableFoodResponse>> GetAvailableFoodsAsync(string userId, CancellationToken cancellationToken)
+    {
+        return await _dbContext.Meals
+            .Where(meal => meal.UserId == userId)
+            .SelectMany(meal => meal.Foods)
+            .Distinct()
+            .OrderBy(food => food.Name)
+            .Select(food => new AvailableFoodResponse(
+                food.Id,
+                food.Name))
+            .ToListAsync(cancellationToken);
+    }
+
+    public async Task<FoodFrequencyResponse?> GetFoodFrequencyAsync(string userId, Guid foodId, DateTime startDate, DateTime endDate, CancellationToken cancellationToken)
+    {
+        var meals = await _dbContext.Meals
+            .Include(meal => meal.Foods)
+            .Where(meal => meal.UserId == userId && meal.Date >= startDate && meal.Date <= endDate)
+            .ToListAsync(cancellationToken);
+
+        var foodOccurrences = meals
+            .SelectMany(meal => meal.Foods
+                .Where(food => food.Id == foodId)
+                .Select(food => new
+                {
+                    Food = food,
+                    Meal = meal,
+                }))
+            .ToList();
+
+        return foodOccurrences.Count == 0
+            ? null
+            : new FoodFrequencyResponse(
+            foodId,
+            foodOccurrences.First().Food.Name,
+            foodOccurrences.Count,
+            foodOccurrences.Sum(x => x.Food.Calories),
+            foodOccurrences.Sum(x => x.Food.Carbs),
+            foodOccurrences.Sum(x => x.Food.Protein),
+            foodOccurrences.Sum(x => x.Food.Fat),
+            [.. foodOccurrences.Select(x => new MealOccurrenceResponse(
+                x.Meal.Date,
+                x.Meal.Type.ToString()))]);
+    }
+
+    public async Task<IReadOnlyCollection<FoodFrequencyResponse>> GetFoodsFrequencyAsync(string userId, DateTime startDate, DateTime endDate, CancellationToken cancellationToken)
     {
         var meals = await _dbContext.Meals
             .Include(meal => meal.Foods)
@@ -52,27 +108,29 @@ internal sealed class ReportRepository(ApplicationDbContext dbContext) : IReport
                 group.Sum(x => x.Food.Fat),
                 [.. group.Select(x => new MealOccurrenceResponse(
                     x.Meal.Date,
-                    x.Meal.Type.ToString()))
-                .OrderByDescending(order => order.MealDate)]))];
+                    x.Meal.Type.ToString()))]))];
     }
 
     public async Task<FoodFrequencyReportResponse> GetFoodFrequencyReportAsync(string userId, FoodFrequencyRequest request, CancellationToken cancellationToken)
     {
         var dateRange = GetDateRange(request.Period, request.StartDate, request.EndDate);
 
-        var results = await GetAllFoodsWithFrequencyAsync(userId, dateRange.StartDate, dateRange.EndDate, cancellationToken);
-
+        IReadOnlyCollection<FoodFrequencyResponse> results;
+        
         if (request.FoodId.HasValue)
         {
-            results = [.. results.Where(food => food.FoodId == request.FoodId.Value)];
+            var foodResult = await GetFoodFrequencyAsync(userId, request.FoodId.Value, dateRange.StartDate, dateRange.EndDate, cancellationToken);
+            results = foodResult is not null ? [foodResult] : [];
         }
-        else if (!string.IsNullOrEmpty(request.FoodName))
+        else
         {
-            results = [.. results.Where(food => food.FoodName.Contains(request.FoodName, StringComparison.OrdinalIgnoreCase))];
+            results = await GetFoodsFrequencyAsync(userId, dateRange.StartDate, dateRange.EndDate, cancellationToken);
         }
 
         return new FoodFrequencyReportResponse(
-            [.. results.OrderByDescending(food => food.OccurrenceCount)],
+            [.. results
+                .OrderByDescending(food => food.OccurrenceCount)
+                .ThenBy(food => food.FoodName)],
             results.Count,
             dateRange.StartDate,
             dateRange.EndDate,

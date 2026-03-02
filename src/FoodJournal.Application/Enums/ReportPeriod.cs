@@ -6,4 +6,5 @@ public enum ReportPeriod
     Month,
     Year,
     AllTime,
+    Custom,
 }

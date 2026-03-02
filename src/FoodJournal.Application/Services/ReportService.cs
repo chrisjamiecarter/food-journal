@@ -5,6 +5,10 @@ namespace FoodJournal.Application.Services;
 
 public interface IReportService
 {
+    Task<List<AvailableFoodResponse>> GetAvailableFoodsAsync(
+        string userId,
+        CancellationToken cancellationToken);
+
     Task<FoodFrequencyReportResponse> GetFoodFrequencyReportAsync(
         string userId,
         FoodFrequencyRequest request,
@@ -18,6 +22,11 @@ public interface IReportService
 internal sealed class ReportService(IReportRepository repository) : IReportService
 {
     private readonly IReportRepository _repository = repository;
+
+    public Task<List<AvailableFoodResponse>> GetAvailableFoodsAsync(string userId, CancellationToken cancellationToken)
+    {
+        return _repository.GetAvailableFoodsAsync(userId, cancellationToken);
+    }
 
     public Task<FoodFrequencyReportResponse> GetFoodFrequencyReportAsync(
         string userId,

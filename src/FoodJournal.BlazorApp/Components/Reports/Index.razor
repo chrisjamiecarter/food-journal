@@ -95,6 +95,8 @@
 
         @* Filters *@
         <div class="flex flex-wrap gap-4 mb-4">
+
+            @* Period Selection *@
             <div>
                 <label class="block text-stone-400 text-sm mb-1">Period</label>
                 <InputSelect @bind-Value="SelectedPeriod"
@@ -103,14 +105,42 @@
                     <option value="@ReportPeriod.Month">This Month</option>
                     <option value="@ReportPeriod.Year">This Year</option>
                     <option value="@ReportPeriod.AllTime">All Time</option>
+                    <option value="@ReportPeriod.Custom">Custom Range</option>
                 </InputSelect>
             </div>
-            <div class="flex-1 min-w-[200px]">
-                <label class="block text-stone-400 text-sm mb-1">Search Food</label>
-                <InputText @bind-Value="FoodSearchTerm"
-                           placeholder="Search by food name..."
-                           class="w-full px-3 py-2 rounded-lg bg-stone-900 text-stone-50 border border-stone-700 placeholder-gray-500" />
+
+
+            @* Food Selection Dropdown *@
+            <div>
+                <label class="block text-stone-400 text-sm mb-1">Food</label>
+                <InputSelect @bind-Value="SelectedFoodId"
+                             class="px-3 py-2 rounded-lg bg-stone-900 text-stone-50 border border-stone-700 min-w-[200px]">
+                    <option value="">All Foods</option>
+                    @foreach (var food in AvailableFoods)
+                    {
+                        <option value="@food.FoodId">@food.FoodName</option>
+                    }
+                </InputSelect>
             </div>
+
+
+            @* Custom Date Range (shown when Custom is selected) *@
+            @if (SelectedPeriod == ReportPeriod.Custom)
+            {
+                <div>
+                    <label class="block text-stone-400 text-sm mb-1">Start Date</label>
+                    <InputDate @bind-Value="CustomStartDate"
+                               class="px-3 py-2 rounded-lg bg-stone-900 text-stone-50 border border-stone-700" />
+                </div>
+                <div>
+                    <label class="block text-stone-400 text-sm mb-1">End Date</label>
+                    <InputDate @bind-Value="CustomEndDate"
+                               class="px-3 py-2 rounded-lg bg-stone-900 text-stone-50 border border-stone-700" />
+                </div>
+            }
+
+
+            @* Action Buttons *@
             <div class="flex items-end gap-2">
                 <button type="button"
                         class="px-6 py-2 rounded-lg bg-cyan-400 text-stone-900 font-semibold hover:bg-cyan-500 transition-colors"
@@ -123,6 +153,7 @@
                     Clear
                 </button>
             </div>
+
         </div>
 
         @* Results *@
@@ -178,8 +209,11 @@
 @code {
     private SummaryReportResponse? SummaryCards { get; set; }
     private FoodFrequencyReportResponse? FrequencyReport { get; set; }
+    private List<AvailableFoodResponse> AvailableFoods { get; set; } = [];
     private ReportPeriod SelectedPeriod { get; set; } = ReportPeriod.Month;
-    private string? FoodSearchTerm { get; set; }
+    private Guid? SelectedFoodId { get; set; }
+    private DateTime? CustomStartDate { get; set; }
+    private DateTime? CustomEndDate { get; set; }
 
     private string DisplayReportDateRange => FrequencyReport?.Period switch
     {
@@ -190,6 +224,7 @@
     protected override async Task OnInitializedAsync()
     {
         await LoadSummaryCardsAsync();
+        await LoadAvailableFoodsAsync();
     }
 
     private async Task LoadSummaryCardsAsync()
@@ -200,12 +235,20 @@
         SummaryCards = await ReportService.GetSummaryReportAsync(userId, CancellationToken.None);
     }
 
+    private async Task LoadAvailableFoodsAsync()
+    {
+        var userId = CurrentUserService.Id;
+        if (string.IsNullOrWhiteSpace(userId)) return;
+
+        AvailableFoods = await ReportService.GetAvailableFoodsAsync(userId, CancellationToken.None);
+    }
+
     private async Task GenerateReportAsync()
     {
         var userId = CurrentUserService.Id;
         if (string.IsNullOrWhiteSpace(userId)) return;
 
-        var request = new FoodFrequencyRequest(null, FoodSearchTerm, null, null, SelectedPeriod);
+        var request = new FoodFrequencyRequest(SelectedFoodId, CustomStartDate, CustomEndDate, SelectedPeriod);
 
         FrequencyReport = await ReportService.GetFoodFrequencyReportAsync(userId, request, CancellationToken.None);
     }
@@ -213,7 +256,8 @@
     private async Task ClearFilters()
     {
         SelectedPeriod = ReportPeriod.Month;
-        FoodSearchTerm = null;
-        await GenerateReportAsync();
+        SelectedFoodId = null;
+        CustomStartDate = null;
+        CustomEndDate = null;
     }
 }

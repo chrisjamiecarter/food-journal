@@ -52,7 +52,7 @@
         var currentUserId = CurrentUserService.Id;
         if (string.IsNullOrWhiteSpace(currentUserId))
         {
-            // TODO: Handle case where user is not authenticated.
+            ToastService.ShowError("You must be logged in to perform this action.");
             return;
         }
 
@@ -66,7 +66,7 @@
         var currentUserId = CurrentUserService.Id;
         if (string.IsNullOrWhiteSpace(currentUserId))
         {
-            // TODO: Handle case where user is not authenticated.
+            ToastService.ShowError("You must be logged in to perform this action.");
             return;
         }
 
@@ -99,14 +99,14 @@
         var currentUserId = CurrentUserService.Id;
         if (string.IsNullOrWhiteSpace(currentUserId))
         {
-            // TODO: Handle case where user is not authenticated.
+            ToastService.ShowError("You must be logged in to perform this action.");
             return;
         }
 
         var meal = await QuickMealService.GetByIdAsync(mealId, CancellationToken.None);
         if (meal is null || meal.UserId != currentUserId)
         {
-            // TODO: Handle case where meal is not found or not a users meal.
+            ToastService.ShowError("You do not have permission to modify this meal.");
             return;
         }
 
@@ -128,14 +128,14 @@
         var currentUserId = CurrentUserService.Id;
         if (string.IsNullOrWhiteSpace(currentUserId))
         {
-            // TODO: Handle case where user is not authenticated.
+            ToastService.ShowError("You must be logged in to perform this action.");
             return;
         }
 
         var quickMeal = await QuickMealService.GetByIdAsync(updateMeal.Id, CancellationToken.None);
         if (quickMeal is null)
         {
-            // TODO: Handle case where quick meal not found.
+            ToastService.ShowError("You do not have permission to modify this meal.");
             return;
         }
 

@@ -125,6 +125,7 @@
         var currentUserId = CurrentUserService.Id;
         if (string.IsNullOrWhiteSpace(currentUserId))
         {
+            ToastService.ShowError("You must be logged in to perform this action.");
             return;
         }
 
@@ -138,6 +139,7 @@
         var currentUserId = CurrentUserService.Id;
         if (string.IsNullOrWhiteSpace(currentUserId))
         {
+            ToastService.ShowError("You must be logged in to perform this action.");
             return;
         }
 
@@ -154,6 +156,7 @@
         var currentUserId = CurrentUserService.Id;
         if (string.IsNullOrWhiteSpace(currentUserId))
         {
+            ToastService.ShowError("You must be logged in to perform this action.");
             return;
         }
 
@@ -197,20 +200,21 @@
         var currentUserId = CurrentUserService.Id;
         if (string.IsNullOrWhiteSpace(currentUserId))
         {
+            ToastService.ShowError("You must be logged in to perform this action.");
             return;
         }
 
         var meal = await MealService.GetByUserIdAndDateAndTypeAsync(currentUserId, deleteMealFood.Date, deleteMealFood.Type, CancellationToken.None);
         if (meal is null)
         {
-            // TODO: Handle case where meal is not found.
+            ToastService.ShowWarning("The requested meal could not be found.");
             return;
         }
 
         var foodToDelete = meal.Foods.FirstOrDefault(f => f.Id == deleteMealFood.FoodId);
         if (foodToDelete is null)
         {
-            // TODO: Handle case where food is not found.
+            ToastService.ShowWarning("The requested food could not be found.");
             return;
         }
 

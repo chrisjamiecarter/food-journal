@@ -1,5 +1,7 @@
-﻿namespace FoodJournal.Application.DTOs;
+﻿using FoodJournal.Application.Entities;
+
+namespace FoodJournal.Application.DTOs;
 
 public sealed record MostFrequentFoodResponse(
-    string FoodName,
+    Food Food,
     int OccurrenceCount);

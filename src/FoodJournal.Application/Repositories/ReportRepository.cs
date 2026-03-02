@@ -207,7 +207,7 @@ internal sealed class ReportRepository(ApplicationDbContext dbContext) : IReport
             .SelectMany(meal => meal.Foods)
             .GroupBy(food => food.Id)
             .Select(group => new MostFrequentFoodResponse(
-                group.First().Name,
+                group.First(),
                 group.Count()))
             .OrderByDescending(food => food.OccurrenceCount)
             .FirstOrDefault();

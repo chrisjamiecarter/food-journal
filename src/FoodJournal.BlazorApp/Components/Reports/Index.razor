@@ -60,14 +60,23 @@
                 <span class="material-symbols-outlined text-yellow-400">star</span>
                 <span class="text-stone-400 text-sm">Most Frequent This Month</span>
             </div>
-            <div class="text-xl font-bold text-stone-50">
-                @(SummaryCards?.MostFrequentFoodThisMonth?.FoodName ?? "No data")
-            </div>
-            @if (SummaryCards?.MostFrequentFoodThisMonth != null)
+            @if(SummaryCards?.MostFrequentFoodThisMonth is not null)
             {
-                <div class="text-stone-500 text-sm">
-                    @SummaryCards.MostFrequentFoodThisMonth.OccurrenceCount times
+                var food = SummaryCards.MostFrequentFoodThisMonth.Food;
+
+                <div class="flex items-center gap-4">
+                    <img src="@food.Base64Image" alt="@food.Name" class="w-12 h-12 object-cover rounded" />
+                    <div>
+                        <div class="text-xl font-bold text-stone-50">@food.Name</div>
+                        <div class="text-stone-500 text-sm">
+                            Logged @(SummaryCards.MostFrequentFoodThisMonth.OccurrenceCount) times
+                        </div>
+                    </div>
                 </div>
+            }
+            else
+            {
+                <div class="text-xl font-bold text-stone-50">No data</div>
             }
         </div>
 
@@ -77,14 +86,23 @@
                 <span class="material-symbols-outlined text-red-400">star</span>
                 <span class="text-stone-400 text-sm">Most Frequent All Time</span>
             </div>
-            <div class="text-xl font-bold text-stone-50">
-                @(SummaryCards?.MostFrequentFoodAllTime?.FoodName ?? "No data")
-            </div>
-            @if (SummaryCards?.MostFrequentFoodAllTime != null)
+            @if (SummaryCards?.MostFrequentFoodAllTime is not null)
             {
-                <div class="text-stone-500 text-sm">
-                    @SummaryCards.MostFrequentFoodAllTime.OccurrenceCount times
+                var food = SummaryCards.MostFrequentFoodAllTime.Food;
+
+                <div class="flex items-center gap-4">
+                    <img src="@food.Base64Image" alt="@food.Name" class="w-12 h-12 object-cover rounded" />
+                    <div>
+                        <div class="text-xl font-bold text-stone-50">@food.Name</div>
+                        <div class="text-stone-500 text-sm">
+                            Logged @(SummaryCards.MostFrequentFoodAllTime.OccurrenceCount) times
+                        </div>
+                    </div>
                 </div>
+            }
+            else
+            {
+                <div class="text-xl font-bold text-stone-50">No data</div>
             }
         </div>
     </div>

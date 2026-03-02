@@ -46,7 +46,10 @@
                         @foreach (var food in FilteredFoods)
                         {
                             var isSelected = FoodInput.Foods.Contains(food);
-                            <div class="@GetCardClasses(isSelected)" @onclick="@(() => ToggleFood(food, !isSelected))">
+                            <FoodSelectCard Food="@food"
+                                            IsSelected="@isSelected"
+                                            OnClick="@(() => ToggleFood(food, !isSelected))" />
+@*                             <div class="@GetCardClasses(isSelected)" @onclick="@(() => ToggleFood(food, !isSelected))">
                                 <div class="relative">
                                     <div class="flex items-center justify-center">
                                         <img src="@food.Base64Image" alt="@food.Name" class="w-12 h-12 object-cover rounded-t-lg" />
@@ -65,7 +68,7 @@
                                         @food.Name
                                     </h3>
                                 </div>
-                            </div>
+                            </div> *@
                         }
                     </div>
                 }

@@ -55,46 +55,26 @@
                                         </span>
                                     </button>
                                 </div>
-   @*                              <button class="flex items-center justify-self-end cursor-pointer rounded-full p-1 text-cyan-400 hover:bg-white/15 self-end" onclick="@(() => ShowDeleteModal(meal.Id))">
-                                    <span class="material-symbols-outlined">
-                                        delete
-                                    </span>
-                                </button> *@
                             </td>
                         </tr>
                         @if (meal.Id == ExpandedMealId)
                         {
-@*                             <tr class="p-3 max-h-60 overflow-y-auto">
-                                <td class="flex flex-wrap gap-2" colspan="2">
-                                    @foreach (var food in meal.Foods)
-                                    {
-                                        <div class="flex items-center justify-center">
-                                            <div class="cursor-pointer transition-all duration-200 hover:scale-105 p-2 rounded-lg bg-white">
-                                                <img src="@food.Base64Image" alt="@food.Name" class="w-12 h-12 object-cover rounded-t-lg" />
-                                                <div class="mt-1">
-                                                    <h3 class="text-xs font-medium text-gray-700 text-center block">
-                                                        @food.Name
-                                                    </h3>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    }
-
-                                </td>
-                            </tr> *@
                             <tr>
                                 <td colspan="2" class="p-3 rounded-b-lg border-x border-b border-cyan-400">
                                     <div class="flex flex-wrap gap-2">
                                         @foreach (var food in meal.Foods)
                                         {
-                                            <div class="p-2">
-                                                <div class="flex items-center justify-center">
-                                                    <img src="@food.Base64Image" alt="@food.Name" class="w-12 h-12 object-cover" />
+                                            <div class="p-3 bg-stone-900/50 rounded-lg text-center min-w-[100px]">
+                                                <img src="@food.Base64Image" alt="@food.Name" class="w-12 h-12 object-cover rounded mx-auto" />
+                                                <div class="mt-2">
+                                                    <div class="text-sm font-medium text-white truncate">@food.Name</div>
+                                                    <div class="text-xs text-stone-500">@food.ServingSize</div>
                                                 </div>
-                                                <div class="mt-1">
-                                                    <h3 class="block text-xs font-medium text-stone-50 text-center">
-                                                        @food.Name
-                                                    </h3>
+                                                <div class="mt-1 font-semibold text-emerald-400 text-sm">@food.Calories kcal</div>
+                                                <div class="flex justify-center gap-2 text-xs mt-1">
+                                                    <span class="text-amber-400">@(food.Carbs)g</span>
+                                                    <span class="text-cyan-400">@(food.Protein)g</span>
+                                                    <span class="text-rose-400">@(food.Fat)g</span>
                                                 </div>
                                             </div>
                                         }
@@ -143,98 +123,6 @@
         }
     }
 </article>
-
-@*     <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
-        <table class="w-full text-sm text-left text-gray-400">
-            <thead class="text-xs text-gray-400 bg-gray-700">
-                <tr>
-                    <th scope="col" class="px-6 py-3">ID</th>
-                    <th scope="col" class="px-6 py-3">User ID</th>
-                    <th scope="col" class="px-6 py-3">Name</th>
-                    <th scope="col" class="px-6 py-3">Foods</th>
-                    <th scope="col" class="px-6 py-3">Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var meal in Meals)
-                {
-                    <tr class="bg-gray-800 border-b border-gray-700 hover:bg-gray-600">
-                        <td scope="row" class="px-6 py-4 font-medium text-white whitespace-nowrap">@meal.Id</td>
-                        <td class="px-6 py-4">@meal.UserId</td>
-                        <td class="px-6 py-4">@meal.Name</td>
-                        <td class="px-6 py-4">@meal.Foods.Count</td>
-                        <td class="px-6 py-4">
-                            <div class="flex gap-2 justify-end">
-                                @if (meal.Id == ExpandedMealId)
-                                {
-                                    <button class="cursor-pointer" onclick="@(() => CollapseMeal())">
-                                        <span class="material-symbols-outlined">
-                                            visibility_off
-                                        </span>
-                                    </button>
-                                }
-                                else
-                                {
-                                    <button class="cursor-pointer" onclick="@(() => ExpandMeal(meal.Id))">
-                                        <span class="material-symbols-outlined">
-                                            visibility
-                                        </span>
-                                    </button>
-                                }
-                                <button class="cursor-pointer" onclick="@(() => ShowEditMeal(meal))">
-                                    <span class="material-symbols-outlined">
-                                        edit
-                                    </span>
-                                </button>
-                                <button class="cursor-pointer" onclick="@(() => ShowConfirmation(meal.Id))">
-                                    <span class="material-symbols-outlined">
-                                        delete
-                                    </span>
-                                </button>
-                            </div>
-                        </td>
-                    </tr>
-                    @if (meal.Id == ExpandedMealId)
-                    {
-                        <tr class="bg-gray-900 border-b border-gray-800">
-                            <td colspan="5" class="px-6 py-3">
-                                <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
-                                    @foreach (var food in meal.Foods)
-                                    {
-                                        <div class="flex items-center gap-3 bg-gray-800 p-2 rounded-lg shadow">
-                                            <img src="@food.Base64Image" alt="@food.Name" class="w-10 h-10 object-cover rounded-full border border-gray-600" />
-                                            <span class="text-white text-sm">@food.Name</span>
-                                        </div>
-                                    }
-                                </div>
-                            </td>
-                        </tr>
-                    }
-                }
-            </tbody>
-        </table>
-    </div>
-
-    @if (ShowConfirmationModal)
-    {
-        <DeleteConfirmationModal 
-            Title="Delete Meal?"
-            Message="Do you really want to delete this meal?"
-            OnCancel="HideConfirmation"
-            OnClose="HideConfirmation"
-            OnConfirm="DeleteMeal" />
-    }
-
-    @if (ShowEditMealModal)
-    {
-        <EditMeal
-            Foods="@Foods"
-            QuickMeal="@EditCandidate"
-            OnUpdateMealCallback="UpdateMeal"
-            OnCancelCallback="HideEditMeal" />
-    }
-}
- *@
 
 @code {
     [Parameter]

@@ -20,18 +20,22 @@
                     @foreach (var food in MealFoods)
                     {
                         <tr class="hover:bg-white/3">
-                            <td scope="row" class="rounded-l-lg">
-                                <div class="flex gap-3 items-center">
-                                    <img src="@food.Base64Image" alt="@food.Name" />
-                                    <span class="font-medium text-white whitespace-nowrap">@food.Name</span>
+                            <td scope="row" class="rounded-l-lg py-3">
+                                <div class="flex items-center gap-3">
+                                    <img src="@food.Base64Image" alt="@food.Name" class="w-10 h-10 rounded object-cover" />
+                                    <div>
+                                        <div class="font-medium text-white">@food.Name</div>
+                                        <div class="text-xs text-stone-500">@food.ServingSize</div>
+                                    </div>
                                 </div>
                             </td>
-                            <td class="rounded-r-lg">
-                                <button class="flex items-center justify-self-end cursor-pointer rounded-full p-1 text-cyan-400 hover:bg-white/15 self-end" onclick="@(() => ShowDeleteModal(food.Id))">
-                                    <span class="material-symbols-outlined">
-                                        delete
-                                    </span>
-                                </button>
+                            <td class="py-3">
+                                <div class="flex items-center gap-4 justify-end">
+                                    <NutritionDisplay Food="food" />
+                                    <button class="flex items-center cursor-pointer rounded-full p-1 text-cyan-400 hover:bg-white/15" @onclick="@(() => ShowDeleteModal(food.Id))">
+                                        <span class="material-symbols-outlined">delete</span>
+                                    </button>
+                                </div>
                             </td>
                         </tr>
                     }

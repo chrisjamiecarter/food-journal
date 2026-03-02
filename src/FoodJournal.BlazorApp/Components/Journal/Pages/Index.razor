@@ -13,7 +13,8 @@
 <PageTitle>Journal</PageTitle>
 
 <section class="flex flex-col gap-6">
-        
+
+    @* Date Picker *@
     <div class="flex justify-center items-center gap-3 h-20 p-6 rounded-lg bg-stone-950 p-10 ring-1 shadow-xs ring-white/10">
         <button class="flex items-center text-cyan-400 rounded-full p-1 cursor-pointer hover:bg-white/15" onclick="@(() => IncrementJournalDate(-1))">
             <span class="material-symbols-outlined">chevron_left</span>
@@ -30,6 +31,50 @@
         </button>
     </div>
 
+    @* Summary Cards *@
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+
+        @* Calories Today *@
+        <div class="p-4 rounded-lg bg-stone-950 ring-1 shadow-xs ring-white/10">
+            <div class="flex items-center gap-2 mb-2">
+                <span class="material-symbols-outlined text-cyan-400">local_fire_department</span>
+                <span class="text-stone-400 text-sm">Today's Calories</span>
+            </div>
+            <div class="text-2xl font-bold text-stone-50">@(DayJournal?.Sum(food => food.Calories).ToString("N0"))</div>
+            <div class="text-stone-500 text-sm">kcal</div>
+        </div>
+
+        @* Carbs Today *@
+        <div class="p-4 rounded-lg bg-stone-950 ring-1 shadow-xs ring-white/10">
+            <div class="flex items-center gap-2 mb-2">
+                <span class="material-symbols-outlined text-emerald-400">bakery_dining</span>
+                <span class="text-stone-400 text-sm">Today's Carbs</span>
+            </div>
+            <div class="text-2xl font-bold text-stone-50">@(DayJournal?.Sum(food => food.Carbs).ToString("N0"))</div>
+            <div class="text-stone-500 text-sm">grams</div>
+        </div>
+
+        @* Protein Today *@
+        <div class="p-4 rounded-lg bg-stone-950 ring-1 shadow-xs ring-white/10">
+            <div class="flex items-center gap-2 mb-2">
+                <span class="material-symbols-outlined text-blue-400">fitness_center</span>
+                <span class="text-stone-400 text-sm">Today's Protein</span>
+            </div>
+            <div class="text-2xl font-bold text-stone-50">@(DayJournal?.Sum(food => food.Protein).ToString("N0"))</div>
+            <div class="text-stone-500 text-sm">grams</div>
+        </div>
+
+        @* Fat Today *@
+        <div class="p-4 rounded-lg bg-stone-950 ring-1 shadow-xs ring-white/10">
+            <div class="flex items-center gap-2 mb-2">
+                <span class="material-symbols-outlined text-purple-400">water_drop</span>
+                <span class="text-stone-400 text-sm">Today's Fat</span>
+            </div>
+            <div class="text-2xl font-bold text-stone-50">@(DayJournal?.Sum(food => food.Fat).ToString("N0"))</div>
+            <div class="text-stone-500 text-sm">grams</div>
+        </div>
+    </div>
+
     <JournalMeal MealType="MealType.Breakfast" MealDate="@JournalDate" MealFoods="@BreakfastJournal" AvailableFoods="Foods" AvailableMeals="QuickMeals" OnAddJournalMeal="HandleAddMeal" OnDeleteJournalMealFood="HandleDeleteMealFood" />
     <JournalMeal MealType="MealType.Lunch" MealDate="@JournalDate" MealFoods="@LunchJournal" AvailableFoods="Foods" AvailableMeals="QuickMeals" OnAddJournalMeal="HandleAddMeal" OnDeleteJournalMealFood="HandleDeleteMealFood" />
     <JournalMeal MealType="MealType.Dinner" MealDate="@JournalDate" MealFoods="@DinnerJournal" AvailableFoods="Foods" AvailableMeals="QuickMeals" OnAddJournalMeal="HandleAddMeal" OnDeleteJournalMealFood="HandleDeleteMealFood" />
@@ -44,10 +89,13 @@
     private IEnumerable<Meal>? Meals { get; set; }
     private IEnumerable<QuickMeal>? QuickMeals { get; set; }
 
-    private IEnumerable<Food>? BreakfastJournal => Meals?.FirstOrDefault(m => m.Type == MealType.Breakfast && m.Date.Date == JournalDate.Date)?.Foods ?? [];
-    private IEnumerable<Food>? LunchJournal => Meals?.FirstOrDefault(m => m.Type == MealType.Lunch && m.Date.Date == JournalDate.Date)?.Foods ?? [];
-    private IEnumerable<Food>? DinnerJournal => Meals?.FirstOrDefault(m => m.Type == MealType.Dinner && m.Date.Date == JournalDate.Date)?.Foods ?? [];
-    private IEnumerable<Food>? SnackJournal => Meals?.FirstOrDefault(m => m.Type == MealType.Snack && m.Date.Date == JournalDate.Date)?.Foods ?? [];
+    private IEnumerable<Food> GetJournalByType(MealType mealType) => Meals?.FirstOrDefault(m => m.Type == mealType && m.Date.Date == JournalDate.Date)?.Foods ?? [];
+    private IEnumerable<Food> BreakfastJournal => GetJournalByType(MealType.Breakfast);
+    private IEnumerable<Food> LunchJournal => GetJournalByType(MealType.Lunch);
+    private IEnumerable<Food> DinnerJournal => GetJournalByType(MealType.Dinner);
+    private IEnumerable<Food> SnackJournal => GetJournalByType(MealType.Snack);
+    private IEnumerable<Food>? DayJournal => [.. BreakfastJournal, .. LunchJournal, .. DinnerJournal, .. SnackJournal];
+
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {

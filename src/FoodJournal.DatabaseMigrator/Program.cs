@@ -19,7 +19,7 @@ internal static class Program
 
         builder.Services.AddOpenTelemetry().WithTracing(tracing => tracing.AddSource(Worker.ActivitySourceName));
 
-        builder.AddSqlServerDbContext<ApplicationDbContext>(ServiceNames.DatabaseName);
+        builder.AddSqlServerDbContext<ApplicationDbContext>(AppHostConstants.DatabaseName);
 
         var host = builder.Build();
 

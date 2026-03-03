@@ -4,6 +4,15 @@ using Microsoft.EntityFrameworkCore;
 
 namespace FoodJournal.Application.Repositories;
 
+public interface IQuickMealRepository
+{
+    Task<bool> CreateAsync(QuickMeal meal, CancellationToken cancellationToken);
+    Task<bool> DeleteAsync(QuickMeal meal, CancellationToken cancellationToken);
+    Task<QuickMeal?> GetByIdAsync(Guid id, CancellationToken cancellationToken);
+    Task<List<QuickMeal>> GetByUserIdAsync(string userId, CancellationToken cancellationToken);
+    Task<bool> UpdateAsync(QuickMeal meal, CancellationToken cancellationToken);
+}
+
 internal sealed class QuickMealRepository(ApplicationDbContext dbContext) : IQuickMealRepository
 {
     public async Task<bool> CreateAsync(QuickMeal quickMeal, CancellationToken cancellationToken)

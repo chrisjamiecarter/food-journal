@@ -1,5 +1,3 @@
-using Aspire.Hosting;
-using FoodJournal.AppHost.Extensions;
 using FoodJournal.Common;
 using Projects;
 
@@ -14,18 +12,18 @@ internal static class Program
     {
         var builder = DistributedApplication.CreateBuilder(args);
 
-        var sqlServer = builder.AddSqlServer(ServiceNames.DatabaseProvider, port: ServiceNames.DatabasePort)
-                               .WithContainerName("foodjournal-sqlserver")
+        var sqlServer = builder.AddSqlServer(AppHostConstants.DatabaseProvider, port: AppHostConstants.DatabasePort)
+                               .WithContainerName(AppHostConstants.DatabaseContainerName)
                                .WithLifetime(ContainerLifetime.Persistent)
                                .WithDataVolume();
 
-        var journalDatabase = sqlServer.AddDatabase(ServiceNames.DatabaseName);
+        var journalDatabase = sqlServer.AddDatabase(AppHostConstants.DatabaseName);
 
-        var migratorApp = builder.AddProject<FoodJournal_DatabaseMigrator>(ServiceNames.DatabaseMigratorAppName)
+        var migratorApp = builder.AddProject<FoodJournal_DatabaseMigrator>(AppHostConstants.DatabaseMigratorAppName)
                                  .WithReference(journalDatabase)
                                  .WaitFor(journalDatabase);
 
-        var blazorApp = builder.AddProject<FoodJournal_BlazorApp>(ServiceNames.WebAppName)
+        var blazorApp = builder.AddProject<FoodJournal_BlazorApp>(AppHostConstants.WebAppName)
                                .WithReference(journalDatabase)
                                .WaitFor(migratorApp);
 

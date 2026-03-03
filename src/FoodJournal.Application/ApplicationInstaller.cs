@@ -15,7 +15,7 @@ public static class ApplicationInstaller
     {
         ArgumentNullException.ThrowIfNull(builder, nameof(builder));
 
-        builder.AddSqlServerDbContext<ApplicationDbContext>(ServiceNames.DatabaseName);
+        builder.AddSqlServerDbContext<ApplicationDbContext>(AppHostConstants.DatabaseName);
 
         builder.Services.AddIdentityCore<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true)
                         .AddEntityFrameworkStores<ApplicationDbContext>()

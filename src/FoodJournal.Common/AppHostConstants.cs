@@ -1,7 +1,9 @@
 ﻿namespace FoodJournal.Common;
 
-public static class ServiceNames
+public static class AppHostConstants
 {
+    public const string DatabaseContainerName = "foodjournal-sqlserver";
+
     public const string DatabaseMigratorAppName = "foodjournal-db-migrator";
 
     public const string DatabaseName = "foodjournal-db";

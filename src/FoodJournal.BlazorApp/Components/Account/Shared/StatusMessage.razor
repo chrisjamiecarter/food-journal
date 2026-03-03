@@ -1,7 +1,7 @@
 ﻿@if (!string.IsNullOrEmpty(DisplayMessage))
 {
     <div class="@($"rounded px-4 py-3 mb-4 text-sm {alertClass}")" role="alert">
-        @DisplayMessage
+        @((MarkupString)(DisplayMessage ?? ""))
     </div>
 }
 

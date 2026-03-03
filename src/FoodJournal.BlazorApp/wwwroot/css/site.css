@@ -967,6 +967,9 @@
   .whitespace-nowrap {
     white-space: nowrap;
   }
+  .whitespace-pre-line {
+    white-space: pre-line;
+  }
   .text-amber-400 {
     color: var(--color-amber-400);
   }

@@ -32,6 +32,7 @@ public static class ApplicationInstaller
         builder.Services.AddScoped<IMealService, MealService>();
         builder.Services.AddScoped<IQuickMealService, QuickMealService>();
         builder.Services.AddScoped<ISearchService, SearchService>();
+        builder.Services.AddScoped<ISeedService, SeedService>();
         builder.Services.AddScoped<IReportService, ReportService>();
 
         return builder;

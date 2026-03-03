@@ -1,0 +1,60 @@
+﻿@page "/Account/CreateTestUser"
+
+@inject IdentityRedirectManager RedirectManager
+
+<PageTitle>Confirm test user</PageTitle>
+
+<div class="flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
+    <div class="bg-zinc-950 rounded-lg p-10 ring-1 shadow-xs ring-white/10 sm:mx-auto sm:w-full sm:max-w-md">
+
+        <div>
+            <img class="mx-auto h-20 w-auto" src="/images/food-journal-logo-512x512.png" alt="Bite Log">
+            <h2 class="mt-10 text-center text-2xl/9 font-bold tracking-tight text-stone-50">Create Test User</h2>
+        </div>
+
+        <div class="mt-10">
+            <div class="space-y-6">
+
+                <div class="whitespace-pre-line">
+                    <StatusMessage Message="@statusMessage" />
+                </div>
+
+                <NavLink href="/">
+                    <Button>Go home</Button>
+                </NavLink>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+    private string? statusMessage;
+
+    [CascadingParameter]
+    private HttpContext HttpContext { get; set; } = default!;
+
+    [SupplyParameterFromQuery]
+    private bool? Success { get; set; }
+
+    [SupplyParameterFromQuery]
+    private string? Message { get; set; }
+
+    [SupplyParameterFromQuery]
+    private string? Email { get; set; }
+
+    [SupplyParameterFromQuery]
+    private string? Password { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (Success is null || Message is null)
+        {
+            RedirectManager.RedirectTo("");
+        }
+
+        var formattedMessage = $"{Message}<br/><br/><strong>NOTE</strong><br/>Email: {Email}<br/>Password: {Password}";
+
+        statusMessage = Success.Value ? formattedMessage : $"Error: {formattedMessage}";
+    }
+}

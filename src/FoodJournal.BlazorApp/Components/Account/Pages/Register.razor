@@ -8,13 +8,14 @@
 @using Microsoft.AspNetCore.Identity
 @using Microsoft.AspNetCore.WebUtilities
 
-@inject UserManager<ApplicationUser> UserManager
-@inject IUserStore<ApplicationUser> UserStore
+@inject IdentityRedirectManager RedirectManager
 @inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
 @inject IEmailSender<ApplicationUser> EmailSender
 @inject ILogger<Register> Logger
-@inject NavigationManager NavigationManager
-@inject IdentityRedirectManager RedirectManager
+@inject ISeedService SeedService
+@inject IUserStore<ApplicationUser> UserStore
+@inject IWebHostEnvironment Environment
 
 <PageTitle>Register</PageTitle>
 
@@ -81,6 +82,15 @@
 
             </EditForm>
 
+            @if (Environment.IsDevelopment())
+            {
+                <EditForm class="mt-4" Model="Seed" method="post" OnSubmit="SeedTestUserData" FormName="seed">
+                    <Button Type="Button.ButtonType.Submit" Style="Button.ButtonStyle.Secondary">
+                        Generate Test User with Seed Data (Dev Only)
+                    </Button>
+                </EditForm>
+            }
+
             <p class="mt-10 text-center text-sm/6 text-stone-500">
                 Already have an account?
                 <a href="@(NavigationManager.GetUriWithQueryParameters("Account/Login", new Dictionary<string, object?> { ["ReturnUrl"] = ReturnUrl }))" class="text-xs font-semibold text-cyan-400 hover:text-cyan-500">Login to your account</a>
@@ -93,15 +103,17 @@
 @code {
     private IEnumerable<IdentityError>? identityErrors;
 
-    [SupplyParameterFromForm]
+    [SupplyParameterFromForm(FormName = "register")]
     private InputModel Input { get; set; } = new();
+
+    private SeedModel Seed { get; set; } = new();
 
     [SupplyParameterFromQuery]
     private string? ReturnUrl { get; set; }
 
     private string? Message => identityErrors is null ? null : $"Error: {string.Join(", ", identityErrors.Select(error => error.Description))}";
 
-    public async Task RegisterUser(EditContext editContext)
+    private async Task RegisterUser(EditContext editContext)
     {
         var user = CreateUser();
 
@@ -160,6 +172,21 @@
         return (IUserEmailStore<ApplicationUser>)UserStore;
     }
 
+    private async Task SeedTestUserData(EditContext editContext)
+    {
+        var response = await SeedService.SeedTestUserDataAsync(CancellationToken.None);
+        
+        RedirectManager.RedirectTo(
+            "Account/CreateTestUser",
+            new() 
+            { 
+                ["success"] = response.Success,
+                ["message"] = response.Message,
+                ["email"] = response.Email,
+                ["password"] = response.Password,
+            });
+    }
+
     private sealed class InputModel
     {
         [Required]
@@ -183,4 +210,6 @@
         [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
         public string ConfirmPassword { get; set; } = "";
     }
+
+    private sealed class SeedModel { }
 }

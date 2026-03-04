@@ -1,12 +1,12 @@
-using Microsoft.AspNetCore.Components.Authorization;
-using Microsoft.AspNetCore.Identity;
+using FoodJournal.Application;
+using FoodJournal.Application.Entities;
+using FoodJournal.Application.Services;
 using FoodJournal.BlazorApp.Components;
 using FoodJournal.BlazorApp.Components.Account;
-using FoodJournal.Application.Entities;
-using FoodJournal.Application;
-using FoodJournal.ServiceDefaults;
-using FoodJournal.Application.Services;
 using FoodJournal.BlazorApp.Services;
+using FoodJournal.ServiceDefaults;
+using Microsoft.AspNetCore.Components.Authorization;
+using Microsoft.AspNetCore.Identity;
 
 namespace FoodJournal.BlazorApp;
 
@@ -15,9 +15,9 @@ internal static class Program
     public static void Main(string[] args)
     {
         var builder = WebApplication.CreateBuilder(args);
-        
+
         builder.AddServiceDefaults();
-        
+
         builder.AddApplication();
 
         // Add services to the container.

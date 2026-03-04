@@ -38,7 +38,7 @@
                         <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none text-gray-400">
                             <span class="material-symbols-outlined" style="font-size:20px;">person</span>
                         </div>
-                        <InputText @bind-Value="Input.Username" id="Input.Username" class="block w-full rounded-md bg-white px-3 py-1.5 ps-10 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-cyan-400 sm:text-sm/6" autocomplete="username" aria-required="true" placeholder="username" />
+                        <InputText @bind-Value="Input!.Username" id="Input.Username" class="block w-full rounded-md bg-white px-3 py-1.5 ps-10 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-cyan-400 sm:text-sm/6" autocomplete="username" aria-required="true" placeholder="username" />
                     </div>
                     <ValidationMessage For="() => Input.Username" class="pt-1.5 text-red-600 text-sm" />
                 </div>
@@ -104,7 +104,7 @@
     private IEnumerable<IdentityError>? identityErrors;
 
     [SupplyParameterFromForm(FormName = "register")]
-    private InputModel Input { get; set; } = new();
+    private InputModel? Input { get; set; }
 
     private SeedModel Seed { get; set; } = new();
 
@@ -113,11 +113,16 @@
 
     private string? Message => identityErrors is null ? null : $"Error: {string.Join(", ", identityErrors.Select(error => error.Description))}";
 
+    protected override void OnInitialized()
+    {
+        Input ??= new();
+    }
+
     private async Task RegisterUser(EditContext editContext)
     {
         var user = CreateUser();
 
-        await UserStore.SetUserNameAsync(user, Input.Username, CancellationToken.None);
+        await UserStore.SetUserNameAsync(user, Input!.Username, CancellationToken.None);
         var emailStore = GetEmailStore();
         await emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);
         var result = await UserManager.CreateAsync(user, Input.Password);

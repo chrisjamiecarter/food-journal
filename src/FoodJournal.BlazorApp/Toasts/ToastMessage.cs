@@ -1,6 +1,6 @@
 ﻿namespace FoodJournal.BlazorApp.Toasts;
 
-public sealed record ToastMessage(
+internal sealed record ToastMessage(
     string Message,
     ToastType Type)
 {

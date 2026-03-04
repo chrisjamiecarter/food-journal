@@ -1,6 +1,6 @@
 ﻿namespace FoodJournal.BlazorApp.Toasts;
 
-public enum ToastType
+internal enum ToastType
 {
     Success,
     Error,

@@ -4,7 +4,8 @@ using FoodJournal.Application.Entities;
 
 namespace FoodJournal.BlazorApp.Components.Meals.Models;
 
-public class CreateMealInputModel
+[System.Diagnostics.CodeAnalysis.SuppressMessage("Maintainability", "CA1515:Consider making public types internal", Justification = "Component parameters should be public.")]
+public sealed class CreateMealInputModel
 {
     [Required(ErrorMessage = "Please enter a meal name.")]
     [DataType(DataType.Text)]

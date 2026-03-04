@@ -8,23 +8,18 @@ using Microsoft.Extensions.Options;
 
 namespace FoodJournal.DatabaseMigrator;
 
-internal class Worker : BackgroundService
+internal sealed class Worker(
+    IServiceProvider serviceProvider,
+    IHostApplicationLifetime hostApplicationLifetime,
+    IOptions<SeedDataOptions> options) : BackgroundService
 {
     public const string ActivitySourceName = "Migrations";
-    //private const int Seed = 19890309;
 
     private static readonly ActivitySource ActivitySource = new(ActivitySourceName);
 
-    private readonly IServiceProvider _serviceProvider;
-    private readonly IHostApplicationLifetime _hostApplicationLifetime;
-    private readonly SeedDataOptions _options;
-
-    public Worker(IServiceProvider serviceProvider, IHostApplicationLifetime hostApplicationLifetime, IOptions<SeedDataOptions> options)
-    {
-        _serviceProvider = serviceProvider;
-        _hostApplicationLifetime = hostApplicationLifetime;
-        _options = options.Value;
-    }
+    private readonly IServiceProvider _serviceProvider = serviceProvider;
+    private readonly IHostApplicationLifetime _hostApplicationLifetime = hostApplicationLifetime;
+    private readonly SeedDataOptions _options = options.Value;
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {

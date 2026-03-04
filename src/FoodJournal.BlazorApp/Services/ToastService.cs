@@ -2,7 +2,7 @@
 
 namespace FoodJournal.BlazorApp.Services;
 
-public interface IToastService
+internal interface IToastService
 {
     event EventHandler<ToastMessageEventArgs>? OnShow;
     void Show(string message, ToastType toastType = ToastType.Info);
@@ -12,7 +12,7 @@ public interface IToastService
     void ShowWarning(string message);
 }
 
-internal class ToastService : IToastService
+internal sealed class ToastService : IToastService
 {
     public event EventHandler<ToastMessageEventArgs>? OnShow;
 

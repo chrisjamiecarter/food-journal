@@ -10,9 +10,10 @@ internal static class ResourceBuilderExtensions
         return builder.WithOpenApiDocs("scalar-docs", "Scalar API Documentation", "scalar/v1");
     }
 
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1031:Do not catch general exception types", Justification = "Not required.")]
     private static IResourceBuilder<T> WithOpenApiDocs<T>(this IResourceBuilder<T> builder, string name, string displayName, string openApiUiPath) where T : IResourceWithEndpoints
     {
-        return builder.WithCommand(name, displayName, executeCommand: async _ =>
+        return builder.WithCommand(name, displayName, async _ =>
         {
             try
             {
@@ -36,8 +37,11 @@ internal static class ResourceBuilderExtensions
                 };
             }
         },
-        updateState: context => context.ResourceSnapshot.HealthStatus == HealthStatus.Healthy ? ResourceCommandState.Enabled : ResourceCommandState.Disabled,
-        iconName: "Document",
-        iconVariant: IconVariant.Filled);
+        new CommandOptions
+        {
+            UpdateState = context => context.ResourceSnapshot.HealthStatus == HealthStatus.Healthy ? ResourceCommandState.Enabled : ResourceCommandState.Disabled,
+            IconName = "Document",
+            IconVariant = IconVariant.Filled
+        });
     }
 }

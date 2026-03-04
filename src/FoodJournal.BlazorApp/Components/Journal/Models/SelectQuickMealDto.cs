@@ -2,7 +2,7 @@
 
 namespace FoodJournal.BlazorApp.Components.Journal.Models;
 
-public class SelectQuickMealDto
+internal sealed class SelectQuickMealDto
 {
     public QuickMeal? SelectedMeal { get; set; }
 }

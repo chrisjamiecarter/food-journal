@@ -5,12 +5,85 @@
 
 Welcome to the **Food Journal** App!
 
-This is a .NET project designed to demonstrate building a complete full-stack web application with authentication, complex relational data modeling, and modern UI design.
+This is a .NET project designed to demonstrate building a complete full-stack web application with authentication, complex relational data modelling, and modern UI design.
 
 Food Journal is a personal meal tracking application that helps users log their daily food intake, track macronutrients, search historical meals, and generate insightful reports about their eating habits.
 
-The web front end is delivered by a Blazor Web App and utilises Tailwind CSS for styling with a vibrant dark theme color palette.
+The web front end is delivered by a Blazor Web App and utilises Tailwind CSS for styling with a vibrant dark theme colour palette.
 There is an integrated SQL Server database in the back end with Entity Framework Core for data access.
+
+## Table of Contents <!-- omit in toc -->
+
+- [Getting Started](#getting-started)
+  - [Prerequisites](#prerequisites)
+  - [Running the Application](#running-the-application)
+- [Requirements](#requirements)
+- [Challenges](#challenges)
+- [Features](#features)
+- [Technologies](#technologies)
+- [Project Architecture](#project-architecture)
+  - [Layer Structure](#layer-structure)
+  - [Data Model](#data-model)
+- [Usage](#usage)
+  - [Journal](#journal)
+  - [Quick Meals](#quick-meals)
+  - [Search](#search)
+  - [Reports](#reports)
+- [Database Schema](#database-schema)
+  - [auth](#auth)
+  - [core](#core)
+  - [dbo](#dbo)
+- [Version](#version)
+- [Contributing](#contributing)
+- [License](#license)
+- [Contact](#contact)
+
+## Getting Started
+
+### Prerequisites
+
+> [!IMPORTANT]
+> These are required in order for the application to run.
+
+- .NET 10 SDK.
+- An IDE (code editor) like Visual Studio 2022 or Visual Studio Code.
+- SQL Server (LocalDB, Express, or a containerized instance).
+- Node.js (for Tailwind CSS).
+- Docker (for SQL Server container).
+
+### Running the Application
+
+1. Ensure the Docker application is started.
+
+2. Clone the repository:
+
+   - `git clone https://github.com/chrisjamiecarter/food-journal.git`
+
+3. You can run the AppHost project from Visual Studio (ensure **FoodJournal.AppHost** is set as the startup project).
+
+OR
+
+3. Run the AppHost application using the .NET CLI from the solution root directory:
+
+   - `dotnet run --project ./src/FoodJournal.AppHost`
+
+4. The application will start and open the Aspire dashboard on your default web browser.
+
+> [!NOTE]
+> If the Aspire dashboard does not open automatically, you can find the link from the cli.
+>
+> ![Aspire Dashboard Link](./_resources/aspire-dashboard-link.png)
+
+5. Wait for the aspire resources to load. This may take some time on first use. Then click the food-journal-web https link to open the site.
+
+![Site Link](./_resources/site-link.png)
+
+6. Go to the Register page to create a new account to start tracking your meals!
+
+> [!WARNING]
+> For Development Testing Only.
+> 
+> Go to the Register page and click the Generate Test User with Seed Data (Dev Only) button to create a test account to get you started! This may take some time to load. Remember to note the username and password to log in.
 
 ## Requirements
 
@@ -107,65 +180,12 @@ The application uses a many-to-many relationship between Meals and Foods, allowi
 
 Additional entities include QuickMeal for frequently eaten meal presets and ApplicationUser for identity management.
 
-## Getting Started
-
-> [!NOTE]
-> The `InitialCreate` database migration has been created.
->
-> On start-up of the **AppHost** application, any required database creation/migrations will be performed automatically by the **DatabaseMigrator** application.
-
-### Prerequisites
-
-- .NET 10 SDK.
-- An IDE (code editor) like Visual Studio 2022 or Visual Studio Code.
-- SQL Server (LocalDB, Express, or a containerized instance).
-- Node.js (for Tailwind CSS build).
-- Docker.
-
-### Installation
-
-1. Clone the repository:
-
-   - `git clone https://github.com/chrisjamiecarter/food-journal.git`
-
-2. Navigate to the solution directory:
-
-   - `cd food-journal`
-
-3. Restore the .NET packages:
-
-   - `dotnet restore`
-
-4. Configure the application:
-
-   - You should not need to enter any appsettings or secrets, Aspire will handle this for you.
-
-5. Build the application using the .NET CLI:
-
-   - `dotnet build`
-
-### Running the Application
-
-1. Ensure the Docker application is started.
-
-2. You can run the AppHost project from Visual Studio (set **FoodJournal.AppHost** as the startup project).
-
-OR
-
-2. Run the AppHost application using the .NET CLI:
-
-   - `cd src\FoodJournal.AppHost`
-   - `dotnet run`
-
-3. The application will start and open in your default web browser at `https://localhost:7202`.
-
-4. Go to the Register page to create a new account to start tracking your meals!
-
-OR
-
-4. For testing: Go to the Register page and click the Generate Test User with Seed Data (Dev Only) button to create a test account to get you started!
-
 ## Usage
+
+Please click the link below to watch a short YouTube video demonstration:
+
+[![YouTube Video Demonstration](./_resources/youtube-logo.png)](https://youtu.be/ZfKOyl8CWek "Food Journal Showcase")
+
 
 ### Journal
 
@@ -187,10 +207,6 @@ Generate reports to see:
 - A summary of all your logged data
 - How many times you ate a specific food over a given time period
 
-Please refer to the short YouTube video demonstration below:
-
-[![YouTube Video Demonstration](https://github.com/user-attachments/assets/placeholder)](https://youtube.com/watch?v=placeholder "Food Journal Showcase")
-
 ## Database Schema
 
 The database contains the following main tables:
@@ -203,6 +219,18 @@ The database contains the following main tables:
 - **AspNetUsers**: User identity data
 - **AspNetRoles**: Role definitions
 - **AspNetUserRoles**: User-role assignments
+
+### auth
+
+![auth Schema](./_resources/foodjournal-db-auth.png)
+
+### core
+
+![core Schema](./_resources/foodjournal-db-core.png)
+
+### dbo
+
+![dbo Schema](./_resources/foodjournal-db-dbo.png)
 
 ## Version
 

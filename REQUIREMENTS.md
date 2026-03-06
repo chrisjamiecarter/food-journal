@@ -5,7 +5,7 @@
 
 ## Requirements
 
-This application fulfills the following [The C# Academy - Food Journal](https://thecsharpacademy.com/project/41/food-journal) project requirements:
+This application fulfils the following [The C# Academy - Food Journal](https://thecsharpacademy.com/project/41/food-journal) project requirements:
 
 - [x] This is an application to track meals.
 - [x] Your data schema should have at least a "Meals" and a "Foods" table, in a many-to-many relationship.

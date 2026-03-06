@@ -47,7 +47,6 @@ There is an integrated SQL Server database in the back end with Entity Framework
 
 - .NET 10 SDK.
 - An IDE (code editor) like Visual Studio 2022 or Visual Studio Code.
-- SQL Server (LocalDB, Express, or a containerized instance).
 - Node.js (for Tailwind CSS).
 - Docker (for SQL Server container).
 
@@ -85,9 +84,19 @@ OR
 > 
 > Go to the Register page and click the Generate Test User with Seed Data (Dev Only) button to create a test account to get you started! This may take some time to load. Remember to note the username and password to log in.
 
+> [!NOTE]
+> If you do not have a self-signed localhost certificate you will need to create one:
+>
+> `dotnet dev-certs https --trust`
+
+> [!NOTE]
+> If you run from Visual Studio, the application may catch a `Microsoft.AspNetCore.Components.NavigationException` exception. Un-check `Break when this exception type is user-unhandled`
+>
+> ![Turn This Setting Off](./_resources/turn-this-off.png)
+
 ## Requirements
 
-This application fulfills the following [The C# Academy - Food Journal](https://thecsharpacademy.com/project/41/food-journal) project requirements:
+This application fulfils the following [The C# Academy - Food Journal](https://thecsharpacademy.com/project/41/food-journal) project requirements:
 
 - [x] This is an application to track meals.
 - [x] Your data schema should have at least a "Meals" and a "Foods" table, in a many-to-many relationship.
